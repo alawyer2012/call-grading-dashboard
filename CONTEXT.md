@@ -32,13 +32,14 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 3. Run the rebuild script (cold or warm)
 4. Run the other rebuild script too (they don't interfere with each other's data)
 5. Manually add recommendations and rootCause for the new run
-6. Redeploy to Netlify
+6. Deploy: `git add -A && git commit -m "update" && git push`
 
 **File:** `/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html`  
-**Live URL:** https://leasingcenter-qa-comparison-dashboard.netlify.app/  
+**Live URL:** https://alawyer2012.github.io/call-grading-dashboard/  
+**GitHub Repo:** https://github.com/alawyer2012/call-grading-dashboard  
 **Serve locally:** `cd "/Users/alawyer/Entrata PM/Dashboard/call-grading" && python3 -m http.server 8890`  
-**Redeploy to Netlify:** `cd "/Users/alawyer/Entrata PM/Dashboard/call-grading" && npx netlify-cli deploy --dir=. --prod --site b7f024c5-ca46-427e-89e6-801ba0ada830`  
-(CLI is authenticated — no anonymous flag needed. Site ID is `b7f024c5-ca46-427e-89e6-801ba0ada830`.)
+**Deploy:** `cd "/Users/alawyer/Entrata PM/Dashboard/call-grading" && git add -A && git commit -m "update" && git push`  
+(GitHub Pages auto-deploys on push to master. No tokens, credits, or CLI auth needed.)
 
 ---
 
@@ -201,12 +202,15 @@ Warm leads are fundamentally **service calls, not sales calls**:
 
 **20 cold-lead calls** graded by both human and AI on the same rubric.
 
-### Current Performance (Run 1 — baseline, re-extracted June 5 from correct source):
-- **67.1% overall question-level agreement** (282/420 answers match)
-- **138 total disagreements** across all calls
-- **23.7% average absolute score delta** (weighted)
-- **90 strict errors** (AI=No, Human=Yes — AI under-crediting agents, 65%)
-- **48 lenient errors** (AI=Yes, Human=No — AI over-crediting agents, 35%)
+### Current Performance (Corrected — against 'New Manual' tab, June 10, 2026):
+- **81.9% overall question-level agreement** (344/420 answers match) — Run 1 baseline
+- **76 total disagreements** across all calls
+- **13.2% average absolute score delta** (weighted)
+- **55 strict errors** (AI=No, Human=Yes — AI under-crediting agents, 72%)
+- **21 lenient errors** (AI=Yes, Human=No — AI over-crediting agents, 28%)
+- Runs 1-4 all cluster at 81.9-82.1% (stable model, ~75 disagreements)
+
+**⚠️ Previous reports showed 67.1% agreement — this was due to 100 incorrect answers in the old 'Manual' tab. Corrected June 10, 2026.**
 
 **Methodology:** Both human and AI scores are independently calculated from raw Yes/No answers using the same formula: (earned points / 80) × 100%, with 20% reductions per disqualifier. Human answers come from the Manual tab, AI answers from the AI tab of the `20 Call Cold Lead Comparison` Google Sheet.
 
@@ -371,7 +375,7 @@ The `rebuild_from_spreadsheet.py` script handles everything. To add Run 3:
 3. Run the script: `python3 rebuild_from_spreadsheet.py`
 4. The script reads all AI tabs, computes metrics, and patches the HTML automatically
 5. Manually add recommendations and rootCause for the new run (the script outputs empty arrays for these)
-6. Redeploy to Netlify
+6. Deploy: `git add -A && git commit -m "update" && git push`
 
 ### Future enhancements (discussed but not built):
 - What-If Simulator (toggle fixes on/off, see projected impact)
@@ -458,8 +462,10 @@ A fresh download of the Google Sheet (`1SeNuw9lI43bibffZGmpjHlWeRtYsepbswXwWPCgR
 The Manual (human) answers stay the same across runs (they're ground truth). Each AI run gets its own tab.
 
 ### Source spreadsheet (authoritative):
-- **Current file:** `/Users/alawyer/Downloads/20 Call Cold Lead Comparison (2).xlsx`
-- Previous files: `(1).xlsx` was Run 1 only. `(2).xlsx` added AI 2 tab.
+- **Current file:** `/Users/alawyer/Downloads/20 Call Cold Lead Comparison (5).xlsx`
+- **Human scores tab:** `New Manual` (NOT `Manual` — the original Manual tab had 100 incorrect answers)
+- Previous files: `(1).xlsx` was Run 1 only. `(2).xlsx` added AI 2 tab. `(3).xlsx` same as (2). `(4).xlsx` added AI 3 tab. `(5).xlsx` added AI 4 tab + corrected `New Manual` tab.
+- **⚠️ Do NOT use the `Manual` tab** — it has 100 incorrect answers across 19 calls. Always use `New Manual`.
 - **⚠️ Do NOT use** `/Users/alawyer/Downloads/Untitled spreadsheet.xlsx`
 
 ### Column-to-question mapping (validated — 19/20 human scores match spreadsheet)
@@ -540,7 +546,7 @@ final_score = base_pct × max(0, 1 - 0.20 × dq_count)
 4. Run: `cd "/Users/alawyer/Entrata PM/Dashboard/call-grading" && python3 rebuild_from_spreadsheet.py`
 5. Script automatically: reads all tabs, validates human scores, computes per-run metrics, generates `runAnswerData` + `runs` array, patches HTML
 6. Manually add recommendations and rootCause for the new run
-7. Redeploy: `npx netlify-cli deploy --dir=. --prod --site b7f024c5-ca46-427e-89e6-801ba0ada830`
+7. Redeploy: `cd "/Users/alawyer/Entrata PM/Dashboard/call-grading" && git add -A && git commit -m "update" && git push`
 
 **Extraction script:** `rebuild_from_spreadsheet.py` handles multi-run extraction. It outputs empty `recommendations: []` and `rootCause: {}` for each run — these must be filled manually with the analysis.
 
@@ -574,6 +580,12 @@ Learned from Run 2: expanding a protocol ("Also mark YES if...") produces zero e
 
 ### 9. The model responds to threshold simplification, not nuance addition
 Simplifying the YES criteria (lower bar, "single instance sufficient", "clear mention sufficient") works. Adding negative examples, additional conditions, or phrasing alternatives does not — the model processes the first paragraph of a protocol and stops.
+
+### 10. Always verify the human scoring data is correct
+The original 'Manual' tab had 100 incorrect answers across 19 of 20 calls (some calls had up to 10 wrong answers). This made it appear the model was at 67% when it was actually at 82%. Three full runs of prompt engineering were directed at a phantom problem. **Always use the 'New Manual' tab.** If human scoring seems unreliable, validate against the source-of-truth before blaming the model.
+
+### 11. Deploy via GitHub Pages, not Netlify
+Netlify free-tier credits run out. The dashboard is now hosted on GitHub Pages (auto-deploys on push to master). Deploy command: `git add -A && git commit -m "update" && git push`. No CLI auth, no tokens, no credit limits.
 
 ---
 
