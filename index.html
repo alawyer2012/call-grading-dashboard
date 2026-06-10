@@ -468,8 +468,17 @@ const coldRuns = [
         ],
         recommendation: 'Strict fixes: Phone number (3pts), Occupants (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts), Closing (2pts).' }
     ],
-    recommendations: [],
-    rootCause: {}
+    recommendations: [
+      { num: 1, title: "Baseline established at 81.9% (corrected data)", severity: "pill-success", severityLabel: "Informational", ownerClass: "pill-owner-monica", owner: "Austin",
+        problem: `<p><strong>Note:</strong> This run was originally reported at 67.1% agreement. After correcting the human scoring data ('New Manual' tab), the true baseline is 81.9% with 76 disagreements.</p><p>Top problem areas in Run 1: conversational (10), rapport (9), pricing_value (7), feature_amenity (7), inclusive_lang (6), open_ended_qs (5).</p>`,
+        protocols: []
+      }
+    ],
+    rootCause: {
+      title: "Run 1 baseline — 82% with subjective-question concentration",
+      summary: "Against corrected human scores, Run 1 achieved 81.9% agreement (344/420). The 76 errors concentrate in subjective questions: conversational (10), rapport (9), feature_amenity (7), pricing_value (7). These require judgment about 'quality' rather than simple fact-checking.",
+      sections: []
+    }
   },
   {
     id: 2,
@@ -703,8 +712,17 @@ const coldRuns = [
         ],
         recommendation: 'Strict fixes: Phone number (3pts), Occupants (3pts). Lenient fixes: Feature/amenity (9pts), Rapport (4pts), Conversational (3pts).' }
     ],
-    recommendations: [],
-    rootCause: {}
+    recommendations: [
+      { num: 1, title: "Run 2 held steady at 81.9% — some shifts within", severity: "pill-medium", severityLabel: "Informational", ownerClass: "pill-owner-monica", owner: "Austin",
+        problem: `<p><strong>Originally reported:</strong> 69.0%. <strong>Corrected:</strong> 81.9% (same as Run 1). The protocol changes shuffled errors between questions but didn't change the total.</p><p><strong>Improved:</strong> inclusive_lang (6→1, biggest win), open_ended_qs (5→3).</p><p><strong>Regressed:</strong> feature_amenity (7→10, biggest loss), how_heard (3→5), tour_next_step (2→4).</p><p>Net effect was zero — gains and losses cancelled out. The feature_amenity regression suggests the "lowered bar" protocol change backfired.</p>`,
+        protocols: []
+      }
+    ],
+    rootCause: {
+      title: "Run 2 — protocol changes traded errors, net zero",
+      summary: "Protocol expansions (recognition rules for occupants/pets/how-heard, redefined conversational/rapport) caused error redistribution. Inclusive language dramatically improved (6→1) but feature/amenity regressed equally (7→10). Total unchanged at 76.",
+      sections: []
+    }
   },
   {
     id: 3,
@@ -939,8 +957,17 @@ const coldRuns = [
         ],
         recommendation: 'Strict fixes: Phone number (3pts), Occupants (3pts). Lenient fixes: Feature/amenity (9pts), Rapport (4pts), Conversational (3pts).' }
     ],
-    recommendations: [],
-    rootCause: {}
+    recommendations: [
+      { num: 1, title: "Run 3 slightly improved to 82.1% — minimal change", severity: "pill-medium", severityLabel: "Informational", ownerClass: "pill-owner-monica", owner: "Austin",
+        problem: `<p><strong>Originally reported:</strong> 68.3%. <strong>Corrected:</strong> 82.1% (+0.2% from Run 2). The structural prompt additions (VOLUNTEERED INFO, NEGATIVE EXAMPLE OVERRIDE) had almost no effect against the corrected data — a net reduction of 1 error.</p><p><strong>Improved:</strong> pricing_disclaimer (2→1), how_heard (5→4), closing (1→1).</p><p><strong>Regressed:</strong> acknowledged (2→4), disclaimers (3→4).</p><p>The prompt additions we thought were failing were actually irrelevant — the "failures" were measurement artifacts from the incorrect human data.</p>`,
+        protocols: []
+      }
+    ],
+    rootCause: {
+      title: "Run 3 — structural prompt additions had negligible effect",
+      summary: "Adding VOLUNTEERED INFORMATION RULE, NEGATIVE EXAMPLE OVERRIDE, and AVOIDING FALSE CREDIT to the prompt reduced errors by 1 (76→75). Against corrected data, these additions were neither harmful nor helpful — the model was already performing well.",
+      sections: []
+    }
   },
   {
     id: 4,
@@ -1172,8 +1199,43 @@ const coldRuns = [
         ],
         recommendation: 'Strict fixes: Name usage (3pts), Phone number (3pts), Occupants (3pts). Lenient fixes: Feature/amenity (9pts), Rapport (4pts), Conversational (3pts).' }
     ],
-    recommendations: [],
-    rootCause: {}
+    recommendations: [
+      { num: 1, title: "Corrected baseline established — model at 82% agreement", severity: "pill-success", severityLabel: "Breakthrough — data quality fix", ownerClass: "pill-owner-monica", owner: "Monica / Austin",
+        problem: `<p><strong>The human scoring data was incorrect.</strong> 100 answers across 19 calls were wrong in the original 'Manual' tab. After correction, the model's true agreement rate is 82.1% — not the 67-69% previously reported.</p><p>This means our prior 3 runs of prompt engineering were solving a phantom problem. The model was never performing poorly — it was being measured against bad data.</p><p><strong>Impact:</strong> Previous recommendations about "attention dilution," "CoT reasoning," and "few-shot examples" were based on a false premise. The model's actual gap is 18%, concentrated in a few specific questions.</p>`,
+        protocols: [
+          { label: "What changed", current: "Old 'Manual' tab with 100 incorrect answers", recommended: `<span class="change">New 'Manual' tab with corrected human scores. All 4 runs re-evaluated. True performance: 81.9% → 82.1% (stable, slight improvement).</span>` }
+        ]
+      },
+      { num: 2, title: "Focus on Conversational (10 errors, unchanged across all runs)", severity: "pill-high", severityLabel: "High — biggest single gap", ownerClass: "pill-owner-monica", owner: "Monica + Myles",
+        problem: `<p><strong>Conversational has 10/20 disagreements in EVERY run.</strong> The model hasn't moved this number at all. This is consistently 50% error rate and accounts for 13% of all remaining errors.</p><p>The pattern: AI credits "conversational" when agents use generic enthusiasm ("That's great!", "How exciting!") between scripted questions. Humans require the agent to actually BUILD on caller details — use them to inform follow-ups.</p><p><strong>The fix must be behavioral, not instructional.</strong> 3 runs of adding rules didn't move this number. The model needs a clearer definition or concrete examples distinguishing genuine conversational flow from scripted friendliness.</p>`,
+        protocols: [
+          { label: "Conversational protocol — redefine the bar", current: "Does the transcript show the agent gathering required information in a conversational and personalized manner by using rapport-building, open-ended questions, or natural follow-up questions while also addressing the caller's questions and needs?", recommended: `<span class="change">Simplify to: "Does the agent ask at least one follow-up question that directly references something the caller just said?" — This makes the bar concrete and testable, eliminates generic enthusiasm as a qualifying behavior.</span>` }
+        ]
+      },
+      { num: 3, title: "Feature/amenity regressed (7→10) — investigate Run 2 change", severity: "pill-high", severityLabel: "High — regression since Run 1", ownerClass: "pill-owner-myles", owner: "Myles",
+        problem: `<p>Feature/amenity went from 7 errors (Run 1) to 10 errors (Runs 2-4) and stayed there. Something in the Run 2 prompt/protocol change made the model WORSE at recognizing feature/amenity mentions.</p><p><strong>Possible cause:</strong> Run 2 "lowered the bar for feature/amenity" — but this may have confused the model about what counts. The human graders have a specific threshold and the Run 2 changes may have moved the model away from it rather than toward it.</p>`,
+        protocols: [
+          { label: "Feature/amenity — revert or simplify", current: "Did the agent mention at least one feature or amenity to demonstrate a specific benefit or the community's value to the caller before discussing pricing details?", recommended: `<span class="change">Investigate: compare Run 1 vs Run 2 feature_amenity answers per call to find which 3 calls regressed. Check if the protocol change in Run 2 caused over-crediting or under-crediting. May need to revert Run 2's feature_amenity protocol change.</span>` }
+        ]
+      },
+      { num: 4, title: "Rapport at 8 errors — similar to conversational but distinct", severity: "pill-medium", severityLabel: "Medium — second biggest gap", ownerClass: "pill-owner-monica", owner: "Monica",
+        problem: `<p>Rapport has 8 errors across Runs 2-4 (slightly improved from 9 in Run 1). The model over-credits rapport when agents use varied sentence structures but don't reference specific caller details.</p><p><strong>Key distinction from conversational:</strong> Rapport requires the agent to reference something SPECIFIC the caller said. "That's wonderful, I'm so excited for you!" is NOT rapport if the agent didn't mention the caller's specific situation.</p>`,
+        protocols: [
+          { label: "Rapport — add concrete test", current: "Does the transcript show the agent using a variety of sentence structures and making efforts to build rapport by referencing specific details about the caller's situation or preferences?", recommended: `<span class="change">Add to prompt guidance: "For rapport, the agent MUST name or reference at least one specific detail the caller mentioned (their job, family situation, reason for moving, timeline, etc). Generic positive statements like 'that's wonderful' or 'how exciting' do NOT count unless they reference specific caller context."</span>` }
+        ]
+      },
+      { num: 5, title: "Pricing value inconsistent (7→6→6→8) — needs calibration", severity: "pill-low", severityLabel: "Low — small regression in Run 4", ownerClass: "pill-owner-myles", owner: "Myles",
+        problem: `<p>Pricing value had improved slightly (7→6) but regressed in Run 4 to 8. This is a conditional question (only applies when pricing discussed) so the denominator may vary. The model may be inconsistently applying urgency/value language detection.</p>`,
+        protocols: [
+          { label: "Pricing value — investigate Run 4 specifics", current: "If pricing and availability are discussed, did the agent use urgency language such as 'limited availability' or 'act quickly'?", recommended: `<span class="change">Check: are the 8 errors consistent calls or shifting? If shifting, the model is unstable on borderline cases. Consider adding explicit examples of what counts: "months free," "special," "incentive," "won't last," "filling up."</span>` }
+        ]
+      }
+    ],
+    rootCause: {
+      title: "The real gap is 18% — and it's concentrated in 4 questions",
+      summary: "After correcting the human scoring data (100 wrong answers in original 'Manual' tab), the model's true performance is 82.1% agreement. The remaining 75 errors (18%) are concentrated in: conversational (10), feature_amenity (10), rapport (8), and pricing_value (8). These 4 questions account for 48% of all remaining errors.",
+      sections: [
+        { heading: "What was actually wrong", detail: `<ul><li><strong>The 'Manual' tab had 100 incorrect answers</strong> across 19 of 20 calls. Some calls had up to 10 wrong answers.</li><li>This made it appear the model was at 67% agreement when it was actually at 82%.</li><li>Our prior analysis (attention dilution, CoT recommendations, few-shot examples) was solving a problem that largely didn't exist.</li><li>The model WAS improving slightly (81.9% → 82.1%) but the incorrect baseline made small gains invisible.</li></ul>` }
   }
 ];
 
