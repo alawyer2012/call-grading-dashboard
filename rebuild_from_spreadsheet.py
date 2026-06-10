@@ -12,7 +12,7 @@ import re
 import sys
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Cold Lead Comparison (5).xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Cold Lead Comparison (6).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
 # Which AI tabs to process (in order). Tab name → run metadata.
