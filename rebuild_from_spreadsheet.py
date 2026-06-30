@@ -12,7 +12,7 @@ import re
 import sys
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Cold Lead Comparison (6).xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Cold Lead Comparison (7).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
 # Which AI tabs to process (in order). Tab name → run metadata.
@@ -29,6 +29,9 @@ AI_TABS = [
     {"tab": "AI 4", "id": 4, "label": "Run 4", "date": "June 10, 2026",
      "description": "Post-correction baseline — first run measured against corrected human scores.",
      "changes": "Human scoring errors identified and corrected (100 answers across 19 calls). All runs re-evaluated against corrected 'New Manual' data."},
+    {"tab": "AI 5", "id": 5, "label": "Run 5", "date": "June 30, 2026",
+     "description": "Version 5.0 — latest model iteration with accumulated prompt and protocol improvements.",
+     "changes": "Full prompt refinement pass incorporating all prior learnings from Runs 1-4"},
 ]
 
 # ═══════════════════════════════════════════════════════════════════════════
