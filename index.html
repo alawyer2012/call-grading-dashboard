@@ -1410,82 +1410,124 @@ const coldRuns = [
     recommendations: [
       {
         num: 1,
-        title: "Conversational: Rewrite or eliminate",
+        title: "Conversational: The AI can't tell 'responsive' from 'conversational'",
         severity: "danger",
-        severityLabel: "50% agreement across all 5 runs",
+        severityLabel: "50% agreement — 9 of 10 errors are AI over-crediting",
         owner: "Protocol Owner",
         ownerClass: "warning",
-        problem: `<p>This question has been at <strong>50% agreement since Run 1</strong>. Nothing we've tried has moved it. 9 of 10 disagreements are lenient — the AI says Yes when humans say No. The AI treats any information exchange as "conversational." Humans require genuine conversational flow distinct from scripted question-asking.</p>
-          <p><strong>Root cause:</strong> The question asks the AI to judge subjective tone and style ("conversational and personalized manner") which is inherently unreliable at the transcript level. The word "conversational" means different things to the model vs. human graders.</p>
-          <p><strong>Impact if eliminated:</strong> 3 pts. Removing it drops 10 disagreements instantly and doesn't materially change score distribution.</p>`,
+        problem: `<p><strong>50% agreement across all 5 runs. 9 lenient errors.</strong> The AI says Yes whenever the agent responds to caller questions or asks any kind of follow-up. Humans require the <em>information gathering itself</em> to be conversational — not just that the agent was helpful.</p>
+          <p><strong>Transcript evidence (6 of 9 lenient cases are clear AI errors):</strong></p>
+          <ul style="font-size:13px; line-height:1.6;">
+            <li><strong>265292177</strong> — Agent asks: name? email? phone? pets? Sequential scripted questions. Only "How are you?" is personal. AI credits it.</li>
+            <li><strong>265426567</strong> — Agent asks: name? spelling? email? occupants? pets? Rapid-fire checklist. AI credits it.</li>
+            <li><strong>265300729</strong> — Spanish call. Name → phone → email → type → occupants → pets. Standard scripted flow. AI credits it.</li>
+            <li><strong>265121798</strong> — Only gathers name and phone. Agent is responsive to caller's MFT unit questions, but gathering is scripted. AI confuses "helpful" with "conversational."</li>
+            <li><strong>265103498</strong> — Only gathers name. 45-second call with no availability. Zero conversational gathering. AI credits it anyway.</li>
+            <li><strong>265292177</strong> — Tour scheduling. Name, email, phone, pets asked in sequence. AI credits it because agent says "Got it. Definitely."</li>
+          </ul>
+          <p><strong>2 borderline cases:</strong> 265017569 (agent asks one open-ended Q: "what are you looking for?") and 265309940 (agent engages with school district concerns). Both still gather info sequentially.</p>
+          <p><strong>1 probable human error:</strong> 265340388 — Agent asks "What kind of features are you looking for? What's important to you?", references caller's family for game room suggestion. This IS conversational. Human said No.</p>
+          <p style="margin-top:12px;"><strong>Root cause:</strong> The protocol says "gathering required information in a conversational manner <em>while also addressing the caller's questions</em>." The AI reads the second clause as an OR — if the agent addresses questions, it credits the whole thing. The AI never evaluates whether the INFO GATHERING is personalized vs. scripted.</p>`,
         protocols: [
           {
-            label: "Option A — Rewrite as binary observable",
+            label: "Option A — Rewrite to test one specific behavior",
             current: "Does the transcript show the agent gathering required information in a conversational and personalized manner by using rapport-building, open-ended questions, or natural follow-up questions while also addressing the caller's questions and needs?",
-            recommended: "Did the agent ask at least one natural follow-up question directly referencing something the caller just said (not a scripted question from a list)?",
-            labelOverride: "Proposed Rewrite — Testable, Binary"
+            recommended: "Did the agent ask at least one follow-up question that directly references something specific the caller previously said? (e.g., caller mentions kids → agent asks about school proximity; caller mentions dog → agent asks about breed before reciting pet policy). Scripted questions asked in sequence do NOT count, even if the agent is friendly.",
+            labelOverride: "Proposed Rewrite — One Observable Behavior"
           },
           {
-            label: "Option B — Eliminate the question",
-            current: "Does the transcript show the agent gathering required information in a conversational and personalized manner by using rapport-building, open-ended questions, or natural follow-up questions while also addressing the caller's questions and needs?",
-            recommended: "Remove this question from the scorecard entirely. Redistribute 3 pts to Rapport (already tests similar behavior) or absorb into Open-ended Questions. Net effect: -10 disagreements, +2.4% agreement immediately.",
-            labelOverride: "Proposed Action — Remove from Scorecard"
+            label: "Option B — Eliminate (3 pts, highest-disagreement, lowest ROI to fix)",
+            current: "Weight: 3 pts. 10 disagreements across 5 runs. 50% agreement = coin flip.",
+            recommended: "Remove from AI scorecard. This question tests subjective conversational quality that requires holistic tone judgment. Redistribute 3 pts to Rapport (4→7) or Open-ended Qs (6→9). Immediate effect: -10 disagreements, agreement jumps to ~84.1%.",
+            labelOverride: "Proposed Action — Remove from AI Scoring"
           },
           {
-            label: "Option C — Change the prompt only (lowest confidence)",
-            current: "Does the transcript show the agent gathering required information in a conversational and personalized manner by using rapport-building, open-ended questions, or natural follow-up questions while also addressing the caller's questions and needs?",
-            recommended: "Answer NO unless the agent explicitly references something unique the caller said and builds on it with a follow-up. Scripted questions asked in sequence = NO. Simply asking 'how are you' or acknowledging the caller = NO. Only answer YES if the agent demonstrably adapts their questions based on prior caller responses.",
-            labelOverride: "Prompt Guardrail — Strict Definition"
+            label: "Option C — Add explicit negative examples to the prompt",
+            current: "Mark 'Yes' if the transcript shows conversational, personalized information gathering while addressing the caller's needs or questions. Mark 'No' if the conversation consists primarily of scripted information gathering with little to no personalized responses.",
+            recommended: "NEGATIVE EXAMPLES — always answer NO for these patterns:<br>• Agent asks name, phone, email, occupants, pets in sequence without referencing anything caller said between questions<br>• Agent responds helpfully to caller questions but only gathers contact info via standard prompts<br>• Agent says 'How are you?' or 'Definitely, I can help' but follows with checklist questions<br><br>POSITIVE EXAMPLES — answer YES only if:<br>• Agent references something specific the caller said and builds a follow-up on it (e.g., 'You mentioned you have family nearby — we have a game room for family nights')<br>• Agent asks an open-ended question that adapts based on prior caller response",
+            labelOverride: "Prompt Fix — Explicit Pass/Fail Examples"
           }
         ]
       },
       {
         num: 2,
-        title: "Feature/Amenity: Simplify the question",
+        title: "Feature/Amenity: The human scores are wrong on 4-5 of 7 'strict' cases",
         severity: "danger",
-        severityLabel: "50% agreement across all 5 runs — 9pt weight",
-        owner: "Protocol Owner",
-        ownerClass: "warning",
-        problem: `<p>Also <strong>stuck at 50% since Run 1</strong>. This is the highest-weighted question on the scorecard (9 pts) and it's a coin flip. 6 strict + 4 lenient = the AI doesn't know what "demonstrate a specific benefit" means, and the "before discussing pricing" timing constraint adds noise.</p>
-          <p><strong>Root cause:</strong> The question bundles two judgments: (1) did the agent mention a feature, and (2) did they frame it as a benefit to the caller specifically. Humans credit any mention with implied value. AI either requires explicit "this is great because…" framing (strict) or credits generic property descriptions (lenient).</p>
-          <p><strong>Impact:</strong> At 9 pts, every disagreement here moves scores by 11.25%. Fixing this one question alone would drop avg delta by ~3-4 pts.</p>`,
+        severityLabel: "50% agreement — but human ground truth is unreliable",
+        owner: "Protocol Owner + Human QA",
+        ownerClass: "danger",
+        problem: `<p><strong>This is not primarily an AI problem. It's a human scoring problem.</strong></p>
+          <p>I read every transcript for the 7 strict errors (Human=Yes, AI=No). In <strong>4-5 of them, no feature or amenity is mentioned at all</strong> — the human marked Yes incorrectly:</p>
+          <ul style="font-size:13px; line-height:1.6;">
+            <li><strong>265311653</strong> — 52-second call. Caller asks if it's apartments or townhomes, asks about low-income options. Agent says "we do have townhomes." <strong>Zero amenity/feature mentions. Zero benefit framing.</strong> Human: Yes. AI: No. <strong>AI is correct.</strong></li>
+            <li><strong>265292177</strong> — Tour scheduling only. Agent asks name, email, phone, pets. <strong>Zero features mentioned.</strong> Human: Yes. AI: No. <strong>AI is correct.</strong></li>
+            <li><strong>265329801</strong> — Caller asks for Paulie, then asks about studio availability. Agent checks pricing. <strong>Zero features mentioned.</strong> Human: Yes. AI: No. <strong>AI is correct.</strong></li>
+            <li><strong>265212524</strong> — Caller wants to reach Connor for a tour. Agent arranges callback. <strong>Zero features mentioned.</strong> Human: Yes. AI: No. <strong>AI is correct.</strong></li>
+            <li><strong>263494762</strong> — Caller asks about 1BR pricing. Agent gives price ($1,917.78). Caller says too high, ends call. <strong>Zero features mentioned.</strong> Human: Yes. AI: No. <strong>AI is correct.</strong></li>
+          </ul>
+          <p><strong>Legitimate strict errors (AI missed real features):</strong></p>
+          <ul style="font-size:13px; line-height:1.6;">
+            <li><strong>265198083</strong> — Agent mentions "balconies in selected apartments," pet-friendly policy with "no weight restrictions, you can have them." This IS a feature with benefit framing. AI should credit it.</li>
+            <li><strong>264909961</strong> — Agent mentions "all apartments have parking, $2.85/month per car." Borderline — it's a feature mention but no explicit benefit framing.</li>
+          </ul>
+          <p><strong>Lenient errors (AI over-credits):</strong></p>
+          <ul style="font-size:13px; line-height:1.6;">
+            <li><strong>265426567</strong> — Agent says "washer and dryer" and "beautiful big bathroom." Listing without benefit. AI over-credits.</li>
+            <li><strong>265017569</strong> — Agent says "we do have washer and dry connection in selected apartments." Listing. AI over-credits.</li>
+            <li><strong>265255755</strong> — Agent says "very nice outdoor pool, the pool side is the best part in the community, picnic area, parking for all residents." <strong>This HAS benefit framing ("best part in the community").</strong> Human said No — <strong>likely human error.</strong></li>
+          </ul>
+          <p style="margin-top:12px; padding:12px; background:var(--bg-3); border-radius:8px;"><strong>Net assessment:</strong> If you correct the 5 human errors in the ground truth, AI agreement on this question jumps from 50% (10/20) to <strong>75% (15/20)</strong> — with only 2 real strict misses and 2-3 lenient over-credits remaining. The AI is mostly right. The benchmark data is wrong.</p>`,
         protocols: [
           {
-            label: "Option A — Simplify to observable behavior",
-            current: "Did the agent mention at least one feature or amenity to demonstrate a specific benefit or the community's value to the caller before discussing pricing details?",
-            recommended: "Did the agent mention at least one specific feature, amenity, or community attribute (e.g., pool, fitness center, in-unit washer/dryer, location, pet park) at any point during the call?",
-            labelOverride: "Proposed Rewrite — Remove 'benefit' and 'before pricing' constraints"
+            label: "Step 1 — Correct human scores (highest impact, zero engineering effort)",
+            current: "Current 'New Manual' tab has 5 calls marked Yes where no features are mentioned in the transcript.",
+            recommended: "Re-score these 5 calls to No: 265311653, 265292177, 265329801, 265212524, 263494762. Also re-score 265255755 to Yes (agent did frame benefit). Net: 6 corrections. Rebuild dashboard. Expected agreement: ~75%.",
+            labelOverride: "Action — Fix Human Ground Truth"
           },
           {
-            label: "Option B — Keep benefit framing, define it explicitly",
-            current: "Did the agent mention at least one feature or amenity to demonstrate a specific benefit or the community's value to the caller before discussing pricing details?",
-            recommended: "Did the agent mention a feature or amenity AND connect it to the caller's stated needs or situation? Examples that count: 'Since you have a dog, you'll love our dog park,' 'Our 2-beds have in-unit laundry which is nice for families.' Examples that do NOT count: 'We have a pool,' 'The apartment has granite counters' (listing without connecting to caller).",
-            labelOverride: "Proposed Rewrite — Explicit Examples"
+            label: "Step 2 — Tighten AI prompt for remaining 2 lenient errors",
+            current: "The agent must build value by discussing at least one community feature or amenity and explaining how it benefits the caller, not just listing it.",
+            recommended: "Add to prompt: 'Simply stating a feature exists (e.g., \"we have a pool\", \"washer and dryer in unit\") is NOT sufficient. The agent must connect the feature to the caller or explain WHY it matters. Examples that DO count: \"Our fitness center is open 24/7 so you can work out whenever,\" \"Since you have a dog, you\\'ll love our off-leash park.\" Examples that do NOT count: \"We have a pool,\" \"Washer and dryer hookups are available.\"'",
+            labelOverride: "Prompt Clarification — Define 'Benefit Framing'"
           },
           {
-            label: "Option C — Reduce weight while fixing",
-            current: "Weight: 9 pts (11.25% of total score)",
-            recommended: "Drop weight to 5 pts until agreement reaches 80%+. A 9-pt question at 50% reliability is injecting ~4.5 pts of random noise into every score. Reducing weight limits damage while you iterate on the prompt.",
-            labelOverride: "Interim Fix — Reduce Scoring Weight"
+            label: "Step 3 — Reduce weight from 9→5 until agreement stabilizes at 80%+",
+            current: "Weight: 9 pts (11.25% of total score). At 50% reliability, injects ±4.5 pts of noise per score.",
+            recommended: "Reduce to 5 pts while iterating. Once agreement reaches 80%+ on corrected data, restore to 9. This limits scoring damage while you fix the ground truth and prompt.",
+            labelOverride: "Interim — Reduce Weight to Limit Noise"
           }
         ]
       },
       {
         num: 3,
-        title: "Bottom line: these two questions account for 26% of all disagreements",
+        title: "Correcting human scores would move the needle more than any prompt change",
         severity: "warning",
-        severityLabel: "20 of 77 total disagreements",
-        owner: "Decision Needed",
+        severityLabel: "5-6 human errors identified across these 2 questions",
+        owner: "Austin / QA Team",
         ownerClass: "danger",
-        problem: `<p><strong>The math:</strong> Conversational (10 disagreements) + Feature/Amenity (10 disagreements) = 20 of 77 total. Fix just these two and agreement jumps from 81.7% → ~86.7%. That's more progress than Runs 1-4 combined.</p>
-          <p><strong>The honest assessment:</strong> Five runs of prompt tuning haven't moved either question. The problem isn't the model — it's the questions. They ask for subjective judgments that humans themselves would disagree on if you tested inter-rater reliability. Either make them binary and observable, or accept they can't be graded by AI and remove them.</p>
-          <p><strong>Recommended next step:</strong> Pick one option per question above. Apply it. Run 6.0 on the same 20 calls. If agreement doesn't hit 75%+ on both questions individually, eliminate them from AI grading and grade them manually in QA review only.</p>`,
+        problem: `<p><strong>The math after corrections:</strong></p>
+          <table style="width:100%; font-size:13px; border-collapse:collapse; margin:12px 0;">
+            <tr style="border-bottom:1px solid var(--border);"><th style="text-align:left; padding:6px;">Metric</th><th style="text-align:center; padding:6px;">Current</th><th style="text-align:center; padding:6px;">After fixing human errors</th><th style="text-align:center; padding:6px;">After prompt fixes too</th></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:6px;">Feature/Amenity agreement</td><td style="text-align:center; padding:6px;">50% (10/20)</td><td style="text-align:center; padding:6px;">75% (15/20)</td><td style="text-align:center; padding:6px;">~85% (17/20)</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:6px;">Conversational agreement</td><td style="text-align:center; padding:6px;">50% (10/20)</td><td style="text-align:center; padding:6px;">55% (11/20)*</td><td style="text-align:center; padding:6px;">~75% with prompt fix</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:6px;">Overall agreement</td><td style="text-align:center; padding:6px;">81.7%</td><td style="text-align:center; padding:6px;">~83.5%</td><td style="text-align:center; padding:6px;">~86-87%</td></tr>
+            <tr><td style="padding:6px;">Total disagreements</td><td style="text-align:center; padding:6px;">77</td><td style="text-align:center; padding:6px;">~70</td><td style="text-align:center; padding:6px;">~55-60</td></tr>
+          </table>
+          <p style="font-size:12px; color:var(--text-3);">*Conversational has 1 human error (265340388 should be Yes). Remaining 8 lenient errors require a prompt fix.</p>
+          <p style="margin-top:12px;"><strong>Recommended sequence:</strong></p>
+          <ol style="font-size:13px; line-height:1.8;">
+            <li><strong>Fix human scores now</strong> — correct the 6 identified errors in the 'New Manual' tab. Zero engineering effort. Rebuild dashboard.</li>
+            <li><strong>Add negative examples to Conversational prompt</strong> — the explicit pass/fail examples from Rec 1 Option C. This is the only way to teach the AI what "scripted" looks like.</li>
+            <li><strong>Add benefit-framing clarification to Feature/Amenity prompt</strong> — from Rec 2 Step 2. Fixes the 2 remaining lenient errors.</li>
+            <li><strong>Run 6.0</strong> on same 20 calls against corrected ground truth. Expected: ~86-87% agreement.</li>
+          </ol>
+          <p style="margin-top:12px;"><strong>If that still doesn't hit 90%:</strong> Eliminate Conversational (3 pts) from AI scoring. Keep Feature/Amenity but at reduced weight (5 pts). That gets you to ~89% with just 2 removals.</p>`,
         protocols: []
       }
     ],
     rootCause: {
-      conversational: "Question is subjectively defined. AI cannot distinguish 'conversational tone' from 'asked questions.' 9/10 errors are over-crediting.",
-      feature_amenity: "Question bundles feature mention + benefit framing + timing constraint. AI can't reliably judge 'demonstrate a benefit' from transcript text alone."
+      conversational: "AI interprets 'addressing the caller's questions' as sufficient for Yes. Protocol requires the INFO GATHERING to be conversational — not just that the agent was helpful. 6 of 9 lenient errors are calls where gathering is pure scripted checklist but agent responds to caller questions.",
+      feature_amenity: "4-5 of 7 'strict' errors are human scoring mistakes — no features mentioned in transcript at all. After correcting ground truth, AI agreement rises to ~75%. Remaining errors: AI over-credits bare feature listings without benefit framing."
     }
   }
 ];
