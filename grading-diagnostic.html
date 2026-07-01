@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Call Analysis AI Grading Diagnostic — Jul 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #fff; --surface: #f8f9fa; --border: #e2e5e9;
+    --text: #1a1d21; --text2: #555e68; --text3: #8b95a1;
+    --accent: #2563eb; --danger: #dc2626; --warning: #d97706;
+    --success: #16a34a; --info: #0ea5e9;
+    --danger-bg: #fef2f2; --warning-bg: #fffbeb; --success-bg: #f0fdf4; --info-bg: #f0f9ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text); background: var(--bg); line-height: 1.6; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; color: var(--text); }
+  h3 { font-size: 16px; font-weight: 600; margin: 20px 0 6px; color: var(--text2); }
+  p, .desc { color: var(--text2); font-size: 14px; margin-bottom: 12px; }
+  .subtitle { color: var(--text3); font-size: 14px; margin-bottom: 24px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  .stats { display: grid; gap: 12px; margin: 16px 0; }
+  .stats-4 { grid-template-columns: repeat(4, 1fr); }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px; text-align: center; }
+  .stat-value { font-size: 24px; font-weight: 700; }
+  .stat-label { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .stat-success .stat-value { color: var(--success); }
+  .stat-warning .stat-value { color: var(--warning); }
+  .stat-danger .stat-value { color: var(--danger); }
+
+  .callout { border-radius: 8px; padding: 16px 20px; margin: 16px 0; border-left: 4px solid; }
+  .callout-warning { background: var(--warning-bg); border-color: var(--warning); }
+  .callout-danger { background: var(--danger-bg); border-color: var(--danger); }
+  .callout-info { background: var(--info-bg); border-color: var(--info); }
+  .callout-success { background: var(--success-bg); border-color: var(--success); }
+  .callout-title { font-weight: 600; font-size: 15px; margin-bottom: 8px; }
+  .callout-warning .callout-title { color: var(--warning); }
+  .callout-danger .callout-title { color: var(--danger); }
+  .callout-info .callout-title { color: var(--info); }
+  .callout-success .callout-title { color: var(--success); }
+  .callout p { font-size: 14px; color: var(--text); margin-bottom: 6px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  th { background: var(--surface); font-weight: 600; text-align: left; padding: 10px 12px;
+    border-bottom: 2px solid var(--border); color: var(--text2); font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.03em; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .row-danger { background: var(--danger-bg); }
+  .row-warning { background: var(--warning-bg); }
+  .row-success { background: var(--success-bg); }
+
+  .pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px;
+    border-radius: 10px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .pill-danger { background: var(--danger); color: #fff; }
+  .pill-warning { background: var(--warning); color: #fff; }
+  .pill-success { background: var(--success); color: #fff; }
+  .pill-info { background: var(--info); color: #fff; }
+  .pill-neutral { background: var(--border); color: var(--text2); }
+
+  .chart-wrap { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px; margin: 16px 0; }
+  .chart-wrap canvas { max-height: 280px; }
+
+  .card { border: 1px solid var(--border); border-radius: 8px; margin: 16px 0; overflow: hidden; }
+  .card-header { background: var(--surface); padding: 12px 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; }
+  .card-header h3 { margin: 0; font-size: 14px; font-weight: 600; color: var(--text); }
+  .card-body { padding: 16px; }
+  .card-body p { margin-bottom: 10px; }
+
+  .steps { list-style: none; counter-reset: step; margin: 12px 0; }
+  .steps li { position: relative; padding: 8px 0 8px 36px; font-size: 14px; color: var(--text2); }
+  .steps li::before { counter-increment: step; content: counter(step);
+    position: absolute; left: 0; top: 8px; width: 24px; height: 24px;
+    background: var(--accent); color: #fff; border-radius: 50%;
+    font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  .steps li strong { color: var(--text); }
+
+  .tldr { background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px; margin: 16px 0; }
+  .tldr h3 { margin: 0 0 8px; font-size: 14px; color: var(--accent); }
+  .tldr p { margin-bottom: 6px; font-size: 14px; }
+
+  .timestamp { color: var(--text3); font-size: 12px; margin-top: 32px; text-align: center; }
+
+  @media (max-width: 700px) {
+    .stats-4 { grid-template-columns: repeat(2, 1fr); }
+    .wrap { padding: 20px 16px 48px; }
+    h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Call Analysis AI Grading Diagnostic</h1>
+<p class="subtitle">Source: Call Analysis Metrics and Stats.xlsx — AI tabs Jan–Jun 2026 &nbsp;|&nbsp; Generated Jul 1, 2026</p>
+
+<div class="tldr">
+  <h3>TL;DR for Leadership</h3>
+  <p><strong>Customer complaints are valid.</strong> While 99–100% of calls are being <em>processed</em> by the AI,
+  the percentage receiving a full <strong>scorecard/grade</strong> ("Analyzed") has declined for several clients.</p>
+  <p>Three patterns: (1) complete pipeline failures for specific clients, (2) gradual rate decline suggesting a classification shift, (3) one client with a partial recovery after a processing outage.</p>
+</div>
+
+<div class="callout callout-warning">
+  <div class="callout-title">Key Distinction: "Evaluated" vs "Analyzed"</div>
+  <p><strong>Evaluated</strong> = call processed by the AI system (99.4–100% every month — healthy).</p>
+  <p><strong>Analyzed</strong> = call receives a full AI scorecard/grade (~8% of calls — this is what's declining).</p>
+  <p>Customers perceive "graded calls" as the Analyzed number — that's what's dropping.</p>
+</div>
+
+<div class="stats stats-4">
+  <div class="stat">
+    <div class="stat-value">111,620</div>
+    <div class="stat-label">Total Calls (Jun)</div>
+  </div>
+  <div class="stat stat-success">
+    <div class="stat-value">100%</div>
+    <div class="stat-label">Evaluation Rate (Jun)</div>
+  </div>
+  <div class="stat stat-warning">
+    <div class="stat-value">7.9%</div>
+    <div class="stat-label">Analyzed Rate (Jun)</div>
+  </div>
+  <div class="stat stat-danger">
+    <div class="stat-value">-21%</div>
+    <div class="stat-label">May → Jun Analyzed Drop</div>
+  </div>
+</div>
+
+<hr>
+
+<h2>Monthly Trend: Total Calls vs Analyzed Rate</h2>
+<div class="chart-wrap">
+  <canvas id="trendChart"></canvas>
+</div>
+
+<h2>Analyzed Rate by Month</h2>
+<div class="chart-wrap">
+  <canvas id="rateChart"></canvas>
+</div>
+
+<hr>
+
+<h2>Three Distinct Failure Patterns</h2>
+
+<div class="card">
+  <div class="card-header">
+    <h3>Pattern 1: Complete Pipeline Failure (Zero Analyzed Since March)</h3>
+    <span class="pill pill-danger">Critical</span>
+  </div>
+  <div class="card-body">
+    <p>These clients have had ZERO calls analyzed for 3–4 months straight. This is not a gradual trend — something broke in the pipeline.</p>
+    <table>
+      <thead><tr><th>Client</th><th class="num">Jan</th><th class="num">Feb</th><th class="num">Mar</th><th class="num">Apr</th><th class="num">May</th><th class="num">Jun</th></tr></thead>
+      <tbody>
+        <tr class="row-danger"><td>Benchmark</td><td class="num">8.8%</td><td class="num">9.7%</td><td class="num">0%</td><td class="num">0%</td><td class="num">0%</td><td class="num">0%</td></tr>
+        <tr class="row-danger"><td>Michaels Student Living Mgmt</td><td class="num">13.8%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">0%</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-danger">
+      <div class="callout-title">Action Required</div>
+      <p>Benchmark has been completely broken since March (4 months). Likely a configuration or classification rule change that is misrouting their calls away from the analysis engine.</p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>Pattern 2: Gradual Degradation (~50% loss per month)</h3>
+    <span class="pill pill-warning">Warning</span>
+  </div>
+  <div class="card-body">
+    <p>These clients show a consistent downward trend — not a sudden break, but a slow bleed suggesting changing call mix or tightening classification thresholds.</p>
+    <table>
+      <thead><tr><th>Client</th><th class="num">Jan</th><th class="num">Feb</th><th class="num">Mar</th><th class="num">Apr</th><th class="num">May</th><th class="num">Jun</th><th class="num">Drop</th></tr></thead>
+      <tbody>
+        <tr class="row-warning"><td>Burkentine Property Mgmt</td><td class="num">7.6%</td><td class="num">7.1%</td><td class="num">5.8%</td><td class="num">2.9%</td><td class="num">1.4%</td><td class="num">0.7%</td><td class="num">-6.9pp</td></tr>
+        <tr class="row-warning"><td>Advanced Management</td><td class="num">14.8%</td><td class="num">11.3%</td><td class="num">10.4%</td><td class="num">4.1%</td><td class="num">6.7%</td><td class="num">3.5%</td><td class="num">-11.3pp</td></tr>
+        <tr class="row-warning"><td>Klingbeil</td><td class="num">12.6%</td><td class="num">11.4%</td><td class="num">11.6%</td><td class="num">9.6%</td><td class="num">8.0%</td><td class="num">7.5%</td><td class="num">-5.2pp</td></tr>
+        <tr class="row-warning"><td>Heritage</td><td class="num">15.2%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">6.2%</td><td class="num">-9.0pp</td></tr>
+        <tr class="row-warning"><td>The Property Groups, LLC</td><td class="num">10.3%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">3.9%</td><td class="num">-6.3pp</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>Pattern 3: Horizon — Partial Recovery After Outage</h3>
+    <span class="pill pill-info">Recovering</span>
+  </div>
+  <div class="card-body">
+    <p>Horizon had BOTH evaluation failures (8–9% of calls not processed at all) AND analysis dropped to 0%. The evaluation issue resolved by May, but analysis has only partially recovered.</p>
+    <table>
+      <thead><tr><th>Month</th><th class="num">Unevaluated</th><th class="num">Eval Rate</th><th class="num">Analyzed Rate</th></tr></thead>
+      <tbody>
+        <tr><td>Jan</td><td class="num">0</td><td class="num">100%</td><td class="num">5.9%</td></tr>
+        <tr class="row-warning"><td>Feb</td><td class="num">370</td><td class="num">92.9%</td><td class="num">3.3%</td></tr>
+        <tr class="row-danger"><td>Mar</td><td class="num">538</td><td class="num">91.6%</td><td class="num">0.0%</td></tr>
+        <tr class="row-danger"><td>Apr</td><td class="num">591</td><td class="num">91.7%</td><td class="num">0.7%</td></tr>
+        <tr class="row-warning"><td>May</td><td class="num">0</td><td class="num">100%</td><td class="num">0.9%</td></tr>
+        <tr class="row-warning"><td>Jun</td><td class="num">0</td><td class="num">100%</td><td class="num">2.6%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr>
+
+<h2>Top 10 Clients by Volume — June Analyzed Rate</h2>
+<table>
+  <thead><tr><th>Client</th><th class="num">Jun Total</th><th class="num">Jan Rate</th><th class="num">Jun Rate</th><th>Trend</th></tr></thead>
+  <tbody>
+    <tr><td>Trinity Property Consultants</td><td class="num">33,858</td><td class="num">9.3%</td><td class="num">9.4%</td><td><span class="pill pill-neutral">Stable</span></td></tr>
+    <tr class="row-success"><td>Brookside Properties</td><td class="num">18,357</td><td class="num">6.1%</td><td class="num">7.0%</td><td><span class="pill pill-success">Improving</span></td></tr>
+    <tr class="row-success"><td>PeakMade</td><td class="num">16,968</td><td class="num">4.5%</td><td class="num">6.8%</td><td><span class="pill pill-success">Improving</span></td></tr>
+    <tr class="row-warning"><td>Hines Living US LLC</td><td class="num">10,169</td><td class="num">9.4%</td><td class="num">7.9%</td><td><span class="pill pill-warning">Declining</span></td></tr>
+    <tr class="row-danger"><td>Horizon</td><td class="num">7,741</td><td class="num">5.9%</td><td class="num">2.6%</td><td><span class="pill pill-danger">Degraded</span></td></tr>
+    <tr class="row-warning"><td>Klingbeil</td><td class="num">3,565</td><td class="num">12.6%</td><td class="num">7.5%</td><td><span class="pill pill-warning">Declining</span></td></tr>
+    <tr class="row-success"><td>Campus Apartments</td><td class="num">3,362</td><td class="num">8.4%</td><td class="num">11.6%</td><td><span class="pill pill-success">Improving</span></td></tr>
+    <tr><td>TI</td><td class="num">2,683</td><td class="num">10.1%</td><td class="num">9.7%</td><td><span class="pill pill-neutral">Stable</span></td></tr>
+    <tr class="row-success"><td>Princeton</td><td class="num">2,482</td><td class="num">7.6%</td><td class="num">10.8%</td><td><span class="pill pill-success">Improving</span></td></tr>
+    <tr><td>Stout</td><td class="num">1,918</td><td class="num">10.9%</td><td class="num">9.9%</td><td><span class="pill pill-neutral">Stable</span></td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>Root Cause Hypotheses</h2>
+
+<div class="card">
+  <div class="card-header">
+    <h3>1. Call Classification Threshold Change</h3>
+    <span class="pill pill-danger">High Confidence</span>
+  </div>
+  <div class="card-body">
+    <p>The system "Evaluates" (processes) 99–100% of calls but only "Analyzes" (fully grades) ~8%. If the criteria for what triggers a full analysis tightened — perhaps a model update or threshold change around what qualifies as a "scoreable lead call" — you'd see exactly this pattern: total calls up, evaluated at 100%, but analyzed rate declining.</p>
+    <p><strong>Evidence:</strong> Benchmark's clean cutoff at exactly March (from 9.7% to 0%) suggests a deploy, not a gradual drift.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>2. Call Type Mix Shift</h3>
+    <span class="pill pill-warning">Medium Confidence</span>
+  </div>
+  <div class="card-body">
+    <p>If clients are receiving more non-lead calls (maintenance, existing resident, vendor), those would be "Evaluated" but not qualify for "Analysis." Rising total volume from non-lead calls dilutes the analyzed rate.</p>
+    <p><strong>Evidence:</strong> Clients with gradual declines (Burkentine, Klingbeil) are consistent with a shifting call mix rather than a hard break.</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>3. Client-Specific Pipeline Failures</h3>
+    <span class="pill pill-danger">High Confidence</span>
+  </div>
+  <div class="card-body">
+    <p>Benchmark going to exactly 0% for 4 straight months is not a gradual trend — it's a break. Likely a config issue, disabled integration, or classification rule that's misrouting their calls away from the analysis engine entirely.</p>
+    <p><strong>Evidence:</strong> Only 2–3 clients are at exactly 0%. The rest have non-zero (even if low) rates, ruling out a system-wide failure.</p>
+  </div>
+</div>
+
+<hr>
+
+<h2>Recommended Investigation Steps</h2>
+<ol class="steps">
+  <li><strong>Benchmark pipeline audit</strong> — Check configuration for why they've had 0 analyzed calls since March. This should be a quick fix.</li>
+  <li><strong>March deploy audit</strong> — Identify any model updates, threshold changes, or classification rule changes deployed between Feb 28 and Mar 5, 2026.</li>
+  <li><strong>Call type breakdown for decliners</strong> — Pull call classification (lead vs non-lead) distribution for Burkentine, Klingbeil, and Advanced Management to see if their call mix shifted.</li>
+  <li><strong>Horizon root cause</strong> — Document what caused Feb–Apr evaluation failures and why analysis hasn't fully recovered despite evaluation being fixed.</li>
+  <li><strong>Analyze "Analyzed" criteria</strong> — Confirm what determines whether an Evaluated call gets promoted to Analyzed. Is this threshold documented? Has it changed?</li>
+  <li><strong>May spike investigation</strong> — May had the highest analyzed rate (9.6%) then June crashed to 7.9%. What was different about May?</li>
+</ol>
+
+<hr>
+
+<h2>Full Monthly Summary</h2>
+<table>
+  <thead><tr><th>Month</th><th class="num">Clients</th><th class="num">Total Calls</th><th class="num">MoM Change</th><th class="num">Evaluated</th><th class="num">Analyzed</th><th class="num">Analyzed Rate</th></tr></thead>
+  <tbody>
+    <tr><td>Jan 2026</td><td class="num">39</td><td class="num">102,256</td><td class="num">—</td><td class="num">102,256 (100%)</td><td class="num">8,079</td><td class="num">7.9%</td></tr>
+    <tr><td>Feb 2026</td><td class="num">39</td><td class="num">93,757</td><td class="num">-8.3%</td><td class="num">93,161 (99.4%)</td><td class="num">8,447</td><td class="num">9.0%</td></tr>
+    <tr><td>Mar 2026</td><td class="num">39</td><td class="num">108,572</td><td class="num">+15.8%</td><td class="num">107,943 (99.4%)</td><td class="num">9,301</td><td class="num">8.6%</td></tr>
+    <tr><td>Apr 2026</td><td class="num">39</td><td class="num">111,865</td><td class="num">+3.0%</td><td class="num">111,259 (99.5%)</td><td class="num">9,083</td><td class="num">8.1%</td></tr>
+    <tr class="row-success"><td>May 2026</td><td class="num">39</td><td class="num">115,424</td><td class="num">+3.2%</td><td class="num">115,424 (100%)</td><td class="num">11,121</td><td class="num">9.6%</td></tr>
+    <tr class="row-warning"><td>Jun 2026</td><td class="num">39</td><td class="num">111,620</td><td class="num">-3.3%</td><td class="num">111,620 (100%)</td><td class="num">8,789</td><td class="num">7.9%</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <div class="callout-title">Data Notes</div>
+  <p><strong>Scope:</strong> 39 active clients across 6 months of AI grading tabs.</p>
+  <p><strong>Jan 2026 tab:</strong> Contains duplicate rows (left + right side data); deduplicated to 39 unique clients for consistency.</p>
+  <p><strong>Columns K-T:</strong> Appear to be a static baseline snapshot (likely Dec 2025) — values don't change across Feb–Jun tabs.</p>
+</div>
+
+<p class="timestamp">Report generated Jul 1, 2026 from Call Analysis Metrics and Stats.xlsx</p>
+
+</div>
+
+<script>
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: months,
+    datasets: [
+      {
+        label: 'Total Calls',
+        data: [102256, 93757, 108572, 111865, 115424, 111620],
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37, 99, 235, 0.08)',
+        fill: true,
+        tension: 0.3,
+        yAxisID: 'y'
+      },
+      {
+        label: 'Analyzed (Graded) Calls',
+        data: [8079, 8447, 9301, 9083, 11121, 8789],
+        borderColor: '#16a34a',
+        backgroundColor: 'rgba(22, 163, 74, 0.08)',
+        fill: true,
+        tension: 0.3,
+        yAxisID: 'y1'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      title: { display: true, text: 'Total Calls vs Analyzed Calls — Jan to Jun 2026', font: { size: 14, weight: '600' } },
+      legend: { position: 'bottom' }
+    },
+    scales: {
+      y: {
+        type: 'linear', position: 'left',
+        title: { display: true, text: 'Total Calls' },
+        min: 80000, max: 120000,
+        ticks: { callback: v => (v/1000).toFixed(0) + 'k' }
+      },
+      y1: {
+        type: 'linear', position: 'right',
+        title: { display: true, text: 'Analyzed Calls' },
+        min: 6000, max: 12000,
+        ticks: { callback: v => (v/1000).toFixed(1) + 'k' },
+        grid: { drawOnChartArea: false }
+      }
+    }
+  }
+});
+
+new Chart(document.getElementById('rateChart'), {
+  type: 'bar',
+  data: {
+    labels: months,
+    datasets: [{
+      label: '% Analyzed (Graded)',
+      data: [7.9, 9.0, 8.6, 8.1, 9.6, 7.9],
+      backgroundColor: [
+        'rgba(37, 99, 235, 0.7)',
+        'rgba(37, 99, 235, 0.7)',
+        'rgba(37, 99, 235, 0.7)',
+        'rgba(37, 99, 235, 0.7)',
+        'rgba(22, 163, 74, 0.7)',
+        'rgba(217, 119, 6, 0.7)'
+      ],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: 'Analyzed Rate (% of Total Calls Receiving Full AI Scorecard)', font: { size: 14, weight: '600' } },
+      legend: { display: false }
+    },
+    scales: {
+      y: {
+        title: { display: true, text: '% Analyzed' },
+        min: 0, max: 12,
+        ticks: { callback: v => v + '%' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
