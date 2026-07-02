@@ -241,20 +241,18 @@ const coldRuns = [
     description: "Baseline — original prompts and protocols, no changes applied.",
     changes: "Initial benchmark run",
     meta: {
-      agreement: 81.9,
-      totalDisagreements: 76,
-      avgDelta: 13.0,
-      strictErrors: 55,
+      agreement: 82.9,
+      totalDisagreements: 72,
+      avgDelta: 11.9,
+      strictErrors: 51,
       lenientErrors: 21,
       target: 90
     },
-    keyFindings: `<p>The AI disagrees with humans on <strong>18.1% of question-level answers</strong> across these 20 calls (76 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 72% of disagreements (55 of 76).</p><p>Worst strict questions: <em>Feature/amenity benefit selling</em> (13/20 = 65%), <em>Pricing value language (if applicable)</em> (13/20 = 65%), <em>Inclusive language (we/us)</em> (14/20 = 70%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (11/20 = 55%), <em>Tour scheduled / clear next step</em> (17/20 = 85%).</p><p>Average absolute score delta is <strong>13.0 percentage points</strong> (weighted).</p>`,
+    keyFindings: `<p>The AI disagrees with humans on <strong>17.1% of question-level answers</strong> across these 20 calls (72 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 71% of disagreements (51 of 72).</p><p>Worst strict questions: <em>Pricing value language (if applicable)</em> (13/20 = 65%), <em>Inclusive language (we/us)</em> (14/20 = 70%), <em>Asked for name + used it</em> (16/20 = 80%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (11/20 = 55%), <em>Tour scheduled / clear next step</em> (17/20 = 85%).</p><p>Average absolute score delta is <strong>11.9 percentage points</strong> (weighted).</p>`,
     questions: [
       { short: "conversational", label: "Conversational info gathering", weight: 3, agree: 10, disagree: 10, total: 20, lenient: 9, strict: 1, dir: "lenient",
         evidence: []},
       { short: "rapport", label: "Rapport building / sentence variety", weight: 4, agree: 11, disagree: 9, total: 20, lenient: 8, strict: 1, dir: "lenient",
-        evidence: []},
-      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 13, disagree: 7, total: 20, lenient: 0, strict: 7, dir: "strict",
         evidence: []},
       { short: "pricing_value", label: "Pricing value language (if applicable)", weight: 3, agree: 13, disagree: 7, total: 20, lenient: 0, strict: 7, dir: "strict",
         evidence: []},
@@ -269,6 +267,8 @@ const coldRuns = [
       { short: "tour_offer", label: "Offered a tour", weight: 4, agree: 16, disagree: 4, total: 20, lenient: 0, strict: 4, dir: "strict",
         evidence: []},
       { short: "occupants", label: "Confirmed occupants", weight: 3, agree: 17, disagree: 3, total: 20, lenient: 0, strict: 3, dir: "strict",
+        evidence: []},
+      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 17, disagree: 3, total: 20, lenient: 0, strict: 3, dir: "strict",
         evidence: []},
       { short: "email", label: "Email address gathered", weight: 2, agree: 17, disagree: 3, total: 20, lenient: 0, strict: 3, dir: "strict",
         evidence: []},
@@ -292,8 +292,8 @@ const coldRuns = [
         evidence: []}
     ],
     calls: [
-      { id: "263494762", human: 85.0, ai: 28.75, strict: 12, lenient: 0, weightLost: 45, disqualifier: false,
-        note: '12 disagreements — all AI too strict.',
+      { id: "263494762", human: 73.75, ai: 28.75, strict: 11, lenient: 0, weightLost: 36, disqualifier: false,
+        note: '11 disagreements — all AI too strict.',
         details: [
           { q: "Conversational", w: 3, ai: "No", h: "Yes", reason: "Human credited conversational gathering. AI did not detect sufficient conversational flow." },
           { q: "Rapport", w: 4, ai: "No", h: "Yes", reason: "Human credited rapport building. AI did not detect sufficient personalization." },
@@ -301,26 +301,24 @@ const coldRuns = [
           { q: "Occupants", w: 3, ai: "No", h: "Yes", reason: "Occupant info surfaced in conversation. AI required a specific direct question format." },
           { q: "Pets", w: 3, ai: "No", h: "Yes", reason: "Pet info surfaced in conversation. AI required agent to ask in a specific format." },
           { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Tour offer", w: 4, ai: "No", h: "Yes", reason: "Agent offered a tour or visit. AI may have required exact \'tour\' wording." },
           { q: "Email", w: 2, ai: "No", h: "Yes", reason: "Agent gathered email address. AI missed the phrasing used." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
           { q: "Tour/next step", w: 5, ai: "No", h: "Yes", reason: "Agent provided a clear next step. AI did not credit it." },
           { q: "Inclusive language", w: 3, ai: "No", h: "Yes", reason: "Agent used \'we/our\' language but AI missed common phrasings like \'We do have...\' or \'Our community...\'" }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Tour/next step (5pts), Rapport (4pts).' },
-      { id: "264909961", human: 70.0, ai: 50.0, strict: 5, lenient: 2, weightLost: 30, disqualifier: false,
-        note: '7 disagreements: 5 strict, 2 lenient.',
+        recommendation: 'Strict fixes: Tour/next step (5pts), Rapport (4pts), Tour offer (4pts).' },
+      { id: "264909961", human: 58.75, ai: 50.0, strict: 4, lenient: 2, weightLost: 21, disqualifier: false,
+        note: '6 disagreements: 4 strict, 2 lenient.',
         details: [
           { q: "Name usage", w: 3, ai: "No", h: "Yes", reason: "Agent used caller\'s name but AI didn\'t detect it — likely transcription garble or exact-string matching failure." },
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
           { q: "Urgency/pricing disclaimer", w: 5, ai: "No", h: "Yes", reason: "Human credited urgency/pricing disclaimer language. AI applied narrow pattern matching." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
           { q: "Inclusive language", w: 3, ai: "No", h: "Yes", reason: "Agent used \'we/our\' language but AI missed common phrasings like \'We do have...\' or \'Our community...\'" }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Urgency/pricing disclaimer (5pts), Name usage (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
+        recommendation: 'Strict fixes: Urgency/pricing disclaimer (5pts), Name usage (3pts), Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
       { id: "265017569", human: 80.0, ai: 85.0, strict: 1, lenient: 2, weightLost: 10, disqualifier: false,
         note: '3 disagreements: 1 strict, 2 lenient.',
         details: [
@@ -367,14 +365,13 @@ const coldRuns = [
           { q: "Required disclaimers", w: 5, ai: "No", h: "Yes", reason: "Agent stated required disclaimers. AI missed due to phrasing variation." }
         ],
         recommendation: 'Strict fixes: Open-ended questions (6pts), Required disclaimers (5pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
-      { id: "265198083", human: 75.0, ai: 75.0, strict: 1, lenient: 2, weightLost: 18, disqualifier: false,
-        note: '3 disagreements: 1 strict, 2 lenient.',
+      { id: "265198083", human: 63.75, ai: 75.0, strict: 0, lenient: 2, weightLost: 9, disqualifier: false,
+        note: '2 disagreements — all AI too lenient.',
         details: [
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Tour/next step", w: 5, ai: "Yes", h: "No", reason: "AI credited a vague statement as a next step; human required a definitive action." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts). Lenient fixes: Tour/next step (5pts), Rapport (4pts).' },
+        recommendation: 'Lenient fixes: Tour/next step (5pts), Rapport (4pts).' },
       { id: "265212524", human: 92.5, ai: 60.0, strict: 6, lenient: 0, weightLost: 26, disqualifier: false,
         note: '6 disagreements — all AI too strict.',
         details: [
@@ -390,15 +387,14 @@ const coldRuns = [
         note: 'Perfect agreement — AI and human matched on every question.',
         details: [],
         recommendation: 'No action needed — perfect agreement.' },
-      { id: "265292177", human: 81.25, ai: 67.5, strict: 3, lenient: 1, weightLost: 17, disqualifier: false,
-        note: '4 disagreements: 3 strict, 1 lenient.',
+      { id: "265292177", human: 70.0, ai: 67.5, strict: 2, lenient: 1, weightLost: 8, disqualifier: false,
+        note: '3 disagreements: 2 strict, 1 lenient.',
         details: [
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
           { q: "Closing", w: 2, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Pricing value (3pts), Closing (2pts). Lenient fixes: Conversational (3pts).' },
+        recommendation: 'Strict fixes: Pricing value (3pts), Closing (2pts). Lenient fixes: Conversational (3pts).' },
       { id: "265300729", human: 76.25, ai: 85.0, strict: 0, lenient: 2, weightLost: 7, disqualifier: false,
         note: '2 disagreements — all AI too lenient.',
         details: [
@@ -478,22 +474,22 @@ const coldRuns = [
     description: "Protocol & prompt updates — Monica\'s expanded recognition rules + Myles\'s transcription handling.",
     changes: "Recs 1-5 applied: expanded recognition for occupants/pets/how-heard, redefined conversational/rapport, reclassified open-ended detection, lowered bar for feature/amenity + inclusive language, added transcription guidance",
     meta: {
-      agreement: 81.9,
-      totalDisagreements: 76,
-      avgDelta: 13.6,
-      strictErrors: 52,
+      agreement: 82.9,
+      totalDisagreements: 72,
+      avgDelta: 13.0,
+      strictErrors: 48,
       lenientErrors: 24,
       target: 90
     },
-    keyFindings: `<p>The AI disagrees with humans on <strong>18.1% of question-level answers</strong> across these 20 calls (76 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 68% of disagreements (52 of 76).</p><p>Worst strict questions: <em>Feature/amenity benefit selling</em> (10/20 = 50%), <em>How heard about community</em> (14/20 = 70%), <em>Pricing value language (if applicable)</em> (14/20 = 70%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (12/20 = 60%), <em>Tour scheduled / clear next step</em> (15/20 = 75%).</p><p>Average absolute score delta is <strong>13.6 percentage points</strong> (weighted).</p>`,
+    keyFindings: `<p>The AI disagrees with humans on <strong>17.1% of question-level answers</strong> across these 20 calls (72 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 67% of disagreements (48 of 72).</p><p>Worst strict questions: <em>How heard about community</em> (14/20 = 70%), <em>Pricing value language (if applicable)</em> (14/20 = 70%), <em>Offered a tour</em> (15/20 = 75%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (12/20 = 60%), <em>Tour scheduled / clear next step</em> (15/20 = 75%).</p><p>Average absolute score delta is <strong>13.0 percentage points</strong> (weighted).</p>`,
     questions: [
       { short: "conversational", label: "Conversational info gathering", weight: 3, agree: 10, disagree: 10, total: 20, lenient: 9, strict: 1, dir: "lenient",
-        evidence: []},
-      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 10, disagree: 10, total: 20, lenient: 3, strict: 7, dir: "strict",
         evidence: []},
       { short: "rapport", label: "Rapport building / sentence variety", weight: 4, agree: 12, disagree: 8, total: 20, lenient: 7, strict: 1, dir: "lenient",
         evidence: []},
       { short: "how_heard", label: "How heard about community", weight: 3, agree: 14, disagree: 6, total: 20, lenient: 0, strict: 6, dir: "strict",
+        evidence: []},
+      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 14, disagree: 6, total: 20, lenient: 3, strict: 3, dir: "mixed",
         evidence: []},
       { short: "pricing_value", label: "Pricing value language (if applicable)", weight: 3, agree: 14, disagree: 6, total: 20, lenient: 0, strict: 6, dir: "strict",
         evidence: []},
@@ -527,8 +523,8 @@ const coldRuns = [
         evidence: []}
     ],
     calls: [
-      { id: "263494762", human: 85.0, ai: 32.5, strict: 11, lenient: 0, weightLost: 42, disqualifier: false,
-        note: '11 disagreements — all AI too strict.',
+      { id: "263494762", human: 73.75, ai: 32.5, strict: 10, lenient: 0, weightLost: 33, disqualifier: false,
+        note: '10 disagreements — all AI too strict.',
         details: [
           { q: "Conversational", w: 3, ai: "No", h: "Yes", reason: "Human credited conversational gathering. AI did not detect sufficient conversational flow." },
           { q: "Rapport", w: 4, ai: "No", h: "Yes", reason: "Human credited rapport building. AI did not detect sufficient personalization." },
@@ -536,22 +532,20 @@ const coldRuns = [
           { q: "Occupants", w: 3, ai: "No", h: "Yes", reason: "Occupant info surfaced in conversation. AI required a specific direct question format." },
           { q: "Pets", w: 3, ai: "No", h: "Yes", reason: "Pet info surfaced in conversation. AI required agent to ask in a specific format." },
           { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Tour offer", w: 4, ai: "No", h: "Yes", reason: "Agent offered a tour or visit. AI may have required exact \'tour\' wording." },
           { q: "Email", w: 2, ai: "No", h: "Yes", reason: "Agent gathered email address. AI missed the phrasing used." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
           { q: "Tour/next step", w: 5, ai: "No", h: "Yes", reason: "Agent provided a clear next step. AI did not credit it." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Tour/next step (5pts), Rapport (4pts).' },
-      { id: "264909961", human: 70.0, ai: 63.75, strict: 2, lenient: 2, weightLost: 19, disqualifier: false,
-        note: '4 disagreements: 2 strict, 2 lenient.',
+        recommendation: 'Strict fixes: Tour/next step (5pts), Rapport (4pts), Tour offer (4pts).' },
+      { id: "264909961", human: 58.75, ai: 63.75, strict: 1, lenient: 2, weightLost: 10, disqualifier: false,
+        note: '3 disagreements: 1 strict, 2 lenient.',
         details: [
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
+        recommendation: 'Strict fixes: Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
       { id: "265017569", human: 80.0, ai: 96.25, strict: 1, lenient: 3, weightLost: 19, disqualifier: false,
         note: '4 disagreements: 1 strict, 3 lenient.',
         details: [
@@ -602,15 +596,14 @@ const coldRuns = [
           { q: "Required disclaimers", w: 5, ai: "No", h: "Yes", reason: "Agent stated required disclaimers. AI missed due to phrasing variation." }
         ],
         recommendation: 'Strict fixes: Required disclaimers (5pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
-      { id: "265198083", human: 75.0, ai: 81.25, strict: 1, lenient: 3, weightLost: 23, disqualifier: false,
-        note: '4 disagreements: 1 strict, 3 lenient.',
+      { id: "265198083", human: 63.75, ai: 81.25, strict: 0, lenient: 3, weightLost: 14, disqualifier: false,
+        note: '3 disagreements — all AI too lenient.',
         details: [
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
           { q: "Urgency/pricing disclaimer", w: 5, ai: "Yes", h: "No", reason: "AI flagged a basic statement as urgency language; human required explicit scarcity phrasing." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Tour/next step", w: 5, ai: "Yes", h: "No", reason: "AI credited a vague statement as a next step; human required a definitive action." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts). Lenient fixes: Urgency/pricing disclaimer (5pts), Tour/next step (5pts), Rapport (4pts).' },
+        recommendation: 'Lenient fixes: Urgency/pricing disclaimer (5pts), Tour/next step (5pts), Rapport (4pts).' },
       { id: "265212524", human: 92.5, ai: 60.0, strict: 6, lenient: 0, weightLost: 26, disqualifier: false,
         note: '6 disagreements — all AI too strict.',
         details: [
@@ -628,15 +621,14 @@ const coldRuns = [
           { q: "Feature/amenity", w: 9, ai: "Yes", h: "No", reason: "AI credited a generic statement as feature selling; human required specific mentions." }
         ],
         recommendation: 'Lenient fixes: Feature/amenity (9pts).' },
-      { id: "265292177", human: 81.25, ai: 67.5, strict: 3, lenient: 1, weightLost: 17, disqualifier: false,
-        note: '4 disagreements: 3 strict, 1 lenient.',
+      { id: "265292177", human: 70.0, ai: 67.5, strict: 2, lenient: 1, weightLost: 8, disqualifier: false,
+        note: '3 disagreements: 2 strict, 1 lenient.',
         details: [
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
           { q: "Closing", w: 2, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Pricing value (3pts), Closing (2pts). Lenient fixes: Conversational (3pts).' },
+        recommendation: 'Strict fixes: Pricing value (3pts), Closing (2pts). Lenient fixes: Conversational (3pts).' },
       { id: "265300729", human: 76.25, ai: 85.0, strict: 0, lenient: 2, weightLost: 7, disqualifier: false,
         note: '2 disagreements — all AI too lenient.',
         details: [
@@ -713,20 +705,20 @@ const coldRuns = [
     description: "Structural prompt additions — processing order, volunteered info rule, negative example override.",
     changes: "Added protocol processing ORDER, VOLUNTEERED INFORMATION RULE, NEGATIVE EXAMPLE OVERRIDE, AVOIDING FALSE CREDIT guard to system prompt",
     meta: {
-      agreement: 82.1,
-      totalDisagreements: 75,
-      avgDelta: 13.4,
-      strictErrors: 51,
+      agreement: 83.1,
+      totalDisagreements: 71,
+      avgDelta: 12.8,
+      strictErrors: 47,
       lenientErrors: 24,
       target: 90
     },
-    keyFindings: `<p>The AI disagrees with humans on <strong>17.9% of question-level answers</strong> across these 20 calls (75 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 68% of disagreements (51 of 75).</p><p>Worst strict questions: <em>Feature/amenity benefit selling</em> (10/20 = 50%), <em>Pricing value language (if applicable)</em> (14/20 = 70%), <em>How heard about community</em> (15/20 = 75%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (12/20 = 60%), <em>Pricing disclaimer / urgency language</em> (19/20 = 95%).</p><p>Average absolute score delta is <strong>13.4 percentage points</strong> (weighted).</p>`,
+    keyFindings: `<p>The AI disagrees with humans on <strong>16.9% of question-level answers</strong> across these 20 calls (71 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 66% of disagreements (47 of 71).</p><p>Worst strict questions: <em>Pricing value language (if applicable)</em> (14/20 = 70%), <em>How heard about community</em> (15/20 = 75%), <em>Required disclaimers stated</em> (16/20 = 80%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (12/20 = 60%), <em>Pricing disclaimer / urgency language</em> (19/20 = 95%).</p><p>Average absolute score delta is <strong>12.8 percentage points</strong> (weighted).</p>`,
     questions: [
       { short: "conversational", label: "Conversational info gathering", weight: 3, agree: 10, disagree: 10, total: 20, lenient: 9, strict: 1, dir: "lenient",
         evidence: []},
-      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 10, disagree: 10, total: 20, lenient: 3, strict: 7, dir: "strict",
-        evidence: []},
       { short: "rapport", label: "Rapport building / sentence variety", weight: 4, agree: 12, disagree: 8, total: 20, lenient: 7, strict: 1, dir: "lenient",
+        evidence: []},
+      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 14, disagree: 6, total: 20, lenient: 3, strict: 3, dir: "mixed",
         evidence: []},
       { short: "pricing_value", label: "Pricing value language (if applicable)", weight: 3, agree: 14, disagree: 6, total: 20, lenient: 1, strict: 5, dir: "strict",
         evidence: []},
@@ -764,8 +756,8 @@ const coldRuns = [
         evidence: []}
     ],
     calls: [
-      { id: "263494762", human: 85.0, ai: 32.5, strict: 11, lenient: 0, weightLost: 42, disqualifier: false,
-        note: '11 disagreements — all AI too strict.',
+      { id: "263494762", human: 73.75, ai: 32.5, strict: 10, lenient: 0, weightLost: 33, disqualifier: false,
+        note: '10 disagreements — all AI too strict.',
         details: [
           { q: "Conversational", w: 3, ai: "No", h: "Yes", reason: "Human credited conversational gathering. AI did not detect sufficient conversational flow." },
           { q: "Rapport", w: 4, ai: "No", h: "Yes", reason: "Human credited rapport building. AI did not detect sufficient personalization." },
@@ -773,22 +765,20 @@ const coldRuns = [
           { q: "Occupants", w: 3, ai: "No", h: "Yes", reason: "Occupant info surfaced in conversation. AI required a specific direct question format." },
           { q: "Pets", w: 3, ai: "No", h: "Yes", reason: "Pet info surfaced in conversation. AI required agent to ask in a specific format." },
           { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Tour offer", w: 4, ai: "No", h: "Yes", reason: "Agent offered a tour or visit. AI may have required exact \'tour\' wording." },
           { q: "Email", w: 2, ai: "No", h: "Yes", reason: "Agent gathered email address. AI missed the phrasing used." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
           { q: "Tour/next step", w: 5, ai: "No", h: "Yes", reason: "Agent provided a clear next step. AI did not credit it." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Tour/next step (5pts), Rapport (4pts).' },
-      { id: "264909961", human: 70.0, ai: 63.75, strict: 2, lenient: 2, weightLost: 19, disqualifier: false,
-        note: '4 disagreements: 2 strict, 2 lenient.',
+        recommendation: 'Strict fixes: Tour/next step (5pts), Rapport (4pts), Tour offer (4pts).' },
+      { id: "264909961", human: 58.75, ai: 63.75, strict: 1, lenient: 2, weightLost: 10, disqualifier: false,
+        note: '3 disagreements: 1 strict, 2 lenient.',
         details: [
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
+        recommendation: 'Strict fixes: Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
       { id: "265017569", human: 80.0, ai: 96.25, strict: 1, lenient: 3, weightLost: 19, disqualifier: false,
         note: '4 disagreements: 1 strict, 3 lenient.',
         details: [
@@ -836,15 +826,14 @@ const coldRuns = [
           { q: "Pricing value", w: 3, ai: "Yes", h: "No", reason: "AI credited a basic pricing mention; human required more explicit value framing." }
         ],
         recommendation: 'Strict fixes: Required disclaimers (5pts). Lenient fixes: Rapport (4pts), Conversational (3pts), Pricing value (3pts).' },
-      { id: "265198083", human: 75.0, ai: 81.25, strict: 1, lenient: 3, weightLost: 23, disqualifier: false,
-        note: '4 disagreements: 1 strict, 3 lenient.',
+      { id: "265198083", human: 63.75, ai: 81.25, strict: 0, lenient: 3, weightLost: 14, disqualifier: false,
+        note: '3 disagreements — all AI too lenient.',
         details: [
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
           { q: "Urgency/pricing disclaimer", w: 5, ai: "Yes", h: "No", reason: "AI flagged a basic statement as urgency language; human required explicit scarcity phrasing." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Tour/next step", w: 5, ai: "Yes", h: "No", reason: "AI credited a vague statement as a next step; human required a definitive action." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts). Lenient fixes: Urgency/pricing disclaimer (5pts), Tour/next step (5pts), Rapport (4pts).' },
+        recommendation: 'Lenient fixes: Urgency/pricing disclaimer (5pts), Tour/next step (5pts), Rapport (4pts).' },
       { id: "265212524", human: 92.5, ai: 60.0, strict: 6, lenient: 0, weightLost: 26, disqualifier: false,
         note: '6 disagreements — all AI too strict.',
         details: [
@@ -863,14 +852,13 @@ const coldRuns = [
           { q: "Feature/amenity", w: 9, ai: "Yes", h: "No", reason: "AI credited a generic statement as feature selling; human required specific mentions." }
         ],
         recommendation: 'Strict fixes: Text/email permission (2pts). Lenient fixes: Feature/amenity (9pts).' },
-      { id: "265292177", human: 81.25, ai: 70.0, strict: 2, lenient: 1, weightLost: 15, disqualifier: false,
-        note: '3 disagreements: 2 strict, 1 lenient.',
+      { id: "265292177", human: 70.0, ai: 70.0, strict: 1, lenient: 1, weightLost: 6, disqualifier: false,
+        note: '2 disagreements: 1 strict, 1 lenient.',
         details: [
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Pricing value (3pts). Lenient fixes: Conversational (3pts).' },
+        recommendation: 'Strict fixes: Pricing value (3pts). Lenient fixes: Conversational (3pts).' },
       { id: "265300729", human: 76.25, ai: 71.25, strict: 2, lenient: 2, weightLost: 18, disqualifier: false,
         note: '4 disagreements: 2 strict, 2 lenient.',
         details: [
@@ -949,24 +937,24 @@ const coldRuns = [
     description: "Post-correction baseline — first run measured against corrected human scores.",
     changes: "Human scoring errors identified and corrected (100 answers across 19 calls). All runs re-evaluated against corrected \'New Manual\' data.",
     meta: {
-      agreement: 82.1,
-      totalDisagreements: 75,
-      avgDelta: 14.1,
-      strictErrors: 50,
+      agreement: 83.1,
+      totalDisagreements: 71,
+      avgDelta: 13.4,
+      strictErrors: 46,
       lenientErrors: 25,
       target: 90
     },
-    keyFindings: `<p>The AI disagrees with humans on <strong>17.9% of question-level answers</strong> across these 20 calls (75 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 67% of disagreements (50 of 75).</p><p>Worst strict questions: <em>Feature/amenity benefit selling</em> (10/20 = 50%), <em>Pricing value language (if applicable)</em> (12/20 = 60%), <em>How heard about community</em> (14/20 = 70%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (12/20 = 60%), <em>Pricing disclaimer / urgency language</em> (19/20 = 95%).</p><p>Average absolute score delta is <strong>14.1 percentage points</strong> (weighted).</p>`,
+    keyFindings: `<p>The AI disagrees with humans on <strong>16.9% of question-level answers</strong> across these 20 calls (71 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 65% of disagreements (46 of 71).</p><p>Worst strict questions: <em>Pricing value language (if applicable)</em> (12/20 = 60%), <em>How heard about community</em> (14/20 = 70%), <em>Asked for name + used it</em> (16/20 = 80%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (12/20 = 60%), <em>Pricing disclaimer / urgency language</em> (19/20 = 95%).</p><p>Average absolute score delta is <strong>13.4 percentage points</strong> (weighted).</p>`,
     questions: [
       { short: "conversational", label: "Conversational info gathering", weight: 3, agree: 10, disagree: 10, total: 20, lenient: 9, strict: 1, dir: "lenient",
-        evidence: []},
-      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 10, disagree: 10, total: 20, lenient: 3, strict: 7, dir: "strict",
         evidence: []},
       { short: "rapport", label: "Rapport building / sentence variety", weight: 4, agree: 12, disagree: 8, total: 20, lenient: 7, strict: 1, dir: "lenient",
         evidence: []},
       { short: "pricing_value", label: "Pricing value language (if applicable)", weight: 3, agree: 12, disagree: 8, total: 20, lenient: 2, strict: 6, dir: "strict",
         evidence: []},
       { short: "how_heard", label: "How heard about community", weight: 3, agree: 14, disagree: 6, total: 20, lenient: 0, strict: 6, dir: "strict",
+        evidence: []},
+      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 14, disagree: 6, total: 20, lenient: 3, strict: 3, dir: "mixed",
         evidence: []},
       { short: "name_usage", label: "Asked for name + used it", weight: 3, agree: 16, disagree: 4, total: 20, lenient: 0, strict: 4, dir: "strict",
         evidence: []},
@@ -996,8 +984,8 @@ const coldRuns = [
         evidence: []}
     ],
     calls: [
-      { id: "263494762", human: 85.0, ai: 28.75, strict: 12, lenient: 0, weightLost: 45, disqualifier: false,
-        note: '12 disagreements — all AI too strict.',
+      { id: "263494762", human: 73.75, ai: 28.75, strict: 11, lenient: 0, weightLost: 36, disqualifier: false,
+        note: '11 disagreements — all AI too strict.',
         details: [
           { q: "Conversational", w: 3, ai: "No", h: "Yes", reason: "Human credited conversational gathering. AI did not detect sufficient conversational flow." },
           { q: "Rapport", w: 4, ai: "No", h: "Yes", reason: "Human credited rapport building. AI did not detect sufficient personalization." },
@@ -1005,23 +993,21 @@ const coldRuns = [
           { q: "Occupants", w: 3, ai: "No", h: "Yes", reason: "Occupant info surfaced in conversation. AI required a specific direct question format." },
           { q: "Pets", w: 3, ai: "No", h: "Yes", reason: "Pet info surfaced in conversation. AI required agent to ask in a specific format." },
           { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Tour offer", w: 4, ai: "No", h: "Yes", reason: "Agent offered a tour or visit. AI may have required exact \'tour\' wording." },
           { q: "Email", w: 2, ai: "No", h: "Yes", reason: "Agent gathered email address. AI missed the phrasing used." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
           { q: "Tour/next step", w: 5, ai: "No", h: "Yes", reason: "Agent provided a clear next step. AI did not credit it." },
           { q: "Inclusive language", w: 3, ai: "No", h: "Yes", reason: "Agent used \'we/our\' language but AI missed common phrasings like \'We do have...\' or \'Our community...\'" }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Tour/next step (5pts), Rapport (4pts).' },
-      { id: "264909961", human: 70.0, ai: 63.75, strict: 2, lenient: 2, weightLost: 19, disqualifier: false,
-        note: '4 disagreements: 2 strict, 2 lenient.',
+        recommendation: 'Strict fixes: Tour/next step (5pts), Rapport (4pts), Tour offer (4pts).' },
+      { id: "264909961", human: 58.75, ai: 63.75, strict: 1, lenient: 2, weightLost: 10, disqualifier: false,
+        note: '3 disagreements: 1 strict, 2 lenient.',
         details: [
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
+        recommendation: 'Strict fixes: Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
       { id: "265017569", human: 80.0, ai: 100.0, strict: 0, lenient: 3, weightLost: 16, disqualifier: false,
         note: '3 disagreements — all AI too lenient.',
         details: [
@@ -1067,15 +1053,14 @@ const coldRuns = [
           { q: "Pricing value", w: 3, ai: "Yes", h: "No", reason: "AI credited a basic pricing mention; human required more explicit value framing." }
         ],
         recommendation: 'Strict fixes: Required disclaimers (5pts). Lenient fixes: Rapport (4pts), Conversational (3pts), Pricing value (3pts).' },
-      { id: "265198083", human: 75.0, ai: 81.25, strict: 1, lenient: 3, weightLost: 23, disqualifier: false,
-        note: '4 disagreements: 1 strict, 3 lenient.',
+      { id: "265198083", human: 63.75, ai: 81.25, strict: 0, lenient: 3, weightLost: 14, disqualifier: false,
+        note: '3 disagreements — all AI too lenient.',
         details: [
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
           { q: "Urgency/pricing disclaimer", w: 5, ai: "Yes", h: "No", reason: "AI flagged a basic statement as urgency language; human required explicit scarcity phrasing." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Tour/next step", w: 5, ai: "Yes", h: "No", reason: "AI credited a vague statement as a next step; human required a definitive action." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts). Lenient fixes: Urgency/pricing disclaimer (5pts), Tour/next step (5pts), Rapport (4pts).' },
+        recommendation: 'Lenient fixes: Urgency/pricing disclaimer (5pts), Tour/next step (5pts), Rapport (4pts).' },
       { id: "265212524", human: 92.5, ai: 60.0, strict: 6, lenient: 0, weightLost: 26, disqualifier: false,
         note: '6 disagreements — all AI too strict.',
         details: [
@@ -1093,14 +1078,13 @@ const coldRuns = [
           { q: "Feature/amenity", w: 9, ai: "Yes", h: "No", reason: "AI credited a generic statement as feature selling; human required specific mentions." }
         ],
         recommendation: 'Lenient fixes: Feature/amenity (9pts).' },
-      { id: "265292177", human: 81.25, ai: 70.0, strict: 2, lenient: 1, weightLost: 15, disqualifier: false,
-        note: '3 disagreements: 2 strict, 1 lenient.',
+      { id: "265292177", human: 70.0, ai: 70.0, strict: 1, lenient: 1, weightLost: 6, disqualifier: false,
+        note: '2 disagreements: 1 strict, 1 lenient.',
         details: [
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Inclusive language", w: 3, ai: "No", h: "Yes", reason: "Agent used \'we/our\' language but AI missed common phrasings like \'We do have...\' or \'Our community...\'" }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Inclusive language (3pts). Lenient fixes: Conversational (3pts).' },
+        recommendation: 'Strict fixes: Inclusive language (3pts). Lenient fixes: Conversational (3pts).' },
       { id: "265300729", human: 76.25, ai: 85.0, strict: 0, lenient: 2, weightLost: 7, disqualifier: false,
         note: '2 disagreements — all AI too lenient.',
         details: [
@@ -1182,20 +1166,20 @@ const coldRuns = [
     description: "Version 5.0 — latest model iteration with accumulated prompt and protocol improvements.",
     changes: "Full prompt refinement pass incorporating all prior learnings from Runs 1-4",
     meta: {
-      agreement: 81.7,
-      totalDisagreements: 77,
-      avgDelta: 13.8,
-      strictErrors: 53,
+      agreement: 82.6,
+      totalDisagreements: 73,
+      avgDelta: 13.1,
+      strictErrors: 49,
       lenientErrors: 24,
       target: 90
     },
-    keyFindings: `<p>The AI disagrees with humans on <strong>18.3% of question-level answers</strong> across these 20 calls (77 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 69% of disagreements (53 of 77).</p><p>Worst strict questions: <em>Feature/amenity benefit selling</em> (10/20 = 50%), <em>Pricing value language (if applicable)</em> (14/20 = 70%), <em>How heard about community</em> (15/20 = 75%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (12/20 = 60%).</p><p>Average absolute score delta is <strong>13.8 percentage points</strong> (weighted).</p>`,
+    keyFindings: `<p>The AI disagrees with humans on <strong>17.4% of question-level answers</strong> across these 20 calls (73 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 67% of disagreements (49 of 73).</p><p>Worst strict questions: <em>Pricing value language (if applicable)</em> (14/20 = 70%), <em>How heard about community</em> (15/20 = 75%), <em>Offered a tour</em> (15/20 = 75%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (12/20 = 60%).</p><p>Average absolute score delta is <strong>13.1 percentage points</strong> (weighted).</p>`,
     questions: [
       { short: "conversational", label: "Conversational info gathering", weight: 3, agree: 10, disagree: 10, total: 20, lenient: 9, strict: 1, dir: "lenient",
         evidence: []},
-      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 10, disagree: 10, total: 20, lenient: 3, strict: 7, dir: "strict",
-        evidence: []},
       { short: "rapport", label: "Rapport building / sentence variety", weight: 4, agree: 12, disagree: 8, total: 20, lenient: 7, strict: 1, dir: "lenient",
+        evidence: []},
+      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 14, disagree: 6, total: 20, lenient: 3, strict: 3, dir: "mixed",
         evidence: []},
       { short: "pricing_value", label: "Pricing value language (if applicable)", weight: 3, agree: 14, disagree: 6, total: 20, lenient: 1, strict: 5, dir: "strict",
         evidence: []},
@@ -1229,8 +1213,8 @@ const coldRuns = [
         evidence: []}
     ],
     calls: [
-      { id: "263494762", human: 85.0, ai: 32.5, strict: 11, lenient: 0, weightLost: 42, disqualifier: false,
-        note: '11 disagreements — all AI too strict.',
+      { id: "263494762", human: 73.75, ai: 32.5, strict: 10, lenient: 0, weightLost: 33, disqualifier: false,
+        note: '10 disagreements — all AI too strict.',
         details: [
           { q: "Conversational", w: 3, ai: "No", h: "Yes", reason: "Human credited conversational gathering. AI did not detect sufficient conversational flow." },
           { q: "Rapport", w: 4, ai: "No", h: "Yes", reason: "Human credited rapport building. AI did not detect sufficient personalization." },
@@ -1238,22 +1222,20 @@ const coldRuns = [
           { q: "Occupants", w: 3, ai: "No", h: "Yes", reason: "Occupant info surfaced in conversation. AI required a specific direct question format." },
           { q: "Pets", w: 3, ai: "No", h: "Yes", reason: "Pet info surfaced in conversation. AI required agent to ask in a specific format." },
           { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Tour offer", w: 4, ai: "No", h: "Yes", reason: "Agent offered a tour or visit. AI may have required exact \'tour\' wording." },
           { q: "Email", w: 2, ai: "No", h: "Yes", reason: "Agent gathered email address. AI missed the phrasing used." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
           { q: "Tour/next step", w: 5, ai: "No", h: "Yes", reason: "Agent provided a clear next step. AI did not credit it." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Tour/next step (5pts), Rapport (4pts).' },
-      { id: "264909961", human: 70.0, ai: 63.75, strict: 2, lenient: 2, weightLost: 19, disqualifier: false,
-        note: '4 disagreements: 2 strict, 2 lenient.',
+        recommendation: 'Strict fixes: Tour/next step (5pts), Rapport (4pts), Tour offer (4pts).' },
+      { id: "264909961", human: 58.75, ai: 63.75, strict: 1, lenient: 2, weightLost: 10, disqualifier: false,
+        note: '3 disagreements: 1 strict, 2 lenient.',
         details: [
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
+        recommendation: 'Strict fixes: Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
       { id: "265017569", human: 80.0, ai: 92.5, strict: 1, lenient: 3, weightLost: 22, disqualifier: false,
         note: '4 disagreements: 1 strict, 3 lenient.',
         details: [
@@ -1303,16 +1285,15 @@ const coldRuns = [
           { q: "Required disclaimers", w: 5, ai: "No", h: "Yes", reason: "Agent stated required disclaimers. AI missed due to phrasing variation." }
         ],
         recommendation: 'Strict fixes: Required disclaimers (5pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
-      { id: "265198083", human: 75.0, ai: 85.0, strict: 1, lenient: 4, weightLost: 26, disqualifier: false,
-        note: '5 disagreements: 1 strict, 4 lenient.',
+      { id: "265198083", human: 63.75, ai: 85.0, strict: 0, lenient: 4, weightLost: 17, disqualifier: false,
+        note: '4 disagreements — all AI too lenient.',
         details: [
           { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
           { q: "Urgency/pricing disclaimer", w: 5, ai: "Yes", h: "No", reason: "AI flagged a basic statement as urgency language; human required explicit scarcity phrasing." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "Yes", h: "No", reason: "AI credited a basic pricing mention; human required more explicit value framing." },
           { q: "Tour/next step", w: 5, ai: "Yes", h: "No", reason: "AI credited a vague statement as a next step; human required a definitive action." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts). Lenient fixes: Urgency/pricing disclaimer (5pts), Tour/next step (5pts), Rapport (4pts).' },
+        recommendation: 'Lenient fixes: Urgency/pricing disclaimer (5pts), Tour/next step (5pts), Rapport (4pts).' },
       { id: "265212524", human: 92.5, ai: 60.0, strict: 6, lenient: 0, weightLost: 26, disqualifier: false,
         note: '6 disagreements — all AI too strict.',
         details: [
@@ -1330,16 +1311,15 @@ const coldRuns = [
           { q: "Feature/amenity", w: 9, ai: "Yes", h: "No", reason: "AI credited a generic statement as feature selling; human required specific mentions." }
         ],
         recommendation: 'Lenient fixes: Feature/amenity (9pts).' },
-      { id: "265292177", human: 81.25, ai: 63.75, strict: 4, lenient: 1, weightLost: 20, disqualifier: false,
-        note: '5 disagreements: 4 strict, 1 lenient.',
+      { id: "265292177", human: 70.0, ai: 63.75, strict: 3, lenient: 1, weightLost: 11, disqualifier: false,
+        note: '4 disagreements: 3 strict, 1 lenient.',
         details: [
           { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
-          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
           { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
           { q: "Inclusive language", w: 3, ai: "No", h: "Yes", reason: "Agent used \'we/our\' language but AI missed common phrasings like \'We do have...\' or \'Our community...\'" },
           { q: "Closing", w: 2, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." }
         ],
-        recommendation: 'Strict fixes: Feature/amenity (9pts), Pricing value (3pts), Inclusive language (3pts). Lenient fixes: Conversational (3pts).' },
+        recommendation: 'Strict fixes: Pricing value (3pts), Inclusive language (3pts), Closing (2pts). Lenient fixes: Conversational (3pts).' },
       { id: "265300729", human: 76.25, ai: 77.5, strict: 1, lenient: 2, weightLost: 13, disqualifier: false,
         note: '3 disagreements: 1 strict, 2 lenient.',
         details: [
@@ -1606,19 +1586,461 @@ const coldRunAnswerData = {
     "265390645": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265426567": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,0],occupants:[1,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]}
   },
+  {
+    id: 6,
+    label: "Run 6",
+    date: "July 2, 2026",
+    description: "Protocol revision — conversational (Option C) + benefit framing clarification for feature/amenity. QA manager re-graded manual answers.",
+    changes: "Switched conversational protocol to Option C (negative examples). Added \'define benefit framing\' to feature/amenity prompt — agent must connect feature to a benefit, not just name it. QA manager corrected manual answers across benefit selling and multiple other questions.",
+    meta: {
+      agreement: 83.8,
+      totalDisagreements: 68,
+      avgDelta: 12.0,
+      strictErrors: 44,
+      lenientErrors: 24,
+      target: 90
+    },
+    keyFindings: `<p>The AI disagrees with humans on <strong>16.2% of question-level answers</strong> across these 20 calls (68 of 420 comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 65% of disagreements (44 of 68).</p><p>Worst strict questions: <em>Pricing value language (if applicable)</em> (14/20 = 70%), <em>How heard about community</em> (15/20 = 75%), <em>Offered a tour</em> (16/20 = 80%). Worst lenient questions: <em>Conversational info gathering</em> (10/20 = 50%), <em>Rapport building / sentence variety</em> (11/20 = 55%).</p><p>Average absolute score delta is <strong>12.0 percentage points</strong> (weighted).</p>`,
+    questions: [
+      { short: "conversational", label: "Conversational info gathering", weight: 3, agree: 10, disagree: 10, total: 20, lenient: 9, strict: 1, dir: "lenient",
+        evidence: []},
+      { short: "rapport", label: "Rapport building / sentence variety", weight: 4, agree: 11, disagree: 9, total: 20, lenient: 8, strict: 1, dir: "lenient",
+        evidence: []},
+      { short: "feature_amenity", label: "Feature/amenity benefit selling", weight: 9, agree: 14, disagree: 6, total: 20, lenient: 3, strict: 3, dir: "mixed",
+        evidence: []},
+      { short: "pricing_value", label: "Pricing value language (if applicable)", weight: 3, agree: 14, disagree: 6, total: 20, lenient: 1, strict: 5, dir: "strict",
+        evidence: []},
+      { short: "how_heard", label: "How heard about community", weight: 3, agree: 15, disagree: 5, total: 20, lenient: 0, strict: 5, dir: "strict",
+        evidence: []},
+      { short: "tour_offer", label: "Offered a tour", weight: 4, agree: 16, disagree: 4, total: 20, lenient: 0, strict: 4, dir: "strict",
+        evidence: []},
+      { short: "tour_next_step", label: "Tour scheduled / clear next step", weight: 5, agree: 16, disagree: 4, total: 20, lenient: 2, strict: 2, dir: "mixed",
+        evidence: []},
+      { short: "name_usage", label: "Asked for name + used it", weight: 3, agree: 17, disagree: 3, total: 20, lenient: 0, strict: 3, dir: "strict",
+        evidence: []},
+      { short: "occupants", label: "Confirmed occupants", weight: 3, agree: 17, disagree: 3, total: 20, lenient: 0, strict: 3, dir: "strict",
+        evidence: []},
+      { short: "disclaimers", label: "Required disclaimers stated", weight: 5, agree: 17, disagree: 3, total: 20, lenient: 1, strict: 2, dir: "strict",
+        evidence: []},
+      { short: "email", label: "Email address gathered", weight: 2, agree: 17, disagree: 3, total: 20, lenient: 0, strict: 3, dir: "strict",
+        evidence: []},
+      { short: "phone", label: "Phone number gathered", weight: 3, agree: 18, disagree: 2, total: 20, lenient: 0, strict: 2, dir: "strict",
+        evidence: []},
+      { short: "pets", label: "Confirmed pets", weight: 3, agree: 18, disagree: 2, total: 20, lenient: 0, strict: 2, dir: "strict",
+        evidence: []},
+      { short: "open_ended_qs", label: "Two open-ended questions", weight: 6, agree: 18, disagree: 2, total: 20, lenient: 0, strict: 2, dir: "strict",
+        evidence: []},
+      { short: "acknowledged", label: "Acknowledged caller / willingness to help", weight: 6, agree: 18, disagree: 2, total: 20, lenient: 0, strict: 2, dir: "strict",
+        evidence: []},
+      { short: "pricing_disclaimer", label: "Pricing disclaimer / urgency language", weight: 5, agree: 19, disagree: 1, total: 20, lenient: 0, strict: 1, dir: "strict",
+        evidence: []},
+      { short: "text_email_perm", label: "Text/email permission", weight: 2, agree: 19, disagree: 1, total: 20, lenient: 0, strict: 1, dir: "strict",
+        evidence: []},
+      { short: "inclusive_lang", label: "Inclusive language (we/us)", weight: 3, agree: 19, disagree: 1, total: 20, lenient: 0, strict: 1, dir: "strict",
+        evidence: []},
+      { short: "closing", label: "Closing / confirm next steps", weight: 2, agree: 19, disagree: 1, total: 20, lenient: 0, strict: 1, dir: "strict",
+        evidence: []}
+    ],
+    calls: [
+      { id: "263494762", human: 73.75, ai: 32.5, strict: 10, lenient: 0, weightLost: 33, disqualifier: false,
+        note: '10 disagreements — all AI too strict.',
+        details: [
+          { q: "Conversational", w: 3, ai: "No", h: "Yes", reason: "Human credited conversational gathering. AI did not detect sufficient conversational flow." },
+          { q: "Rapport", w: 4, ai: "No", h: "Yes", reason: "Human credited rapport building. AI did not detect sufficient personalization." },
+          { q: "Phone number", w: 3, ai: "No", h: "Yes", reason: "Agent gathered phone number. AI missed the phrasing." },
+          { q: "Occupants", w: 3, ai: "No", h: "Yes", reason: "Occupant info surfaced in conversation. AI required a specific direct question format." },
+          { q: "Pets", w: 3, ai: "No", h: "Yes", reason: "Pet info surfaced in conversation. AI required agent to ask in a specific format." },
+          { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." },
+          { q: "Tour offer", w: 4, ai: "No", h: "Yes", reason: "Agent offered a tour or visit. AI may have required exact \'tour\' wording." },
+          { q: "Email", w: 2, ai: "No", h: "Yes", reason: "Agent gathered email address. AI missed the phrasing used." },
+          { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
+          { q: "Tour/next step", w: 5, ai: "No", h: "Yes", reason: "Agent provided a clear next step. AI did not credit it." }
+        ],
+        recommendation: 'Strict fixes: Tour/next step (5pts), Rapport (4pts), Tour offer (4pts).' },
+      { id: "264909961", human: 58.75, ai: 63.75, strict: 1, lenient: 2, weightLost: 10, disqualifier: false,
+        note: '3 disagreements: 1 strict, 2 lenient.',
+        details: [
+          { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
+          { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
+          { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." }
+        ],
+        recommendation: 'Strict fixes: Pricing value (3pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
+      { id: "265017569", human: 80.0, ai: 100.0, strict: 0, lenient: 3, weightLost: 16, disqualifier: false,
+        note: '3 disagreements — all AI too lenient.',
+        details: [
+          { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
+          { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
+          { q: "Feature/amenity", w: 9, ai: "Yes", h: "No", reason: "AI credited a generic statement as feature selling; human required specific mentions." }
+        ],
+        recommendation: 'Lenient fixes: Feature/amenity (9pts), Rapport (4pts), Conversational (3pts).' },
+      { id: "265039609", human: 100.0, ai: 86.25, strict: 3, lenient: 0, weightLost: 11, disqualifier: false,
+        note: '3 disagreements — all AI too strict.',
+        details: [
+          { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." },
+          { q: "Required disclaimers", w: 5, ai: "No", h: "Yes", reason: "Agent stated required disclaimers. AI missed due to phrasing variation." },
+          { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." }
+        ],
+        recommendation: 'Strict fixes: Required disclaimers (5pts), How heard (3pts), Pricing value (3pts).' },
+      { id: "265085947", human: 96.25, ai: 92.5, strict: 1, lenient: 0, weightLost: 3, disqualifier: false,
+        note: '1 disagreement — all AI too strict.',
+        details: [
+          { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." }
+        ],
+        recommendation: 'Strict fixes: How heard (3pts).' },
+      { id: "265103498", human: 73.75, ai: 63.75, strict: 3, lenient: 2, weightLost: 22, disqualifier: false,
+        note: '5 disagreements: 3 strict, 2 lenient.',
+        details: [
+          { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
+          { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
+          { q: "Open-ended questions", w: 6, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally and rejected them." },
+          { q: "Tour offer", w: 4, ai: "No", h: "Yes", reason: "Agent offered a tour or visit. AI may have required exact \'tour\' wording." },
+          { q: "Tour/next step", w: 5, ai: "No", h: "Yes", reason: "Agent provided a clear next step. AI did not credit it." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (6pts), Tour/next step (5pts), Tour offer (4pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
+      { id: "265106571", human: 100.0, ai: 93.75, strict: 1, lenient: 0, weightLost: 5, disqualifier: false,
+        note: '1 disagreement — all AI too strict.',
+        details: [
+          { q: "Urgency/pricing disclaimer", w: 5, ai: "No", h: "Yes", reason: "Human credited urgency/pricing disclaimer language. AI applied narrow pattern matching." }
+        ],
+        recommendation: 'Strict fixes: Urgency/pricing disclaimer (5pts).' },
+      { id: "265121798", human: 53.75, ai: 56.25, strict: 1, lenient: 2, weightLost: 12, disqualifier: false,
+        note: '3 disagreements: 1 strict, 2 lenient.',
+        details: [
+          { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
+          { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
+          { q: "Required disclaimers", w: 5, ai: "No", h: "Yes", reason: "Agent stated required disclaimers. AI missed due to phrasing variation." }
+        ],
+        recommendation: 'Strict fixes: Required disclaimers (5pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
+      { id: "265198083", human: 63.75, ai: 75.0, strict: 0, lenient: 2, weightLost: 9, disqualifier: false,
+        note: '2 disagreements — all AI too lenient.',
+        details: [
+          { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
+          { q: "Tour/next step", w: 5, ai: "Yes", h: "No", reason: "AI credited a vague statement as a next step; human required a definitive action." }
+        ],
+        recommendation: 'Lenient fixes: Tour/next step (5pts), Rapport (4pts).' },
+      { id: "265212524", human: 92.5, ai: 60.0, strict: 6, lenient: 0, weightLost: 26, disqualifier: false,
+        note: '6 disagreements — all AI too strict.',
+        details: [
+          { q: "Name usage", w: 3, ai: "No", h: "Yes", reason: "Agent used caller\'s name but AI didn\'t detect it — likely transcription garble or exact-string matching failure." },
+          { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." },
+          { q: "Open-ended questions", w: 6, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally and rejected them." },
+          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
+          { q: "Email", w: 2, ai: "No", h: "Yes", reason: "Agent gathered email address. AI missed the phrasing used." },
+          { q: "Inclusive language", w: 3, ai: "No", h: "Yes", reason: "Agent used \'we/our\' language but AI missed common phrasings like \'We do have...\' or \'Our community...\'" }
+        ],
+        recommendation: 'Strict fixes: Feature/amenity (9pts), Open-ended questions (6pts), Name usage (3pts).' },
+      { id: "265255755", human: 88.75, ai: 100.0, strict: 0, lenient: 1, weightLost: 9, disqualifier: false,
+        note: '1 disagreement — all AI too lenient.',
+        details: [
+          { q: "Feature/amenity", w: 9, ai: "Yes", h: "No", reason: "AI credited a generic statement as feature selling; human required specific mentions." }
+        ],
+        recommendation: 'Lenient fixes: Feature/amenity (9pts).' },
+      { id: "265292177", human: 70.0, ai: 67.5, strict: 2, lenient: 1, weightLost: 8, disqualifier: false,
+        note: '3 disagreements: 2 strict, 1 lenient.',
+        details: [
+          { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
+          { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." },
+          { q: "Closing", w: 2, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." }
+        ],
+        recommendation: 'Strict fixes: Pricing value (3pts), Closing (2pts). Lenient fixes: Conversational (3pts).' },
+      { id: "265300729", human: 76.25, ai: 77.5, strict: 1, lenient: 2, weightLost: 13, disqualifier: false,
+        note: '3 disagreements: 1 strict, 2 lenient.',
+        details: [
+          { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
+          { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
+          { q: "Acknowledged caller", w: 6, ai: "No", h: "Yes", reason: "Agent acknowledged caller\'s question. AI did not credit it." }
+        ],
+        recommendation: 'Strict fixes: Acknowledged caller (6pts). Lenient fixes: Rapport (4pts), Conversational (3pts).' },
+      { id: "265309940", human: 96.25, ai: 88.75, strict: 3, lenient: 1, weightLost: 12, disqualifier: false,
+        note: '4 disagreements: 3 strict, 1 lenient.',
+        details: [
+          { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
+          { q: "Text/email permission", w: 2, ai: "No", h: "Yes", reason: "Agent asked for text/email permission. AI did not detect the request." },
+          { q: "Tour offer", w: 4, ai: "No", h: "Yes", reason: "Agent offered a tour or visit. AI may have required exact \'tour\' wording." },
+          { q: "Pricing value", w: 3, ai: "No", h: "Yes", reason: "Human credited pricing value language. AI did not detect the phrasing used." }
+        ],
+        recommendation: 'Strict fixes: Tour offer (4pts), Pricing value (3pts), Text/email permission (2pts). Lenient fixes: Conversational (3pts).' },
+      { id: "265311653", human: 45.0, ai: 32.5, strict: 2, lenient: 1, weightLost: 20, disqualifier: false,
+        note: '3 disagreements: 2 strict, 1 lenient.',
+        details: [
+          { q: "Required disclaimers", w: 5, ai: "Yes", h: "No", reason: "AI credited disclaimers; human did not consider them sufficient." },
+          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
+          { q: "Acknowledged caller", w: 6, ai: "No", h: "Yes", reason: "Agent acknowledged caller\'s question. AI did not credit it." }
+        ],
+        recommendation: 'Strict fixes: Feature/amenity (9pts), Acknowledged caller (6pts). Lenient fixes: Required disclaimers (5pts).' },
+      { id: "265329801", human: 81.25, ai: 52.5, strict: 7, lenient: 1, weightLost: 31, disqualifier: false,
+        note: '8 disagreements: 7 strict, 1 lenient.',
+        details: [
+          { q: "Name usage", w: 3, ai: "No", h: "Yes", reason: "Agent used caller\'s name but AI didn\'t detect it — likely transcription garble or exact-string matching failure." },
+          { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
+          { q: "Occupants", w: 3, ai: "No", h: "Yes", reason: "Occupant info surfaced in conversation. AI required a specific direct question format." },
+          { q: "Pets", w: 3, ai: "No", h: "Yes", reason: "Pet info surfaced in conversation. AI required agent to ask in a specific format." },
+          { q: "How heard", w: 3, ai: "No", h: "Yes", reason: "Agent asked how caller heard about community. AI missed — possibly due to phrasing or position in call." },
+          { q: "Feature/amenity", w: 9, ai: "No", h: "Yes", reason: "Agent mentioned features/amenities with value framing. AI required more explicit benefit language or missed due to transcription." },
+          { q: "Tour offer", w: 4, ai: "No", h: "Yes", reason: "Agent offered a tour or visit. AI may have required exact \'tour\' wording." },
+          { q: "Email", w: 2, ai: "No", h: "Yes", reason: "Agent gathered email address. AI missed the phrasing used." }
+        ],
+        recommendation: 'Strict fixes: Feature/amenity (9pts), Tour offer (4pts), Name usage (3pts). Lenient fixes: Rapport (4pts).' },
+      { id: "265336988", human: 96.25, ai: 92.5, strict: 1, lenient: 0, weightLost: 3, disqualifier: false,
+        note: '1 disagreement — all AI too strict.',
+        details: [
+          { q: "Name usage", w: 3, ai: "No", h: "Yes", reason: "Agent used caller\'s name but AI didn\'t detect it — likely transcription garble or exact-string matching failure." }
+        ],
+        recommendation: 'Strict fixes: Name usage (3pts).' },
+      { id: "265340388", human: 76.25, ai: 90.0, strict: 0, lenient: 3, weightLost: 11, disqualifier: false,
+        note: '3 disagreements — all AI too lenient.',
+        details: [
+          { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
+          { q: "Pricing value", w: 3, ai: "Yes", h: "No", reason: "AI credited a basic pricing mention; human required more explicit value framing." },
+          { q: "Tour/next step", w: 5, ai: "Yes", h: "No", reason: "AI credited a vague statement as a next step; human required a definitive action." }
+        ],
+        recommendation: 'Lenient fixes: Tour/next step (5pts), Conversational (3pts), Pricing value (3pts).' },
+      { id: "265390645", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "265426567", human: 66.25, ai: 78.75, strict: 2, lenient: 3, weightLost: 22, disqualifier: false,
+        note: '5 disagreements: 2 strict, 3 lenient.',
+        details: [
+          { q: "Conversational", w: 3, ai: "Yes", h: "No", reason: "AI credited info-gathering approach; human required genuine conversational flow beyond scripted exchanges." },
+          { q: "Rapport", w: 4, ai: "Yes", h: "No", reason: "AI counted agent\'s tone/variety as rapport; human required specific references to caller\'s situation." },
+          { q: "Phone number", w: 3, ai: "No", h: "Yes", reason: "Agent gathered phone number. AI missed the phrasing." },
+          { q: "Occupants", w: 3, ai: "No", h: "Yes", reason: "Occupant info surfaced in conversation. AI required a specific direct question format." },
+          { q: "Feature/amenity", w: 9, ai: "Yes", h: "No", reason: "AI credited a generic statement as feature selling; human required specific mentions." }
+        ],
+        recommendation: 'Strict fixes: Phone number (3pts), Occupants (3pts). Lenient fixes: Feature/amenity (9pts), Rapport (4pts), Conversational (3pts).' }
+    ],
+    recommendations: [
+      {
+        num: 1,
+        title: "Conversational: Option C negative examples had zero effect — 6 runs, always 50%",
+        severity: "danger",
+        severityLabel: "50% agreement — unchanged across all 6 runs (9 lenient, 1 strict)",
+        owner: "Protocol Owner",
+        ownerClass: "warning",
+        problem: `<p><strong>This is the most persistent problem in the entire grading system.</strong> Across all 6 runs — including Run 6 with Option C negative examples baked into the protocol — agreement is stuck at exactly 50% with 9 lenient errors and 1 strict error. The negative examples did not move the needle at all.</p>
+          <p><strong>What Option C was supposed to fix:</strong> The protocol now explicitly lists patterns like "agent asks name, phone, email, occupants, pets in sequence" as NO. The AI appears to ignore these examples, suggesting the problem is deeper than prompt wording.</p>
+          <p><strong>Root cause hypothesis:</strong> The AI evaluates each exchange independently rather than looking at the conversation as a whole. When it sees the agent respond helpfully to a caller question, it credits "conversational" without checking whether the information <em>gathering</em> follows a scripted pattern. The negative examples describe patterns that require holistic conversation analysis — but the AI processes utterance-by-utterance.</p>
+          <p><strong>What this means:</strong> Prompt engineering alone cannot fix this question. After 6 iterations, we've exhausted A/B/C options. The remaining paths are structural.</p>`,
+        protocols: [
+          {
+            label: "Option A — Eliminate from AI scoring (recommended)",
+            current: "Weight: 3 pts. 10 disagreements across 6 runs. 50% agreement = coin flip. Six prompt iterations have produced no improvement.",
+            recommended: "Remove from AI scorecard entirely. This question tests holistic conversational quality that the AI cannot reliably assess. Redistribute 3 pts to Open-ended Qs (6→9) — which tests a related but more measurable behavior. Immediate effect: -10 disagreements, agreement jumps to ~85.0%.",
+            labelOverride: "Recommended — Remove from AI Scoring"
+          },
+          {
+            label: "Option B — Two-pass structural evaluation (engineering effort)",
+            current: "Single-pass evaluation where AI reads transcript and answers Yes/No.",
+            recommended: "Implement a two-pass approach: Pass 1 — AI extracts all information-gathering exchanges and labels each as 'scripted' (standard question) or 'contextual' (references caller's prior statement). Pass 2 — Score based on ratio: if ≥30% of info-gathering questions are contextual, mark Yes. This forces the AI to evaluate the GATHERING pattern, not the agent's overall helpfulness.",
+            labelOverride: "Alternative — Structural Two-Pass Evaluation"
+          }
+        ]
+      },
+      {
+        num: 2,
+        title: "Rapport: Same structural problem — AI credits filler enthusiasm as rapport",
+        severity: "danger",
+        severityLabel: "55% agreement — worsened from Run 5 (60% → 55%). 8 lenient errors.",
+        owner: "Protocol Owner",
+        ownerClass: "warning",
+        problem: `<p><strong>55% agreement with 8 lenient and 1 strict error.</strong> Slightly worse than Run 5 (60%). The AI credits generic positive responses ("Great!", "Awesome!", "Perfect!") as rapport, even though the protocol explicitly states "sentence variety alone does NOT qualify."</p>
+          <p><strong>The protocol already says the right thing.</strong> It requires the agent to "reference at least one specific detail the caller shared." But the AI isn't following this requirement — it sees varied word choice and filler enthusiasm and marks Yes.</p>
+          <p><strong>Relationship to Conversational:</strong> These two questions are deeply correlated. In every run, calls where Conversational is a lenient error also have Rapport as a lenient error. They're testing the same underlying behavior (personalized vs. scripted interaction) with different labels.</p>`,
+        protocols: [
+          {
+            label: "Option A — Combine with Conversational into one question",
+            current: "Two separate questions: Conversational (3 pts, 50% agreement) + Rapport (4 pts, 55% agreement). Together: 19 disagreements, 7 pts, dominant source of lenient errors.",
+            recommended: "Merge into a single 'Personalized Interaction' question (7 pts): 'Does the transcript show the agent referencing at least one specific detail from the caller\\'s situation and adapting their response to it? Generic enthusiasm (Great!, Awesome!) does not count.' One question, one clear behavioral test, half the disagreement surface.",
+            labelOverride: "Recommended — Merge Conversational + Rapport"
+          },
+          {
+            label: "Option B — Keep separate, add hard gate",
+            current: "Mark YES if the transcript shows clear attempts to personalize the conversation or build rapport using caller-provided information.",
+            recommended: "Add a HARD GATE to the prompt: 'Before answering, identify the specific caller detail the agent referenced. Write it down. If you cannot identify one, the answer is NO. Generic filler words and varied adjectives do NOT count.'",
+            labelOverride: "Alternative — Require Evidence Before Answering"
+          }
+        ]
+      },
+      {
+        num: 3,
+        title: "Feature/Amenity: Benefit framing clarification helped — but 3S/3L split shows confusion",
+        severity: "warning",
+        severityLabel: "70% agreement — unchanged count but QA re-grading shifted the ground truth",
+        owner: "Protocol Owner",
+        ownerClass: "warning",
+        problem: `<p><strong>70% agreement with 3 strict and 3 lenient errors.</strong> The "define benefit framing" prompt clarification and QA manager's re-grading created a clearer standard — the QA comments confirm the new bar: simply naming a feature is not enough, the agent must connect it to a benefit or explain why it matters.</p>
+          <p><strong>QA manager comments on re-graded calls:</strong></p>
+          <ul style="font-size:13px; line-height:1.6;">
+            <li><strong>264909961</strong> — "Agents talks about parking and the fees, but doesn't explain the benefit" → Changed to No</li>
+            <li><strong>265017569</strong> — "Correct" → Confirmed No</li>
+            <li><strong>265198083</strong> — "Agent mentioned balconies, but doesn't explain the benefit of them" → Confirmed No</li>
+            <li><strong>265255755</strong> — "Correct, Suggestion is saying Human error, but pricing was given out before they mentioned amenities" → Changed to No (timing matters)</li>
+            <li><strong>265426567</strong> — "correct" → Confirmed No</li>
+          </ul>
+          <p><strong>The 3S/3L split means the AI is confused in both directions:</strong> It misses legitimate benefit selling (strict) AND still credits bare feature mentions (lenient). The benefit framing definition needs to be more explicit with pass/fail examples.</p>`,
+        protocols: [
+          {
+            label: "Tighten the benefit framing definition with explicit examples",
+            current: "The agent must build value by discussing at least one community feature or amenity and connecting it to the caller's situation or clearly conveying its value.",
+            recommended: "Add explicit pass/fail examples to the prompt:<br><br><strong>DOES count (feature + benefit):</strong><br>• 'Our fitness center is open 24/7, so you can work out whenever it fits your schedule'<br>• 'Since you mentioned you have a dog, you'll love our off-leash dog park'<br>• 'The pool area is the best part of the community — great for relaxing on weekends'<br><br><strong>Does NOT count (feature only, no benefit):</strong><br>• 'We have a pool'<br>• 'Washer and dryer hookups are available'<br>• 'We have covered parking' (unless followed by why it matters)<br><br><strong>TIMING matters:</strong> Features must be mentioned BEFORE pricing details to receive credit. If pricing is discussed first, then features mentioned after do not count.",
+            labelOverride: "Prompt Fix — Explicit Pass/Fail + Timing Rule"
+          }
+        ]
+      },
+      {
+        num: 4,
+        title: "Pricing Value / Urgency Language: AI too strict — missing 5 of 6 cases",
+        severity: "warning",
+        severityLabel: "70% agreement — 5 strict errors. AI not recognizing urgency patterns.",
+        owner: "Protocol Owner",
+        ownerClass: "warning",
+        problem: `<p><strong>70% agreement. 5 of 6 errors are strict</strong> — the AI is not recognizing urgency language that humans credit. This has been a consistent blind spot across all 6 runs.</p>
+          <p>The protocol defines urgency as language like "limited availability" or "act quickly." The AI interprets this too narrowly and misses common agent phrasings like "availability changes daily," "these go fast," or "I'd recommend scheduling soon."</p>
+          <p><strong>Note:</strong> If pricing/availability were NOT discussed, both AI and human should mark Yes (auto-credit). The strict errors occur on calls where pricing IS discussed but the AI doesn't credit the agent's urgency language.</p>`,
+        protocols: [
+          {
+            label: "Expand recognized urgency patterns",
+            current: "Did the agent use urgency language such as 'limited availability' or 'act quickly'?",
+            recommended: "Add to prompt:<br><br><strong>The following patterns ALL qualify as urgency language:</strong><br>• 'Limited availability' / 'limited units' / 'only X left'<br>• 'Act quickly' / 'move fast' / 'won't last long'<br>• 'Availability changes daily' / 'availability is always changing'<br>• 'I'd recommend scheduling/applying soon'<br>• 'These go fast' / 'popular floor plan'<br>• 'Pricing may change' / 'current pricing' (implies limited window)<br>• 'We're filling up' / 'almost fully leased'<br><br>Any statement implying time-sensitive opportunity counts.",
+            labelOverride: "Prompt Fix — Expand Urgency Pattern List"
+          }
+        ]
+      },
+      {
+        num: 5,
+        title: "How Heard: AI consistently misses volunteered source info — 5 strict errors",
+        severity: "info",
+        severityLabel: "75% agreement — all 5 errors are strict. Stable across runs.",
+        owner: "Protocol Owner",
+        ownerClass: "info",
+        problem: `<p><strong>75% agreement with all 5 errors being strict.</strong> The AI consistently fails to credit the how-heard question when the source is volunteered by the caller rather than explicitly asked by the agent. This has been stable across all 6 runs.</p>
+          <p>The protocol states credit should be given when the caller voluntarily shares how they found the property. The AI appears to require the agent to ASK the question, ignoring volunteer mentions like "I saw your listing on Apartments.com" or "My friend lives there."</p>`,
+        protocols: [
+          {
+            label: "Reinforce volunteered information rule for how-heard",
+            current: "Did the agent ask or confirm how the caller heard about the community or was it offered by the caller?",
+            recommended: "Add to prompt: 'IMPORTANT: Credit is given in TWO scenarios: (1) The agent asks how the caller heard about the community, OR (2) the caller volunteers the source without being asked (e.g., \"I found you on Apartments.com,\" \"My friend lives there,\" \"I drove by\"). In scenario (2), the agent does NOT need to repeat or confirm the source — the caller stating it is sufficient.'",
+            labelOverride: "Prompt Fix — Explicit Volunteered Info Credit"
+          }
+        ]
+      },
+      {
+        num: 6,
+        title: "QA Note: Two calls flagged as warm leads misclassified by prediction model",
+        severity: "info",
+        severityLabel: "Data quality — 265212524 and 265329801 are warm leads in cold lead set",
+        owner: "Austin / Dev Team",
+        ownerClass: "info",
+        problem: `<p><strong>The QA manager flagged two calls as warm leads:</strong> 265212524 and 265329801. Both were classified as cold leads by the prediction model but the QA manager's comments indicate they should be warm leads.</p>
+          <p>This doesn't affect the grading accuracy analysis (both calls are graded against the same cold lead scorecard), but it's a signal that the call type prediction model may need calibration. These calls should be investigated to understand why the model classified them as cold.</p>`,
+        protocols: [
+          {
+            label: "Investigate prediction model misclassification",
+            current: "Call type prediction model classified both calls as cold leads.",
+            recommended: "Review transcripts for 265212524 and 265329801 to identify what warm-lead signals the prediction model missed. Consider adding these as test cases for the two-pass lead prediction system (see Knowledge/two-pass-lead-prediction.md).",
+            labelOverride: "Action — Investigate with Dev Team"
+          }
+        ]
+      }
+    ],
+    rootCause: {
+      conversational: "The AI cannot distinguish 'helpful and responsive' from 'conversational info gathering.' Six prompt iterations including explicit negative examples have not moved agreement past 50%. This is a structural limitation of single-pass evaluation — the AI evaluates individual exchanges rather than the overall conversation pattern.",
+      rapport: "Same structural issue as conversational. The AI treats filler enthusiasm and word variety as rapport, ignoring the protocol requirement to reference specific caller details. Deeply correlated with conversational — both test personalized interaction quality.",
+      feature_amenity: "Mixed-direction errors (3S/3L) indicate the benefit framing definition is partially working but needs clearer examples. QA re-grading established a higher bar: naming a feature is insufficient; the agent must connect it to a benefit.",
+      pricing_value: "AI interprets urgency language too narrowly. Only recognizes exact phrases like 'limited availability' — misses common variants like 'availability changes daily' or 'I'd recommend applying soon.'",
+      how_heard: "AI requires the agent to ASK about the source. Doesn't credit caller-volunteered information, contradicting the protocol's explicit allowance."
+    }
+  }
+];
+
+const coldMatrixQuestions = [
+  { short: "Greeting", key: "greeting" },
+  { short: "Name", key: "name_usage" },
+  { short: "Conversational", key: "conversational" },
+  { short: "Rapport", key: "rapport" },
+  { short: "Phone #", key: "phone" },
+  { short: "Occupants", key: "occupants" },
+  { short: "Pets", key: "pets" },
+  { short: "Pet breed", key: "pet_breed" },
+  { short: "How heard", key: "how_heard" },
+  { short: "Open-ended Qs", key: "open_ended_qs" },
+  { short: "Pricing disc.", key: "pricing_disclaimer" },
+  { short: "Permission", key: "text_email_perm" },
+  { short: "Disclaimers", key: "disclaimers" },
+  { short: "Feature/amenity", key: "feature_amenity" },
+  { short: "Tour offer", key: "tour_offer" },
+  { short: "Email", key: "email" },
+  { short: "Pricing value", key: "pricing_value" },
+  { short: "Next step", key: "tour_next_step" },
+  { short: "Acknowledged", key: "acknowledged" },
+  { short: "Inclusive lang", key: "inclusive_lang" },
+  { short: "Closing", key: "closing" },
+  { short: "FHA (DQ)", key: "fha" },
+  { short: "Secure info (DQ)", key: "secure_info" },
+  { short: "No contact (DQ)", key: "no_contact" },
+];
+
+// Raw answer data from spreadsheet: [human, ai] where 1=Yes, 0=No, null=N/A
+const coldAnswerData = {
+  "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "264909961": {greeting:[1,1],name_usage:[1,0],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265017569": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265039609": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265085947": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[0,0],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265103498": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[0,0],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,1]},
+  "265106571": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265121798": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,0],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[0,0],tour_offer:[0,0],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265212524": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,0],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265255755": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265300729": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265309940": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,0],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265311653": {greeting:[1,1],name_usage:[0,0],conversational:[0,0],rapport:[0,0],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[0,1],feature_amenity:[1,0],tour_offer:[0,0],email:[0,0],pricing_value:[1,1],tour_next_step:[0,0],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,1]},
+  "265329801": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[0,0],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265336988": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265340388": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[0,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265390645": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+  "265426567": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,0],occupants:[1,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]}
+};
+
+const coldRunAnswerData = {
+  1: {
+    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "264909961": {greeting:[1,1],name_usage:[1,0],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265017569": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265039609": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265085947": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[0,0],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265103498": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[0,0],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,1]},
+    "265106571": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265121798": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,0],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[0,0],tour_offer:[0,0],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265212524": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,0],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265255755": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265300729": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265309940": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,0],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265311653": {greeting:[1,1],name_usage:[0,0],conversational:[0,0],rapport:[0,0],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[0,1],feature_amenity:[1,0],tour_offer:[0,0],email:[0,0],pricing_value:[1,1],tour_next_step:[0,0],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,1]},
+    "265329801": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[0,0],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265336988": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265340388": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[0,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265390645": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265426567": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,0],occupants:[1,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]}
+  },
   2: {
-    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "264909961": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "264909961": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265017569": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265039609": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,0],disclaimers:[1,0],feature_amenity:[1,1],tour_offer:[1,0],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265085947": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[0,0],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265103498": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[0,0],pricing_value:[1,1],tour_next_step:[1,0],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265106571": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,0],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265121798": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,1],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[0,0],tour_offer:[0,0],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265212524": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,0],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265255755": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265300729": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265309940": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,0],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265311653": {greeting:[1,1],name_usage:[0,0],conversational:[0,0],rapport:[0,0],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[0,1],feature_amenity:[1,0],tour_offer:[0,0],email:[0,0],pricing_value:[1,1],tour_next_step:[0,0],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
@@ -1629,18 +2051,18 @@ const coldRunAnswerData = {
     "265426567": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,0],occupants:[1,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]}
   },
   3: {
-    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "264909961": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "264909961": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265017569": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265039609": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265085947": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[0,0],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265103498": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[0,0],pricing_value:[1,1],tour_next_step:[1,0],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265106571": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265121798": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,1],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[0,0],tour_offer:[0,0],email:[1,1],pricing_value:[0,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265212524": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,0],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265255755": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,0],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265300729": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265309940": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,0],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265311653": {greeting:[1,1],name_usage:[0,0],conversational:[0,0],rapport:[0,0],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[0,1],feature_amenity:[1,0],tour_offer:[0,0],email:[0,0],pricing_value:[1,1],tour_next_step:[0,0],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,1]},
@@ -1651,18 +2073,18 @@ const coldRunAnswerData = {
     "265426567": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,0],occupants:[1,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]}
   },
   4: {
-    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "264909961": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "264909961": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265017569": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265039609": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265085947": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[0,0],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265103498": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[0,0],pricing_value:[1,1],tour_next_step:[1,0],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265106571": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265121798": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,1],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[0,0],tour_offer:[0,0],email:[1,1],pricing_value:[0,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265212524": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,0],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265255755": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265300729": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265309940": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265311653": {greeting:[1,1],name_usage:[0,0],conversational:[0,0],rapport:[0,0],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[0,1],feature_amenity:[1,0],tour_offer:[0,0],email:[0,0],pricing_value:[1,1],tour_next_step:[0,0],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,1]},
@@ -1673,18 +2095,18 @@ const coldRunAnswerData = {
     "265426567": {greeting:[1,1],name_usage:[1,0],conversational:[0,1],rapport:[0,1],phone:[1,0],occupants:[1,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]}
   },
   5: {
-    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "264909961": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "264909961": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265017569": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265039609": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[1,1],tour_offer:[1,0],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265085947": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[0,0],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265103498": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[0,0],pricing_value:[1,1],tour_next_step:[1,0],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265106571": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,0],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265121798": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,1],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[0,0],tour_offer:[0,0],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,1],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,1],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265212524": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,0],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265255755": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
-    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265300729": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265309940": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265311653": {greeting:[1,1],name_usage:[0,0],conversational:[0,0],rapport:[0,0],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[0,1],feature_amenity:[1,0],tour_offer:[0,0],email:[0,0],pricing_value:[1,1],tour_next_step:[0,0],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
@@ -1692,6 +2114,28 @@ const coldRunAnswerData = {
     "265336988": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265340388": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265390645": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265426567": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,0],occupants:[1,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]}
+  },
+  6: {
+    "263494762": {greeting:[1,1],name_usage:[1,1],conversational:[1,0],rapport:[1,0],phone:[1,0],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,0],tour_next_step:[1,0],acknowledged:[0,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "264909961": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[0,0],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265017569": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265039609": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265085947": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[0,0],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265103498": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[0,0],pricing_value:[1,1],tour_next_step:[1,0],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265106571": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265121798": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[1,1],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,0],feature_amenity:[0,0],tour_offer:[0,0],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265198083": {greeting:[1,1],name_usage:[0,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[0,0],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265212524": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[1,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,1],email:[1,0],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,0],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265255755": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265292177": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265300729": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,0],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265309940": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,0],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,0],email:[1,1],pricing_value:[1,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265311653": {greeting:[1,1],name_usage:[0,0],conversational:[0,0],rapport:[0,0],phone:[0,0],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[0,1],feature_amenity:[1,0],tour_offer:[0,0],email:[0,0],pricing_value:[1,1],tour_next_step:[0,0],acknowledged:[1,0],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265329801": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[0,1],phone:[1,1],occupants:[1,0],pets:[1,0],pet_breed:[1,1],how_heard:[1,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,0],tour_offer:[1,0],email:[1,0],pricing_value:[1,1],tour_next_step:[0,0],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265336988": {greeting:[1,1],name_usage:[1,0],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[0,0],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265340388": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[1,1],phone:[1,1],occupants:[0,0],pets:[0,0],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[0,1],tour_next_step:[0,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
+    "265390645": {greeting:[1,1],name_usage:[1,1],conversational:[1,1],rapport:[1,1],phone:[1,1],occupants:[1,1],pets:[1,1],pet_breed:[1,1],how_heard:[1,1],open_ended_qs:[1,1],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[1,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[1,1],fha:[0,0],secure_info:[0,0],no_contact:[0,0]},
     "265426567": {greeting:[1,1],name_usage:[1,1],conversational:[0,1],rapport:[0,1],phone:[1,0],occupants:[1,0],pets:[1,1],pet_breed:[1,1],how_heard:[0,0],open_ended_qs:[0,0],pricing_disclaimer:[1,1],text_email_perm:[1,1],disclaimers:[1,1],feature_amenity:[0,1],tour_offer:[1,1],email:[1,1],pricing_value:[1,1],tour_next_step:[1,1],acknowledged:[1,1],inclusive_lang:[1,1],closing:[0,0],fha:[0,0],secure_info:[0,0],no_contact:[0,0]}
   }
 };

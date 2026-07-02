@@ -12,7 +12,7 @@ import re
 import sys
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Cold Lead Comparison (7).xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Cold Lead Comparison (8).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
 # Which AI tabs to process (in order). Tab name → run metadata.
@@ -32,6 +32,9 @@ AI_TABS = [
     {"tab": "AI 5", "id": 5, "label": "Run 5", "date": "June 30, 2026",
      "description": "Version 5.0 — latest model iteration with accumulated prompt and protocol improvements.",
      "changes": "Full prompt refinement pass incorporating all prior learnings from Runs 1-4"},
+    {"tab": "AI 6", "id": 6, "label": "Run 6", "date": "July 2, 2026",
+     "description": "Protocol revision — conversational (Option C) + benefit framing clarification for feature/amenity. QA manager re-graded manual answers.",
+     "changes": "Switched conversational protocol to Option C (negative examples). Added 'define benefit framing' to feature/amenity prompt — agent must connect feature to a benefit, not just name it. QA manager corrected manual answers across benefit selling and multiple other questions."},
 ]
 
 # ═══════════════════════════════════════════════════════════════════════════
