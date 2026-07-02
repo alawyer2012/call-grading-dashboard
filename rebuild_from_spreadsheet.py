@@ -35,6 +35,10 @@ AI_TABS = [
     {"tab": "AI 6", "id": 6, "label": "Run 6", "date": "July 2, 2026",
      "description": "Protocol revision — conversational (Option C) + benefit framing clarification for feature/amenity. QA manager re-graded manual answers.",
      "changes": "Switched conversational protocol to Option C (negative examples). Added 'define benefit framing' to feature/amenity prompt — agent must connect feature to a benefit, not just name it. QA manager corrected manual answers across benefit selling and multiple other questions."},
+    {"tab": "AI 6", "id": 7, "label": "Run 7", "date": "July 2, 2026",
+     "description": "Simulation — what if we removed the 3 worst questions? Uses Run 6 AI answers with conversational, rapport, and feature/amenity excluded from scoring.",
+     "changes": "Removed conversational (3 pts, 50% agree), rapport (4 pts, 55% agree), and feature/amenity (9 pts, 70% agree) from scoring. Total weight reduced from 80 to 64. Same AI answers as Run 6.",
+     "exclude_keys": ["conversational", "rapport", "feature_amenity"]},
 ]
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -204,10 +208,13 @@ def parse_yes_no(val):
     return 1 if str(val).strip().lower() == "yes" else 0
 
 
-def calc_score(answers):
-    earned = sum(WEIGHTS[q] for q in SCORED_KEYS if answers.get(q) == 1)
-    base = (earned / 80) * 100
-    dq_count = sum(1 for dq in DQ_KEYS if answers.get(dq) == 1)
+def calc_score(answers, exclude_keys=None):
+    excl = set(exclude_keys or [])
+    scored = [q for q in SCORED_KEYS if q not in excl]
+    total_weight = sum(WEIGHTS[q] for q in scored)
+    earned = sum(WEIGHTS[q] for q in scored if answers.get(q) == 1)
+    base = (earned / total_weight) * 100 if total_weight else 0
+    dq_count = sum(1 for dq in DQ_KEYS if dq not in excl and answers.get(dq) == 1)
     return round(base * max(0, 1 - 0.20 * dq_count), 2)
 
 
@@ -290,8 +297,12 @@ print(f"\nScore validation: {score_mismatches} mismatches out of {len(benchmark_
 # 3. BUILD PER-RUN DATA (answerData, calls, questions, meta for each run)
 # ═══════════════════════════════════════════════════════════════════════════
 
-def build_run_data(human_data, ai_data, benchmark_ids):
+def build_run_data(human_data, ai_data, benchmark_ids, exclude_keys=None):
     """Build all computed data for one run: answerData, calls, questions, meta."""
+    excl = set(exclude_keys or [])
+    run_scored_keys = [q for q in SCORED_KEYS if q not in excl]
+    run_all_keys = [q for q in ALL_KEYS if q not in excl]
+
     answer_data = {}
     for call_id in benchmark_ids:
         h = human_data[call_id]["answers"]
@@ -314,16 +325,16 @@ def build_run_data(human_data, ai_data, benchmark_ids):
 
     for call_id in sorted(answer_data.keys()):
         cd = answer_data[call_id]
-        h_score = calc_score({q: cd[q][0] for q in ALL_KEYS})
+        h_score = calc_score({q: cd[q][0] for q in ALL_KEYS}, exclude_keys)
         ai_answers = {q: cd[q][1] for q in ALL_KEYS}
-        has_ai = any(v is not None for q, v in ai_answers.items() if q in SCORED_KEYS)
-        a_score = calc_score(ai_answers) if has_ai else None
+        has_ai = any(v is not None for q, v in ai_answers.items() if q in run_scored_keys)
+        a_score = calc_score(ai_answers, exclude_keys) if has_ai else None
 
         strict, lenient = 0, 0
         details = []
         scored_agree, scored_disagree = 0, 0
 
-        for q in ALL_KEYS:
+        for q in run_all_keys:
             h_val, a_val = cd[q]
             if a_val is None or h_val is None:
                 continue
@@ -388,7 +399,7 @@ def build_run_data(human_data, ai_data, benchmark_ids):
 
     # Per-question stats
     questions_data = []
-    for q_key in ALL_KEYS:
+    for q_key in run_all_keys:
         agree, disagree, strict, lenient, total = 0, 0, 0, 0, 0
         for call_id, cd in answer_data.items():
             h, a = cd[q_key]
@@ -451,7 +462,8 @@ for run_info in AI_TABS:
     print(f"\n{'=' * 70}")
     print(f"BUILDING {run_info['label']} (tab: {tab_name})")
     print(f"{'=' * 70}")
-    rd = build_run_data(human_data, ai_runs[tab_name], benchmark_call_ids)
+    rd = build_run_data(human_data, ai_runs[tab_name], benchmark_call_ids,
+                        exclude_keys=run_info.get("exclude_keys"))
     rd["info"] = run_info
     all_runs.append(rd)
 
@@ -601,11 +613,13 @@ run_answer_data_parts = []
 for rd in all_runs:
     run_id = rd["info"]["id"]
     ad = rd["answer_data"]
+    excl = set(rd["info"].get("exclude_keys") or [])
+    run_keys = [q for q in ALL_KEYS if q not in excl]
     ad_lines = []
     for call_id in sorted(ad.keys()):
         cd = ad[call_id]
         parts = []
-        for q in ALL_KEYS:
+        for q in run_keys:
             h, a = cd[q]
             h_str = str(h) if h is not None else "null"
             a_str = str(a) if a is not None else "null"
