@@ -12,7 +12,7 @@ import re
 import sys
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Cold Lead Comparison (8).xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Cold Lead Comparison (9).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
 # Which AI tabs to process (in order). Tab name → run metadata.
@@ -38,6 +38,13 @@ AI_TABS = [
     {"tab": "AI 6", "id": 7, "label": "Run 7", "date": "July 2, 2026",
      "description": "Simulation — what if we removed the 3 worst questions? Uses Run 6 AI answers with conversational, rapport, and feature/amenity excluded from scoring.",
      "changes": "Removed conversational (3 pts, 50% agree), rapport (4 pts, 55% agree), and feature/amenity (9 pts, 70% agree) from scoring. Total weight reduced from 80 to 64. Same AI answers as Run 6.",
+     "exclude_keys": ["conversational", "rapport", "feature_amenity"]},
+    {"tab": "AI 8", "id": 8, "label": "Run 8.0", "date": "July 20, 2026",
+     "description": "Fatal objection protocol — agents are not penalized when they had no legitimate opportunity to gather answers.",
+     "changes": "Added fatal objection protocol: when callers cut short, object, or otherwise prevent the agent from pursuing a scorecard question, the AI does not score No / withhold credit for that question."},
+    {"tab": "AI 8", "id": 9, "label": "Run 8.0-sim", "date": "July 20, 2026",
+     "description": "Simulation — Run 8.0 AI answers with conversational, rapport, and feature/amenity excluded (same exclusions as Run 7).",
+     "changes": "Combines fatal objection protocol (Run 8.0) with the reduced 64-pt scorecard (exclude conversational, rapport, feature/amenity).",
      "exclude_keys": ["conversational", "rapport", "feature_amenity"]},
 ]
 

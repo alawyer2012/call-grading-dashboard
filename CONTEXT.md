@@ -17,7 +17,14 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **21 scored questions, 80 weighted points**, 3 DQs (FHA, Secure info, No contact)
 - Score = (earned / 80) × 100%, with 20% reduction per DQ
 - **Rebuild script:** `rebuild_from_spreadsheet.py`
-- **Source data:** `~/Downloads/20 Call Cold Lead Comparison (N).xlsx`
+- **Source data:** `~/Downloads/20 Call Cold Lead Comparison (N).xlsx` (current: `(9).xlsx`)
+
+### Cold Lead Run 8.0 (July 20, 2026) — Fatal objection protocol
+- **Tab:** `AI 8` → Run 8.0 (full 80-pt card); also Run 8.0-sim (same answers, Run 7 exclusions)
+- **Change:** Fatal objection — agents not penalized when they had no legitimate chance to gather an answer
+- **Results:** Run 8.0 = **84.8%** (+1.0 vs Run 6); Run 8.0-sim = **88.1%** (flat vs Run 7)
+- **Note:** Spreadsheet also has an `AI 7` tab not yet imported (dashboard Run 7 remains the exclusion sim on AI 6)
+- Lenient errors improved (24→20); strict stuck at 44 on full card. Conversational still 50%.
 
 ### Warm Leads
 - **14 scored questions, 52 weighted points** (from AI Warm Lead Fundamentals tab)
