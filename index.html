@@ -3300,6 +3300,243 @@ const warmMatrixQuestions = [
   { short: "Secure info (DQ)", key: "secure_info" },
 ];
 
+// ═══ RESIDENT DATA ═══
+const residentAnswerData = {
+  "269245474": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,0],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+  "269768640": {greeting:[1,1],name_usage:[1,1],contact_info:[1,0],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,0],closing:[1,0],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+  "269788776": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,0],closing:[1,0],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+  "270245082": {greeting:[1,1],name_usage:[0,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[0,1],fha:[0,0],secure_info:[0,0]},
+  "270543247": {greeting:[1,1],name_usage:[1,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,1],acknowledged:[1,0],closing:[1,1],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,1]},
+  "270842045": {greeting:[1,0],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+  "271873957": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,0],closing:[1,1],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,1]},
+  "271912426": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[0,0],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,1]},
+  "272053386": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,0],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[0,1],fha:[0,0],secure_info:[0,0]},
+  "272063323": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,1],closing:[1,0],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+  "272352194": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[0,0],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+  "272543647": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]}
+};
+
+const residentRunAnswerData = {
+  1: {
+    "269245474": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,0],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "269768640": {greeting:[1,1],name_usage:[1,1],contact_info:[1,0],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,0],closing:[1,0],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "269788776": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,0],closing:[1,0],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "270245082": {greeting:[1,1],name_usage:[0,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[0,1],fha:[0,0],secure_info:[0,0]},
+    "270543247": {greeting:[1,1],name_usage:[1,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,1],acknowledged:[1,0],closing:[1,1],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,1]},
+    "270842045": {greeting:[1,0],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "271873957": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,0],closing:[1,1],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,1]},
+    "271912426": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[0,0],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,1]},
+    "272053386": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,0],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[0,1],fha:[0,0],secure_info:[0,0]},
+    "272063323": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,1],closing:[1,0],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "272352194": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[0,0],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "272543647": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]}
+  }
+};
+
+const residentRuns = [
+  {
+    id: 1,
+    label: "Run 1.0",
+    date: "August 11, 2026",
+    description: "Baseline — resident fundamentals scorecard (10 scored questions + 2 DQs). Partial benchmark: 12 calls with matching AI + human grades.",
+    changes: "Initial resident benchmark run (12 matching call IDs)",
+    meta: {
+      agreement: 78.3,
+      totalDisagreements: 26,
+      avgDelta: 15.1,
+      strictErrors: 20,
+      lenientErrors: 6,
+      target: 90
+    },
+    keyFindings: `<p>The AI disagrees with humans on <strong>21.7% of question-level answers</strong> across these 12 resident calls (26 of 120 scored comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 77% of disagreements (20 of 26).</p><p>Worst strict questions: <em>Asked permission before hold</em> (5/12 = 42%), <em>Closing / confirm next steps</em> (7/12 = 58%), <em>Acknowledged caller / took ownership</em> (8/12 = 67%). Worst lenient questions: <em>Secure info (DQ)</em> (9/12 = 75%), <em>Validated caller concern (if expressed)</em> (10/12 = 83%), <em>Neutral / de-escalating language</em> (10/12 = 83%).</p><p>Average absolute score delta is <strong>15.1 percentage points</strong> (weighted, 42-pt card).</p><p><em>Note: Partial benchmark — 12 matching AI+human call IDs. Evidence/transcripts deferred.</em></p>`,
+    questions: [
+      { short: "hold_permission", label: "Asked permission before hold", weight: 2, agree: 5, disagree: 7, total: 12, lenient: 0, strict: 7, dir: "strict",
+        evidence: []},
+      { short: "closing", label: "Closing / confirm next steps", weight: 3, agree: 7, disagree: 5, total: 12, lenient: 0, strict: 5, dir: "strict",
+        evidence: []},
+      { short: "acknowledged", label: "Acknowledged caller / took ownership", weight: 5, agree: 8, disagree: 4, total: 12, lenient: 0, strict: 4, dir: "strict",
+        evidence: []},
+      { short: "secure_info", label: "Secure info (DQ)", weight: 0, agree: 9, disagree: 3, total: 12, lenient: 3, strict: 0, dir: "lenient",
+        evidence: []},
+      { short: "name_usage", label: "Asked for name + used it", weight: 3, agree: 10, disagree: 2, total: 12, lenient: 1, strict: 1, dir: "mixed",
+        evidence: []},
+      { short: "open_ended_qs", label: "Open-ended questions (2+ distinct)", weight: 7, agree: 10, disagree: 2, total: 12, lenient: 1, strict: 1, dir: "mixed",
+        evidence: []},
+      { short: "validate_concern", label: "Validated caller concern (if expressed)", weight: 5, agree: 10, disagree: 2, total: 12, lenient: 2, strict: 0, dir: "lenient",
+        evidence: []},
+      { short: "neutral_language", label: "Neutral / de-escalating language", weight: 5, agree: 10, disagree: 2, total: 12, lenient: 2, strict: 0, dir: "lenient",
+        evidence: []},
+      { short: "greeting", label: "Greeting (property name + intro)", weight: 4, agree: 11, disagree: 1, total: 12, lenient: 0, strict: 1, dir: "strict",
+        evidence: []},
+      { short: "contact_info", label: "Contact info confirmed (if update requested)", weight: 4, agree: 11, disagree: 1, total: 12, lenient: 0, strict: 1, dir: "strict",
+        evidence: []}
+    ],
+    calls: [
+      { id: "269245474", human: 100.0, ai: 92.86, strict: 1, lenient: 0, weightLost: 3, disqualifier: false,
+        note: '1 disagreement — all AI too strict.',
+        details: [
+          { q: "Closing", w: 3, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." }
+        ],
+        recommendation: 'Strict fixes: Closing (3pts).' },
+      { id: "269768640", human: 100.0, ai: 50.0, strict: 5, lenient: 0, weightLost: 21, disqualifier: false,
+        note: '5 disagreements — all AI too strict.',
+        details: [
+          { q: "Contact info", w: 4, ai: "No", h: "Yes", reason: "Agent confirmed contact info. AI did not credit it." },
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." },
+          { q: "Acknowledged/ownership", w: 5, ai: "No", h: "Yes", reason: "Agent acknowledged caller / took ownership. AI did not credit it." },
+          { q: "Closing", w: 3, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." },
+          { q: "Hold permission", w: 2, ai: "No", h: "Yes", reason: "Agent asked hold permission (or hold not needed). AI did not credit it." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts), Acknowledged/ownership (5pts), Contact info (4pts).' },
+      { id: "269788776", human: 83.33, ai: 59.52, strict: 3, lenient: 0, weightLost: 10, disqualifier: false,
+        note: '3 disagreements — all AI too strict.',
+        details: [
+          { q: "Acknowledged/ownership", w: 5, ai: "No", h: "Yes", reason: "Agent acknowledged caller / took ownership. AI did not credit it." },
+          { q: "Closing", w: 3, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." },
+          { q: "Hold permission", w: 2, ai: "No", h: "Yes", reason: "Agent asked hold permission (or hold not needed). AI did not credit it." }
+        ],
+        recommendation: 'Strict fixes: Acknowledged/ownership (5pts), Closing (3pts), Hold permission (2pts).' },
+      { id: "270245082", human: 80.95, ai: 95.24, strict: 1, lenient: 2, weightLost: 10, disqualifier: false,
+        note: '3 disagreements: 1 strict, 2 lenient.',
+        details: [
+          { q: "Name usage", w: 3, ai: "Yes", h: "No", reason: "AI detected name usage but human says name wasn\'t properly used." },
+          { q: "Hold permission", w: 2, ai: "No", h: "Yes", reason: "Agent asked hold permission (or hold not needed). AI did not credit it." },
+          { q: "Neutral language", w: 5, ai: "Yes", h: "No", reason: "AI credited neutral language; human found it insufficient." }
+        ],
+        recommendation: 'Strict fixes: Hold permission (2pts). Lenient fixes: Neutral language (5pts), Name usage (3pts).' },
+      { id: "270543247", human: 83.33, ai: 60.95, strict: 3, lenient: 2, weightLost: 17, disqualifier: true,
+        note: '5 disagreements: 3 strict, 2 lenient.',
+        details: [
+          { q: "Name usage", w: 3, ai: "No", h: "Yes", reason: "Agent used caller\'s name but AI didn\'t detect it." },
+          { q: "Open-ended questions", w: 7, ai: "Yes", h: "No", reason: "AI counted questions as open-ended; human classified them as closed-ended." },
+          { q: "Acknowledged/ownership", w: 5, ai: "No", h: "Yes", reason: "Agent acknowledged caller / took ownership. AI did not credit it." },
+          { q: "Hold permission", w: 2, ai: "No", h: "Yes", reason: "Agent asked hold permission (or hold not needed). AI did not credit it." },
+          { q: "Secure info (DQ)", w: "DQ", ai: "Yes", h: "No", reason: "AI flagged secure info disclosure; human did not find one." }
+        ],
+        recommendation: 'Strict fixes: Acknowledged/ownership (5pts), Name usage (3pts), Hold permission (2pts). Lenient fixes: Open-ended questions (7pts).' },
+      { id: "270842045", human: 88.1, ai: 90.48, strict: 1, lenient: 1, weightLost: 9, disqualifier: false,
+        note: '2 disagreements: 1 strict, 1 lenient.',
+        details: [
+          { q: "Greeting", w: 4, ai: "No", h: "Yes", reason: "Agent greeted with property name and intro. AI did not detect it." },
+          { q: "Validate concern", w: 5, ai: "Yes", h: "No", reason: "AI credited concern validation; human did not." }
+        ],
+        recommendation: 'Strict fixes: Greeting (4pts). Lenient fixes: Validate concern (5pts).' },
+      { id: "271873957", human: 100.0, ai: 66.67, strict: 2, lenient: 1, weightLost: 7, disqualifier: true,
+        note: '3 disagreements: 2 strict, 1 lenient.',
+        details: [
+          { q: "Acknowledged/ownership", w: 5, ai: "No", h: "Yes", reason: "Agent acknowledged caller / took ownership. AI did not credit it." },
+          { q: "Hold permission", w: 2, ai: "No", h: "Yes", reason: "Agent asked hold permission (or hold not needed). AI did not credit it." },
+          { q: "Secure info (DQ)", w: "DQ", ai: "Yes", h: "No", reason: "AI flagged secure info disclosure; human did not find one." }
+        ],
+        recommendation: 'Strict fixes: Acknowledged/ownership (5pts), Hold permission (2pts).' },
+      { id: "271912426", human: 78.57, ai: 72.38, strict: 0, lenient: 2, weightLost: 5, disqualifier: true,
+        note: '2 disagreements — all AI too lenient.',
+        details: [
+          { q: "Validate concern", w: 5, ai: "Yes", h: "No", reason: "AI credited concern validation; human did not." },
+          { q: "Secure info (DQ)", w: "DQ", ai: "Yes", h: "No", reason: "AI flagged secure info disclosure; human did not find one." }
+        ],
+        recommendation: 'Lenient fixes: Validate concern (5pts).' },
+      { id: "272053386", human: 80.95, ai: 85.71, strict: 1, lenient: 1, weightLost: 8, disqualifier: false,
+        note: '2 disagreements: 1 strict, 1 lenient.',
+        details: [
+          { q: "Closing", w: 3, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." },
+          { q: "Neutral language", w: 5, ai: "Yes", h: "No", reason: "AI credited neutral language; human found it insufficient." }
+        ],
+        recommendation: 'Strict fixes: Closing (3pts). Lenient fixes: Neutral language (5pts).' },
+      { id: "272063323", human: 83.33, ai: 71.43, strict: 2, lenient: 0, weightLost: 5, disqualifier: false,
+        note: '2 disagreements — all AI too strict.',
+        details: [
+          { q: "Closing", w: 3, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." },
+          { q: "Hold permission", w: 2, ai: "No", h: "Yes", reason: "Agent asked hold permission (or hold not needed). AI did not credit it." }
+        ],
+        recommendation: 'Strict fixes: Closing (3pts), Hold permission (2pts).' },
+      { id: "272352194", human: 83.33, ai: 83.33, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "272543647", human: 100.0, ai: 95.24, strict: 1, lenient: 0, weightLost: 2, disqualifier: false,
+        note: '1 disagreement — all AI too strict.',
+        details: [
+          { q: "Hold permission", w: 2, ai: "No", h: "Yes", reason: "Agent asked hold permission (or hold not needed). AI did not credit it." }
+        ],
+        recommendation: 'Strict fixes: Hold permission (2pts).' }
+    ],
+    recommendations: [
+      {
+        num: 1,
+        title: "Tighten Asked permission before hold detection — 7 strict errors (5/12 agree)",
+        severity: "critical",
+        severityLabel: "7 strict / 0 lenient",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p><strong>Asked permission before hold</strong> is a top strict driver on resident Run 1.0 (5/12 agreement). AI under-credits behavior humans marked Yes.</p>`,
+        action: `<p>Review protocol text for this question against the resident fundamentals sheet and loosen detection thresholds where humans consistently credit the behavior.</p>`
+      },
+      {
+        num: 2,
+        title: "Tighten Closing / confirm next steps detection — 5 strict errors (7/12 agree)",
+        severity: "critical",
+        severityLabel: "5 strict / 0 lenient",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p><strong>Closing / confirm next steps</strong> is a top strict driver on resident Run 1.0 (7/12 agreement). AI under-credits behavior humans marked Yes.</p>`,
+        action: `<p>Review protocol text for this question against the resident fundamentals sheet and loosen detection thresholds where humans consistently credit the behavior.</p>`
+      },
+      {
+        num: 3,
+        title: "Tighten Acknowledged caller / took ownership detection — 4 strict errors (8/12 agree)",
+        severity: "warning",
+        severityLabel: "4 strict / 0 lenient",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p><strong>Acknowledged caller / took ownership</strong> is a top strict driver on resident Run 1.0 (8/12 agreement). AI under-credits behavior humans marked Yes.</p>`,
+        action: `<p>Review protocol text for this question against the resident fundamentals sheet and loosen detection thresholds where humans consistently credit the behavior.</p>`
+      },
+      {
+        num: 4,
+        title: "Reduce false positives on Secure info (DQ) — 3 lenient errors",
+        severity: "warning",
+        severityLabel: "3 lenient",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p><strong>Secure info (DQ)</strong> shows AI over-crediting vs human (9/12 agreement).</p>`,
+        action: `<p>Add negative examples to the protocol so AI does not credit weak or N/A cases.</p>`
+      },
+      {
+        num: 5,
+        title: "Reduce false positives on Validated caller concern (if expressed) — 2 lenient errors",
+        severity: "warning",
+        severityLabel: "2 lenient",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p><strong>Validated caller concern (if expressed)</strong> shows AI over-crediting vs human (10/12 agreement).</p>`,
+        action: `<p>Add negative examples to the protocol so AI does not credit weak or N/A cases.</p>`
+      }
+    ],
+    rootCause: {
+      summary: 'Resident Run 1.0 baseline on a 42-point weighted scorecard (10 scored questions + FHA/secure-info DQs). Partial set of 12 matching calls.',
+      strictDetail: '<p>Strict errors concentrate on hold permission, closing, and ownership/acknowledgment — AI under-credits behaviors humans marked Yes.</p>',
+      lenientDetail: '<p>Lenient errors are fewer and spread across secure-info DQ, validate-concern, and neutral language.</p>'
+    }
+  }
+];
+
+const residentMatrixQuestions = [
+  { short: "Greeting", key: "greeting" },
+  { short: "Name", key: "name_usage" },
+  { short: "Contact info", key: "contact_info" },
+  { short: "Unit #", key: "unit_number" },
+  { short: "Open-ended Qs", key: "open_ended_qs" },
+  { short: "Acknowledged", key: "acknowledged" },
+  { short: "Closing", key: "closing" },
+  { short: "Hold perm.", key: "hold_permission" },
+  { short: "Validate concern", key: "validate_concern" },
+  { short: "Neutral lang", key: "neutral_language" },
+  { short: "FHA (DQ)", key: "fha" },
+  { short: "Secure info (DQ)", key: "secure_info" },
+];
+
+
 // ═══ LEAD TYPE CONFIG ═══
 const leadConfig = {
   cold: {
@@ -3329,6 +3566,20 @@ const leadConfig = {
     subtitle: (r) => r ? `20 warm-lead calls \u00b7 15 scoring criteria \u00b7 ${r.label} \u2014 ${r.date}` : `20 warm-lead calls \u00b7 15 scoring criteria \u00b7 ${runs.length} model runs tracked`,
     formulaDesc: '13 scored questions (text/email permission excluded as conditional). Score = (Yes count / 13) \u00d7 100%.',
     dqDesc: 'Each disqualifier triggered (FHA violation, secure info disclosure) applies a 20% reduction.',
+  },
+  resident: {
+    label: 'Residents',
+    callCount: 12,
+    criteriaCount: 12,
+    totalPoints: 42,
+    scoredQuestions: 10,
+    runs: residentRuns,
+    answerData: residentAnswerData,
+    runAnswerData: residentRunAnswerData,
+    matrixQuestions: residentMatrixQuestions,
+    subtitle: (r) => r ? `12 resident calls \u00b7 12 scoring criteria \u00b7 ${r.label} \u2014 ${r.date}` : `12 resident calls \u00b7 12 scoring criteria \u00b7 ${runs.length} model runs tracked`,
+    formulaDesc: '42 total weighted points across 10 regular questions (weights from AI Resident Fundamentals). Score = (earned points / 42) \u00d7 100%.',
+    dqDesc: 'Each disqualifier triggered (FHA violation, secure info disclosure) applies a 20% reduction.',
   }
 };
 
@@ -3341,7 +3592,6 @@ let matrixQuestions = coldMatrixQuestions;
 
 const PENDING_TYPES = {
   workorder: { label: 'Work Orders', icon: '🔧' },
-  resident: { label: 'Residents', icon: '🏠' },
   other: { label: 'Other', icon: '📋' },
 };
 

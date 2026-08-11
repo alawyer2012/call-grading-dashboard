@@ -2,14 +2,14 @@
 
 ## What This Is
 
-A self-contained HTML dashboard comparing AI model call-grading scores against human grader scores for Leasing Center calls. Supports **two lead types** (Cold Leads and Warm Leads) with independent run tracking for each. The goal is to tune the AI model until it aligns with human graders (target: 90%+ agreement, <3% avg score delta).
+A self-contained HTML dashboard comparing AI model call-grading scores against human grader scores for Leasing Center calls. Supports **Cold Leads, Warm Leads, and Residents** (Work Orders / Other still pending) with independent run tracking for each. The goal is to tune the AI model until it aligns with human graders (target: 90%+ agreement, <3% avg score delta).
 
-## Dual Lead Type Architecture (added June 8, 2026)
+## Dual Lead Type Architecture (added June 8, 2026; Residents Aug 11, 2026)
 
-The dashboard uses a **top-level lead-type selector** (Cold Leads | Warm Leads) above the run selector. Each lead type has its own:
-- Data: `coldRuns`/`warmRuns`, `coldAnswerData`/`warmAnswerData`, `coldRunAnswerData`/`warmRunAnswerData`
-- Config: `leadConfig.cold`/`leadConfig.warm` (scoring formula, question count, labels)
-- Matrix questions: `coldMatrixQuestions`/`warmMatrixQuestions`
+The dashboard uses a **top-level lead-type selector** (Cold Leads | Warm Leads | Residents | …) above the run selector. Each lead type has its own:
+- Data: `coldRuns`/`warmRuns`/`residentRuns`, matching `*AnswerData` / `*RunAnswerData`
+- Config: `leadConfig.cold`/`warm`/`resident` (scoring formula, question count, labels)
+- Matrix questions: `coldMatrixQuestions`/`warmMatrixQuestions`/`residentMatrixQuestions`
 
 Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are swapped by `switchLeadType()`.
 
@@ -33,11 +33,26 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **Rebuild script:** `rebuild_warm_from_spreadsheet.py`
 - **Source data:** `~/Downloads/20 Call Warm Lead Comparison.xlsx`
 
+### Residents
+- **10 scored questions, 42 weighted points**, 2 DQs (FHA, Secure info) — matches the New Manual / AI tabs (definitions sheet lists 11 scored incl. a split closing; we use the 10 graded in the comparison sheet)
+- Score = (earned / 42) × 100%, with 20% reduction per DQ
+- **Rebuild script:** `rebuild_resident_from_spreadsheet.py`
+- **Source data:** `~/Downloads/20 Call Resident Comparison.xlsx` (New Manual + AI tabs; ignore old Manual tab)
+- **Definitions:** `AI_ QA 2026 (5).xlsx` → tab `AI Resident Fundamentals`
+
+### Resident Run 1.0 (August 11, 2026) — Baseline
+- **Tab:** `AI` → Run 1.0
+- **Set:** 12 matching AI+human call IDs (partial benchmark; 4 human-only IDs excluded until AI grades land)
+- **Duplicate handling:** call `272543647` had two human rows — kept the 100% row, dropped 87.5%
+- **Results:** **78.3%** scored agreement (94/120), 26 disagreements, 20 strict / 6 lenient, **15.1%** avg score delta
+- **Top strict drivers:** hold permission, closing, acknowledged/ownership
+- Evidence/transcripts and agent names deferred to a later iteration
+
 ### How to Add Data for a New Lead Type Run
 1. Download fresh `.xlsx` from Google Sheet
 2. Add new tab entry to `AI_TABS` in the appropriate rebuild script
-3. Run the rebuild script (cold or warm)
-4. Run the other rebuild script too (they don't interfere with each other's data)
+3. Run the rebuild script (cold, warm, or resident)
+4. Run the other rebuild scripts too if needed (they don't interfere with each other's data)
 5. Manually add recommendations and rootCause for the new run
 6. Deploy: `git add -A && git commit -m "update" && git push`
 
