@@ -3348,7 +3348,9 @@ const residentRuns = [
       lenientErrors: 6,
       target: 90
     },
-    keyFindings: `<p>The AI disagrees with humans on <strong>21.7% of question-level answers</strong> across these 12 resident calls (26 of 120 scored comparisons). The dominant pattern is the AI being <strong>too strict</strong> — 77% of disagreements (20 of 26).</p><p>Worst strict questions: <em>Asked permission before hold</em> (5/12 = 42%), <em>Closing / confirm next steps</em> (7/12 = 58%), <em>Acknowledged caller / took ownership</em> (8/12 = 67%). Worst lenient questions: <em>Secure info (DQ)</em> (9/12 = 75%), <em>Validated caller concern (if expressed)</em> (10/12 = 83%), <em>Neutral / de-escalating language</em> (10/12 = 83%).</p><p>Average absolute score delta is <strong>15.1 percentage points</strong> (weighted, 42-pt card).</p><p><em>Note: Partial benchmark — 12 matching AI+human call IDs. Evidence/transcripts deferred.</em></p>`,
+    keyFindings: `<p><strong>These are mostly message-taking / callback calls</strong> — not sales calls. The agent greets, gets name/unit/phone, says they’ll leave a note or arrange a callback, and wraps up. Humans credit that. The AI often doesn’t, which is why agreement is <strong>78.3%</strong> instead of 90%+.</p>
+      <p>Across 12 matching calls there are <strong>26 disagreements</strong> (20 strict / 6 lenient). Four repeatable grading mistakes drive most of the gap: hold false positives, ownership phrase-matching, secure-info DQ on phone readback, and closing that requires “Anything else?”.</p>
+      <p>Average absolute score delta is <strong>15.1 percentage points</strong> on the 42-pt resident card. Fix the four P0 protocol rules below, re-run the same 12 calls as Run 2.0, then expand to 20.</p>`,
     questions: [
       { short: "hold_permission", label: "Asked permission before hold", weight: 2, agree: 5, disagree: 7, total: 12, lenient: 0, strict: 7, dir: "strict",
         evidence: []},
@@ -3464,59 +3466,94 @@ const residentRuns = [
     recommendations: [
       {
         num: 1,
-        title: "Tighten Asked permission before hold detection — 7 strict errors (5/12 agree)",
+        title: "Hold: “Let me check / hang on” is NOT a hold — 7 of 12 calls",
         severity: "critical",
-        severityLabel: "7 strict / 0 lenient",
+        severityLabel: "7 strict errors · biggest single driver",
         owner: "AI Engineering",
         ownerClass: "info",
-        problem: `<p><strong>Asked permission before hold</strong> is a top strict driver on resident Run 1.0 (5/12 agreement). AI under-credits behavior humans marked Yes.</p>`,
-        action: `<p>Review protocol text for this question against the resident fundamentals sheet and loosen detection thresholds where humans consistently credit the behavior.</p>`
+        problem: `<p><strong>What went wrong:</strong> On resident message-taking calls, agents often say “Let me check,” “Hang on a sec,” or “Just bear with me” while looking up the resident. Humans correctly mark hold permission as Yes (no hold happened). The AI marks No — treating lookup language as an unauthorized hold.</p>
+          <p><strong>Why it matters:</strong> This alone hits ~7 of 12 calls. It is the fastest path to a big agreement jump.</p>
+          <p><strong>Contrast:</strong> Call 270842045 correctly asked “Can I put you on a brief hold?” — both AI and human said Yes. The model can get hold right when it’s a real hold; it’s over-firing on lookup language.</p>`,
+        protocols: [
+          {
+            label: "Hold permission — resident message-taking rule",
+            current: "If it was necessary to place a caller on hold, did the agent ask for the caller’s permission first?",
+            recommended: "Mark <strong style=\"color:var(--red);\">YES if no hold occurred</strong> — including when the agent only says “Let me check,” “Let me see,” “Hang on a sec,” or “Bear with me” while looking something up on the dashboard.<br><br>A hold means the agent actually places the caller on hold, mutes for an extended time, or explicitly says they are putting the caller on hold.<br><br>Mark YES if the agent asks permission (“Can I put you on a brief hold?”) before a real hold.<br><br>Mark NO only if a real hold happened and the agent did not ask permission first."
+          }
+        ]
       },
       {
         num: 2,
-        title: "Tighten Closing / confirm next steps detection — 5 strict errors (7/12 agree)",
+        title: "Ownership: credit “I’ll arrange a callback / leave a note” — 4 calls",
         severity: "critical",
-        severityLabel: "5 strict / 0 lenient",
+        severityLabel: "4 strict errors · message-taking language missed",
         owner: "AI Engineering",
         ownerClass: "info",
-        problem: `<p><strong>Closing / confirm next steps</strong> is a top strict driver on resident Run 1.0 (7/12 agreement). AI under-credits behavior humans marked Yes.</p>`,
-        action: `<p>Review protocol text for this question against the resident fundamentals sheet and loosen detection thresholds where humans consistently credit the behavior.</p>`
+        problem: `<p><strong>What went wrong:</strong> Resident calls are mostly take-a-message. Agents say things like “I can arrange a callback,” “I’ll send this to the front office,” “I’ll put down the notes,” or “Let me ask a specialist to call you.” Humans credit ownership. The AI wants canned phrases like “I can definitely help” / “I will personally follow up” and under-credits.</p>`,
+        protocols: [
+          {
+            label: "Acknowledged / took ownership — expand positive examples",
+            current: "Did the agent clearly acknowledge the caller’s question and express willingness to help such as “I can definitely help,” “I will personally follow up,” “I’d love to look into that for you”?",
+            recommended: "Credit first-person action commitments that show the agent is taking the message / owning next steps. Mark YES for language such as:<br><br>• “I can arrange a callback for you”<br>• “I’ll leave a note / put down the notes for the property”<br>• “I’ll send this over to the front office / onsite team”<br>• “Let me ask a leasing specialist to give you a call”<br>• “I’ll have them call you back”<br>• “Let me check on that / get the status”<br><br>Do <strong style=\"color:var(--red);\">not</strong> require the exact phrases “I can definitely help” or “I will personally follow up.” Those are examples, not the only acceptable wording."
+          }
+        ]
       },
       {
         num: 3,
-        title: "Tighten Acknowledged caller / took ownership detection — 4 strict errors (8/12 agree)",
-        severity: "warning",
-        severityLabel: "4 strict / 0 lenient",
+        title: "Closing: “We’ll call you back” + thanks is enough — 5 calls",
+        severity: "critical",
+        severityLabel: "5 strict errors · formal “Anything else?” over-required",
         owner: "AI Engineering",
         ownerClass: "info",
-        problem: `<p><strong>Acknowledged caller / took ownership</strong> is a top strict driver on resident Run 1.0 (8/12 agreement). AI under-credits behavior humans marked Yes.</p>`,
-        action: `<p>Review protocol text for this question against the resident fundamentals sheet and loosen detection thresholds where humans consistently credit the behavior.</p>`
+        problem: `<p><strong>What went wrong:</strong> On message-taking calls, the natural close is: agent confirms the callback/note, caller says okay/thanks, call ends. Humans credit that. The AI often wants an explicit “Is there anything else I can help you with?” and marks No when it’s missing — even when next steps were clear.</p>`,
+        protocols: [
+          {
+            label: "Closing / next steps — resident callback flows",
+            current: "Before ending the call, did the agent confirm any next steps… and ask a final closing question… or did the caller say there is nothing else they need help with?",
+            recommended: "Mark YES if the agent clearly states the next step (e.g., callback arranged, notes sent to property, someone will reach out) <strong style=\"color:var(--red);\">and</strong> the call ends cooperatively (caller okay/thanks, or agent asks “anything else?”).<br><br>“Is there anything else?” is sufficient but <strong style=\"color:var(--red);\">not required</strong> when next steps are already confirmed and the caller winds down the call.<br><br>Mark NO only when the agent ends abruptly with no next step and no confirmation that the caller’s request was handled."
+          }
+        ]
       },
       {
         num: 4,
-        title: "Reduce false positives on Secure info (DQ) — 3 lenient errors",
-        severity: "warning",
-        severityLabel: "3 lenient",
+        title: "Secure info DQ: confirming the caller’s own phone is NOT a violation — 3 calls",
+        severity: "critical",
+        severityLabel: "3 lenient DQ false positives",
         owner: "AI Engineering",
         ownerClass: "info",
-        problem: `<p><strong>Secure info (DQ)</strong> shows AI over-crediting vs human (9/12 agreement).</p>`,
-        action: `<p>Add negative examples to the protocol so AI does not credit weak or N/A cases.</p>`
+        problem: `<p><strong>What went wrong:</strong> Agents gather and read back the caller’s phone number for the callback message. Humans correctly mark secure-info DQ as No. The AI sometimes flags Yes — treating normal message-taking confirmation as disclosing secure information.</p>
+          <p>This falsely tanks the score (20% DQ penalty) on otherwise fine calls.</p>`,
+        protocols: [
+          {
+            label: "Secure information DQ — negative examples for residents",
+            current: "Did the Agent explicitly provide any information considered secure, such as personal data or confidential property details, to the caller?",
+            recommended: "Mark NO when the agent only confirms information the caller just provided (their own phone number, unit, or name) for the purpose of taking a message or arranging a callback.<br><br>Mark YES only for true disclosures, such as:<br>• Another resident’s personal data<br>• Passwords, gate codes, account numbers, payment details<br>• Confidential property information the caller should not receive<br><br><strong style=\"color:var(--red);\">Reading back the caller’s own phone number is never a secure-info DQ.</strong>"
+          }
+        ]
       },
       {
         num: 5,
-        title: "Reduce false positives on Validated caller concern (if expressed) — 2 lenient errors",
-        severity: "warning",
-        severityLabel: "2 lenient",
-        owner: "AI Engineering",
+        title: "Path to 90%: apply recs 1–4, re-run same 12 calls as Run 2.0",
+        severity: "success",
+        severityLabel: "78.3% → target 90%+ on same benchmark",
+        owner: "Austin + AI Engineering",
         ownerClass: "info",
-        problem: `<p><strong>Validated caller concern (if expressed)</strong> shows AI over-crediting vs human (10/12 agreement).</p>`,
-        action: `<p>Add negative examples to the protocol so AI does not credit weak or N/A cases.</p>`
+        problem: `<p><strong>These are resident message-taking calls.</strong> Don’t tune them like cold-lead sales calls. Recs 1–4 fix the four protocols that explain most of the 26 disagreements.</p>
+          <p><strong>Plan:</strong> (1) Update resident protocols/prompts with recs 1–4. (2) Re-score the same 12 call IDs as Resident Run 2.0. (3) Only then expand to a full 20-call set. (4) Secondary polish after Run 2.0: validate-concern over-credit, third-party name usage, open-ended edge cases.</p>`,
+        protocols: [
+          {
+            label: "Run 2.0 execution checklist",
+            current: "Run 1.0 baseline: 78.3% agreement, 26 disagreements, 15.1% avg score delta, 12 matching calls.",
+            recommended: "Ship protocol updates for hold, ownership, closing, and secure-info DQ. Re-run identical call IDs. Success = <strong style=\"color:var(--red);\">&gt;90% scored agreement</strong> and material drop in hold/ownership/closing/secure disagreements. Defer new call IDs until that bar is met."
+          }
+        ]
       }
     ],
     rootCause: {
-      summary: 'Resident Run 1.0 baseline on a 42-point weighted scorecard (10 scored questions + FHA/secure-info DQs). Partial set of 12 matching calls.',
-      strictDetail: '<p>Strict errors concentrate on hold permission, closing, and ownership/acknowledgment — AI under-credits behaviors humans marked Yes.</p>',
-      lenientDetail: '<p>Lenient errors are fewer and spread across secure-info DQ, validate-concern, and neutral language.</p>'
+      overall: "Resident Run 1.0 fails mainly because the grader still behaves like a lead-call scorer on short centralized message-taking / callback calls. Humans credit normal message-taking; AI under-credits hold, ownership, and closing, and sometimes falsely flags phone readback as a secure-info DQ.",
+      what_worked: "Greeting, unit number, and FHA are generally solid. When agents use clear callback ownership plus an explicit “anything else?” (e.g. 272352194), AI and human can fully agree — the model can grade resident calls correctly when the protocol matches the call type.",
+      what_didnt: "Hold false positives on lookup language (7 calls), ownership phrase-matching (4), closing requiring formal wrap-up (5), secure-info false DQ on caller phone confirm (3). Secondary: validate-concern over-credit, name-usage on third parties, open-ended inconsistency.",
+      path_to_90: "Apply recs 1–4 (hold, ownership, closing, secure-info), re-run the same 12 calls as Run 2.0, then expand to 20. That is a protocol fix for message-taking — not a model rebuild."
     }
   }
 ];
