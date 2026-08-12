@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Leasing Center — AI vs Human Grading Dashboard</title>
+<!-- deploy-bust: 2026-08-12-resident-recs -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   :root {
@@ -3350,7 +3351,7 @@ const residentRuns = [
     },
     keyFindings: `<p><strong>These are mostly message-taking / callback calls</strong> — not sales calls. The agent greets, gets name/unit/phone, says they’ll leave a note or arrange a callback, and wraps up. Humans credit that. The AI often doesn’t, which is why agreement is <strong>78.3%</strong> instead of 90%+.</p>
       <p>Across 12 matching calls there are <strong>26 disagreements</strong> (20 strict / 6 lenient). Four repeatable grading mistakes drive most of the gap: hold false positives, ownership phrase-matching, secure-info DQ on phone readback, and closing that requires “Anything else?”.</p>
-      <p>Average absolute score delta is <strong>15.1 percentage points</strong> on the 42-pt resident card. Fix the four P0 protocol rules below, re-run the same 12 calls as Run 2.0, then expand to 20.</p>`,
+      <p>Average absolute score delta is <strong>15.1 percentage points</strong> on the 42-pt resident card. Fix the four P0 protocol rules in the <strong>Recommendations</strong> tab, re-run the same 12 calls as Run 2.0, then expand to 20.</p><p><strong>→ Open the Recommendations tab</strong> for copy-paste protocol text (hold, ownership, closing, secure-info DQ) plus the Run 2.0 checklist.</p>`,
     questions: [
       { short: "hold_permission", label: "Asked permission before hold", weight: 2, agree: 5, disagree: 7, total: 12, lenient: 0, strict: 7, dir: "strict",
         evidence: []},
@@ -3553,7 +3554,13 @@ const residentRuns = [
       overall: "Resident Run 1.0 fails mainly because the grader still behaves like a lead-call scorer on short centralized message-taking / callback calls. Humans credit normal message-taking; AI under-credits hold, ownership, and closing, and sometimes falsely flags phone readback as a secure-info DQ.",
       what_worked: "Greeting, unit number, and FHA are generally solid. When agents use clear callback ownership plus an explicit “anything else?” (e.g. 272352194), AI and human can fully agree — the model can grade resident calls correctly when the protocol matches the call type.",
       what_didnt: "Hold false positives on lookup language (7 calls), ownership phrase-matching (4), closing requiring formal wrap-up (5), secure-info false DQ on caller phone confirm (3). Secondary: validate-concern over-credit, name-usage on third parties, open-ended inconsistency.",
-      path_to_90: "Apply recs 1–4 (hold, ownership, closing, secure-info), re-run the same 12 calls as Run 2.0, then expand to 20. That is a protocol fix for message-taking — not a model rebuild."
+      path_to_90: "Apply recs 1–4 (hold, ownership, closing, secure-info), re-run the same 12 calls as Run 2.0, then expand to 20. That is a protocol fix for message-taking — not a model rebuild.",
+      strictDetail: `<p><strong>Hold permission (7 calls)</strong> — “Let me check / hang on / bear with me” treated as unauthorized hold when no hold occurred.</p>
+        <p><strong>Closing (5 calls)</strong> — Human credits next-step + natural end; AI wants formal “Anything else?”</p>
+        <p><strong>Ownership (4 calls)</strong> — Misses callback / leave-a-note language; wants canned “I can definitely help.”</p>`,
+      lenientDetail: `<p><strong>Secure info DQ (3 calls)</strong> — False positives when agent only reads back the caller’s own phone for the message.</p>
+        <p><strong>Validate concern (2) / Neutral language (2)</strong> — Over-credits weak empathy or quirky tone.</p>
+        <p>See the <strong>Recommendations</strong> tab for copy-paste protocol fixes (path to 90%).</p>`
     }
   }
 ];
@@ -4591,13 +4598,19 @@ function renderRootCause(run) {
     <div class="two-col">
       <div class="card">
         <div class="card-header">AI too lenient — where it over-credits <span class="pill pill-warning">${run.meta.lenientErrors} errors</span></div>
-        <div class="card-body">${rc.lenientDetail}</div>
+        <div class="card-body">${rc.lenientDetail || (rc.what_didnt ? `<p>${rc.what_didnt}</p>` : '<p style="color:var(--text-3);">No lenient-detail writeup for this run.</p>')}</div>
       </div>
       <div class="card">
         <div class="card-header">AI too strict — where it under-credits <span class="pill pill-info">${run.meta.strictErrors} errors</span></div>
-        <div class="card-body">${rc.strictDetail}</div>
+        <div class="card-body">${rc.strictDetail || (rc.overall ? `<p>${rc.overall}</p>` : '<p style="color:var(--text-3);">No strict-detail writeup for this run.</p>')}</div>
       </div>
     </div>`;
+  if (rc.path_to_90 || rc.what_worked) {
+    html += `<div class="callout info" style="margin-top:24px;">
+      ${rc.what_worked ? `<div class="callout-title">What already works</div><p style="margin:0 0 12px;">${rc.what_worked}</p>` : ''}
+      ${rc.path_to_90 ? `<div class="callout-title">Path to ${run.meta.target || 90}%</div><p style="margin:0;">${rc.path_to_90}</p>` : ''}
+    </div>`;
+  }
 
   if (rc.transcriptionExamples) {
     html += `<h2 style="margin-top:32px;">Transcription failures — evidence from calls</h2>
@@ -4624,9 +4637,11 @@ function renderRootCause(run) {
 function renderRecommendations(run) {
   const el = document.getElementById(`recs-${run.id}`);
   if (!run.recommendations || run.recommendations.length === 0) { el.innerHTML = '<p style="color:var(--text-3);">Recommendations not yet available for this run.</p>'; return; }
+  const callCount = (run.calls && run.calls.length) ? run.calls.length : leadConfig[activeLeadType].callCount;
+  const targetDisagreements = Math.max(1, Math.floor(callCount * leadConfig[activeLeadType].scoredQuestions * (1 - (run.meta.target || 90) / 100)));
   let html = `<h2>Protocol Changes for Model Alignment</h2>
-    <p style="font-size:14px; color:var(--text-2); margin-bottom:8px;">Each recommendation shows the current protocol from the scorecard and the exact updated text to copy-paste into the model. <span style="color:var(--red); font-weight:700;">Red bold text</span> = new language added. Target: ${run.meta.totalDisagreements} → &lt;40 disagreements (90%+ agreement).</p>
-    <p style="font-size:13px; color:var(--text-3); margin-bottom:24px;">Recs 1–5 are copy-paste ready. Apply them, re-run the model on these 20 calls, and update this dashboard to measure improvement.</p>`;
+    <p style="font-size:14px; color:var(--text-2); margin-bottom:8px;">Each recommendation shows the current protocol from the scorecard and the exact updated text to copy-paste into the model. <span style="color:var(--red); font-weight:700;">Red bold text</span> = new language added. Target: ${run.meta.totalDisagreements} → &lt;${targetDisagreements} disagreements (${run.meta.target || 90}%+ agreement).</p>
+    <p style="font-size:13px; color:var(--text-3); margin-bottom:24px;">Copy-paste ready. Apply these protocol updates, re-run the model on these ${callCount} calls, and update this dashboard to measure improvement.</p>`;
 
   run.recommendations.forEach(rec => {
     html += `<div class="rec-card">
