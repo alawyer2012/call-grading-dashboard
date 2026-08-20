@@ -50,13 +50,13 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 
 ### Resident Run 2.0 (August 20, 2026) — Protocol updates from Run 1 recs 1–4
 - **Tab:** `AI 2` → Run 2.0
-- **Set:** Same 12 call IDs as Run 1 (apples-to-apples Overview). Eight extra IDs were graded in AI 2; recs now cover all 20 for Run 3.0.
+- **Set:** Full **20 calls** (original 12 + 8 new IDs). Overview notes that Run 1.0 was 12; comparable 12-slice is 90.8%.
+- **Ops correction:** Human open-ended on 269788776 and 272063323 flipped to Yes — AI was right; original manual was not.
 - **What changed (blue cells in AI Resident Fundamentals):** hold lookup≠hold; ownership credits callback/note language; closing = next steps without requiring “anything else?”; secure-info phone readback is not a DQ.
-- **Results (same 12):** **89.2%** (+10.9pp), 13 disagreements (26→13), 6 strict / 7 lenient (20→6 / 6→7), **10.7%** avg score delta (15.1→10.7)
-- **Cleared:** hold 7→0, ownership 4→0, secure-info DQ 3→0, closing 5→1. Perfect-agreement calls 1→4.
-- **Missed 90% by 1pp.** Leftover: open-ended over-credit (got slightly worse, 2→3), validate-concern unchanged (2), name/neutral unchanged, outlier 269768640 still 4 strict (unit even regressed).
-- **Shadow 20-call:** 87.5% (175/200), 25 disagreements. New 8 alone 85%. Same leftover drivers (open-ended 7, validate 5) plus ownership miss on 269829113.
-- **Next:** Run 3.0 recs on the dashboard Recommendations tab now cover **all 20 calls** (open-ended two poles, validate split, voicemail-forward ownership, contact N/A, name, neutral/third-party). Keep R1/R2 on 12 for the trend. Run 3.0 grades all 20.
+- **Results (all 20):** **88.5%** (177/200), 23 disagreements (12 strict / 11 lenient), **10.0%** avg score delta. Perfect agreement: 9 of 20.
+- **Comparable 12 vs Run 1.0:** **90.8%** (109/120), 11 disagreements (6 strict / 5 lenient), 7.9% avg delta. Hold 7→0, ownership 4→0, secure-info DQ 3→0, closing 5→1.
+- **Top leftovers on 20:** open-ended 5, validate 5, name 3, closing 3. Worst new ID: 269829113 ownership miss on voicemail-forward (H 81 / AI 45). Worst original: 269768640 (4 strict).
+- **Next:** Recs 1–6 on the Recommendations tab are the protocol pack for the next run on these same 20.
 - Transcripts: all 20 IDs in `~/Downloads/{id}.json`.
 - Writeup: `RESIDENT-RUN2-EVAL.md`
 

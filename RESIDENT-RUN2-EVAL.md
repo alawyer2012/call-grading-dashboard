@@ -3,58 +3,72 @@
 > Dashboard: https://alawyer2012.github.io/call-grading-dashboard/ (Residents → Overview / Run 2.0)
 > Source grades: `~/Downloads/20 Call Resident Comparison (1).xlsx` (New Manual + AI + AI 2)
 > Definitions: `AI_ QA 2026 (6).xlsx` → AI Resident Fundamentals (blue = Run 2.0 updates)
-> Transcripts (original 12): `~/Downloads/{call_id}.json`
+> Transcripts: `~/Downloads/{call_id}.json`
 
-**Official set:** same 12 IDs as Run 1.0  
-**Snapshot:** **89.2%** scored agreement (107/120) · 13 disagreements (6 strict / 7 lenient) · 10.7% avg score delta  
-**Vs Run 1.0:** +10.9pp agreement · disagreements 26→13 · strict 20→6
+**Official set:** all 20 matching AI 2 + human IDs  
+**Snapshot:** **88.5%** scored agreement (177/200) · 23 disagreements (12 strict / 11 lenient) · 10.0% avg score delta  
+**Comparable 12 vs Run 1.0:** **90.8%** (109/120) · 11 disagreements (6S / 5L) · 7.9% avg delta · +12.5pp vs Run 1.0’s 78.3%  
+**Ops correction:** 269788776 and 272063323 human open-ended flipped to Yes (AI was right)
 
 ---
 
 ## Did the Run 1.0 blue-cell updates work?
 
-| Rec | Question | R1 disagrees | R2 disagrees | Verdict |
-|-----|----------|--------------|--------------|---------|
+On the original 12:
+
+| Rec | Question | R1 disagrees | R2 disagrees (12) | Verdict |
+|-----|----------|--------------|-------------------|---------|
 | 1 | Hold permission | 7 strict | **0** | Cleared |
-| 2 | Ownership / acknowledged | 4 strict | **0** | Cleared on this set |
-| 3 | Closing | 5 strict | **1** | Almost — leftover is 269768640 |
+| 2 | Ownership / acknowledged | 4 strict | **0** on 12; **1** on 20 (269829113 voicemail-forward) | Worked, did not generalize |
+| 3 | Closing | 5 strict | **1** on 12 (269768640); 3 on 20 | Almost |
 | 4 | Secure-info DQ | 3 lenient | **0** | Cleared |
 
-We missed 90% by **1 percentage point**. Bias flipped from 77% strict to slightly lenient.
-
-Perfect agreement: 269245474, 271873957, 272352194, 272543647 (was only 272352194).
+Perfect agreement on 20: 9 calls (6 of the original 12 + 270583790, 273100258, 274349154).
 
 ---
 
-## Remaining disagreements (original 12)
+## All-20 leftovers (what the next run has to fix)
+
+| Question | Agree | Disagrees | Direction |
+|----------|-------|-----------|-----------|
+| Open-ended | 15/20 | 5 | 2 strict / 3 lenient |
+| Validate concern | 15/20 | 5 | 1 strict / 4 lenient |
+| Name usage | 17/20 | 3 | 2 strict / 1 lenient |
+| Closing | 17/20 | 3 | 2 strict / 1 lenient |
+| Contact info | 18/20 | 2 | 2 strict |
+| Neutral language | 18/20 | 2 | 2 lenient |
+| Greeting / unit / ownership | 19/20 | 1 each | all strict |
+
+Worst calls: **269768640** (H 100 / AI 57, 4 strict) and **269829113** (H 81 / AI 45, ownership+open+closing).
+
+---
+
+## Remaining disagreements (original 12 slice)
 
 | Call | Direction | Questions | Notes |
 |------|-----------|-----------|-------|
-| **269768640** | 4 strict | contact, **unit (regression)**, open-ended, closing | Worst leftover. Hold+ownership now fixed. Crosstalk; unit was asked; callback refused → contact N/A. |
-| 269788776 | 1 lenient | open-ended | New. Greeting + “in what regards” + identity counted as 2 probes. Human No. |
-| 272063323 | 1 lenient | open-ended | New. Same pattern on a fully-explained inspection callback. |
+| **269768640** | 4 strict | contact, unit, open-ended, closing | Worst leftover. Hold+ownership now fixed. Street address not unit; callback refused → contact N/A. “What was this call in regards?” should Yes like 8776/3323. Not an anonymous call. |
 | 270245082 | 2 lenient | name, neutral | Unchanged. Wendy/Keith third party; unprofessional agent rant. |
 | 270543247 | 1 strict | name | Unchanged. Company name / mangled “Prasvi.” |
 | 270842045 | 1S + 1L | greeting, validate | Unchanged. Crosstalk greeting; operational “Understood.” |
 | 271912426 | 1 lenient | validate | Unchanged. “I’ll get this checked” ≠ empathy. |
 | 272053386 | 1 lenient | neutral | Unchanged. Short calm call; possible grader noise. |
 
+269788776 and 272063323 are now perfect agreement (ops).
+
 ---
 
-## Shadow 20-call set (not official yet)
+## New 8 (now part of official Run 2.0)
 
-AI 2 graded 8 extra IDs that now have human scores:  
 265908165, 266239119, 269829113, 270583790, 273100258, 273290320, 273900663, 274349154
 
 | Slice | Agreement | Disagreements | Notes |
 |-------|-----------|---------------|-------|
-| Original 12 | 89.2% | 13 | Official Run 2.0 |
+| Original 12 | 90.8% | 11 | Comparable vs Run 1.0 |
 | New 8 | 85.0% | 12 | 270583790, 273100258, 274349154 = perfect |
-| All 20 | 87.5% | 25 | Open-ended 7, validate 5 |
+| All 20 | 88.5% | 23 | Open-ended 5, validate 5 |
 
-Watch: **269829113** (H 81 / AI 45) — ownership missed on unseen data. Do not lock 20 until Run 3.0 clears 90% on the original 12.
-
-Transcript intake (new 8): 269829113 ✅ · 265908165 ✅ · 273290320 ✅ · 266239119 ✅ · 273900663 ✅ · 270583790 ✅ · 273100258 ✅ · 274349154 ✅ · **all 8 in**
+Watch: **269829113** (H 81 / AI 45) — ownership missed on unseen data.
 
 ---
 
@@ -174,21 +188,18 @@ Positive control — short callback that still earns open-ended Yes because the 
 
 ---
 
-## Run 3.0 recs — refined after all 20 transcripts
+## Next-run recs — same 20 calls
 
-Official run is still the original 12. These 8 only change *how* we write the protocols.
-
-1. **Open-ended (P0)** — Don’t count greeting or identity. Don’t auto-Yes “already explained.” Need **two diagnostic probes after the greeting**. Keep Yes when those probes exist (273100258, 274349154). Keep No on greeting + identity only (270583790 — already correct; 265908165 / 273900663 / 269788776 — AI over-Yes). Don’t lose 269829113’s real “what voicemail should I place?”
+1. **Open-ended (P0)** — Don’t count greeting or identity. Don’t auto-Yes “already explained.” Ops: 269788776 / 272063323 = Yes (“what is this regarding?”). Keep Yes when 2+ diagnostic probes exist (273100258, 274349154). Keep No on greeting + identity only (270583790). Remaining over-Yes: 265908165 / 273900663 / 273290320. Don’t lose 269829113’s “what voicemail should I place?” or 269768640’s regarding probe.
 2. **Ownership** — Add **voicemail-forward** (“I can forward you a voicemail”) from 269829113. Callback/note language from Run 2.0 still works (270583790, 273900663, 274349154).
 3. **Validate** — Split, don’t blunt:
    - Operational “I’ll check / understood” → No (271912426, 270842045)
    - Generic closing “sorry you had to call” → No (265908165)
    - Empathy on the issue (“sorry to hear that” / “sorry for the delay” up front / “sorry you’re locked out”) → Yes (270583790, 274349154, 273290320 — don’t match the human No on the lockout sorry)
    - Garbled “sorry for the shovel/trouble” → Yes (266239119)
-4. **Contact N/A** — Policy-only / no callback (273290320 lockout, 269768640 refused callback) → Yes. Don’t require a phone.
+4. **Contact N/A** — Policy-only / no callback (273290320 lockout, 269768640 refused callback) → Yes. Don’t require a phone. Anonymous decline of name/phone/unit is a separate N/A on identity questions — it does not describe 269768640.
 5. **Name** — Caller personal name, ask + use. Ask-without-use = No (270583790). Friend/leaseholder names don’t count (266239119). Don’t loosen to match that human Yes.
 6. **Hold** — Already good. Lookup ≠ hold (270583790). Real “can I put you on hold?” = Yes (273100258).
 7. **Don’t grade third parties** as the LC agent (Jason on 273100258).
-8. **Still: same 12 first**, then lock 20. Shadow 20 is 87.5% until Rec 1 lands.
 
-Then re-score the **same 12**, then promote 20.
+Then re-score the **same 20**. Target: 90% = at most 20 disagreements (we are at 23).
