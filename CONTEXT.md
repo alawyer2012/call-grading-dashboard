@@ -37,8 +37,8 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **10 scored questions, 42 weighted points**, 2 DQs (FHA, Secure info) — matches the New Manual / AI tabs (definitions sheet lists 11 scored incl. a split closing; we use the 10 graded in the comparison sheet)
 - Score = (earned / 42) × 100%, with 20% reduction per DQ
 - **Rebuild script:** `rebuild_resident_from_spreadsheet.py`
-- **Source data:** `~/Downloads/20 Call Resident Comparison.xlsx` (New Manual + AI tabs; ignore old Manual tab)
-- **Definitions:** `AI_ QA 2026 (5).xlsx` → tab `AI Resident Fundamentals`
+- **Source data:** `~/Downloads/20 Call Resident Comparison (1).xlsx` (New Manual + AI + AI 2 tabs; ignore old Manual tab)
+- **Definitions:** `AI_ QA 2026 (6).xlsx` → tab `AI Resident Fundamentals` (blue cells = Run 2.0 protocol updates)
 
 ### Resident Run 1.0 (August 11, 2026) — Baseline
 - **Tab:** `AI` → Run 1.0
@@ -46,7 +46,19 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **Duplicate handling:** call `272543647` had two human rows — kept the 100% row, dropped 87.5%
 - **Results:** **78.3%** scored agreement (94/120), 26 disagreements, 20 strict / 6 lenient, **15.1%** avg score delta
 - **Top strict drivers:** hold permission, closing, acknowledged/ownership
-- Evidence/transcripts and agent names deferred to a later iteration
+- Transcripts reviewed: `~/Downloads/{call_id}.json` for all 12 — see `RESIDENT-RUN1-DISCONNECT-LOG.md`
+
+### Resident Run 2.0 (August 20, 2026) — Protocol updates from Run 1 recs 1–4
+- **Tab:** `AI 2` → Run 2.0
+- **Set:** Same 12 call IDs (apples-to-apples). AI 2 also graded 8 extra IDs that now have human scores — treated as a **shadow 20-call set**, not the official benchmark yet.
+- **What changed (blue cells in AI Resident Fundamentals):** hold lookup≠hold; ownership credits callback/note language; closing = next steps without requiring “anything else?”; secure-info phone readback is not a DQ.
+- **Results (same 12):** **89.2%** (+10.9pp), 13 disagreements (26→13), 6 strict / 7 lenient (20→6 / 6→7), **10.7%** avg score delta (15.1→10.7)
+- **Cleared:** hold 7→0, ownership 4→0, secure-info DQ 3→0, closing 5→1. Perfect-agreement calls 1→4.
+- **Missed 90% by 1pp.** Leftover: open-ended over-credit (got slightly worse, 2→3), validate-concern unchanged (2), name/neutral unchanged, outlier 269768640 still 4 strict (unit even regressed).
+- **Shadow 20-call:** 87.5% (175/200), 25 disagreements. New 8 alone 85%. Same leftover drivers (open-ended 7, validate 5) plus ownership miss on 269829113.
+- **Next:** Run 3.0 recs on open-ended, validate concern, name usage, neutral language; re-run same 12; then lock 20.
+- Transcripts: original 12 were enough. The 8 new IDs do **not** yet have `~/Downloads/{id}.json` — optional for Run 3.0 writeup.
+- Writeup: `RESIDENT-RUN2-EVAL.md`
 
 ### How to Add Data for a New Lead Type Run
 1. Download fresh `.xlsx` from Google Sheet

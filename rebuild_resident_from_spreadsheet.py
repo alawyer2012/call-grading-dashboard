@@ -10,7 +10,7 @@ import re
 import sys
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison.xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (1).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
 AI_TABS = [
@@ -18,9 +18,17 @@ AI_TABS = [
         "tab": "AI",
         "id": 1,
         "label": "Run 1.0",
-        "date": date.today().strftime("%B %-d, %Y"),
+        "date": "August 11, 2026",
         "description": "Baseline — resident fundamentals scorecard (10 scored questions + 2 DQs). Partial benchmark: 12 calls with matching AI + human grades.",
         "changes": "Initial resident benchmark run (12 matching call IDs)",
+    },
+    {
+        "tab": "AI 2",
+        "id": 2,
+        "label": "Run 2.0",
+        "date": "August 20, 2026",
+        "description": "Protocol updates from Run 1.0 recs 1–4 (hold, ownership, closing, secure-info DQ). Same 12-call benchmark. Blue cells in AI Resident Fundamentals.",
+        "changes": "Hold: lookup language is not a hold. Ownership: credit callback/note language. Closing: next steps without requiring “anything else?”. Secure-info: caller phone readback is not a DQ.",
     },
 ]
 
@@ -433,10 +441,15 @@ def build_run_js(run_data):
             "severityLabel": f"{q['strict']} strict / {q['lenient']} lenient",
             "owner": "AI Engineering",
             "ownerClass": "info",
-            "problem": f"<p><strong>{q['label']}</strong> is a top strict driver on resident Run 1.0 "
+            "problem": f"<p><strong>{q['label']}</strong> is a top strict driver "
                        f"({q['agree']}/{q['total']} agreement). AI under-credits behavior humans marked Yes.</p>",
             "action": "<p>Review protocol text for this question against the resident fundamentals sheet and loosen "
                       "detection thresholds where humans consistently credit the behavior.</p>",
+            "protocols": [{
+                "label": q["label"],
+                "current": "(from AI Resident Fundamentals)",
+                "recommended": "Loosen detection so humans' Yes cases are credited. Replace this stub after analysis.",
+            }],
         })
     for j, q in enumerate(lenient_top[:2], len(recs) + 1):
         recs.append({

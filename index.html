@@ -3331,6 +3331,20 @@ const residentRunAnswerData = {
     "272063323": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,1],closing:[1,0],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
     "272352194": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[0,0],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
     "272543647": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,0],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]}
+  },
+  2: {
+    "269245474": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "269768640": {greeting:[1,1],name_usage:[1,1],contact_info:[1,0],unit_number:[1,0],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,0],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "269788776": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "270245082": {greeting:[1,1],name_usage:[0,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[0,1],fha:[0,0],secure_info:[0,0]},
+    "270543247": {greeting:[1,1],name_usage:[1,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "270842045": {greeting:[1,0],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "271873957": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "271912426": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[0,0],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "272053386": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[0,1],fha:[0,0],secure_info:[0,0]},
+    "272063323": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "272352194": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[0,0],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "272543647": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]}
   }
 };
 
@@ -3464,6 +3478,7 @@ const residentRuns = [
         ],
         recommendation: 'Strict fixes: Hold permission (2pts).' }
     ],
+    recTargetDisagreements: 12,
     recommendations: [
       {
         num: 1,
@@ -3561,6 +3576,264 @@ const residentRuns = [
       lenientDetail: `<p><strong>Secure info DQ (3 calls)</strong> — False positives when agent only reads back the caller’s own phone for the message.</p>
         <p><strong>Validate concern (2) / Neutral language (2)</strong> — Over-credits weak empathy or quirky tone.</p>
         <p>See the <strong>Recommendations</strong> tab for copy-paste protocol fixes (path to 90%).</p>`
+    }
+  },
+  {
+    id: 2,
+    label: "Run 2.0",
+    date: "August 20, 2026",
+    description: "Protocol updates from Run 1.0 recs 1–4 (hold, ownership, closing, secure-info DQ). Same 12-call benchmark. Blue cells in AI Resident Fundamentals.",
+    changes: "Hold: lookup language is not a hold. Ownership: credit callback/note language. Closing: next steps without requiring “anything else?”. Secure-info: caller phone readback is not a DQ.",
+    meta: {
+      agreement: 89.2,
+      totalDisagreements: 13,
+      avgDelta: 10.7,
+      strictErrors: 6,
+      lenientErrors: 7,
+      target: 90
+    },
+    keyFindings: `<p><strong>The Run 1.0 protocol changes worked.</strong> Same 12 calls, same humans: agreement jumped <strong>78.3% → 89.2%</strong> (+10.9pp). Disagreements halved <strong>26 → 13</strong>. Strict errors collapsed <strong>20 → 6</strong>. Avg score delta <strong>15.1% → 10.7%</strong>.</p>
+      <p><strong>What we shipped (blue cells in AI Resident Fundamentals) and the result:</strong></p>
+      <ul>
+        <li><strong>Hold:</strong> 7 disagreements → <strong>0</strong>. Lookup language is no longer scored as an unauthorized hold.</li>
+        <li><strong>Ownership:</strong> 4 → <strong>0</strong> on this set. Callback / leave-a-note language now credits.</li>
+        <li><strong>Secure-info DQ:</strong> 3 false positives → <strong>0</strong>. Reading back the caller’s own phone no longer tanks the score.</li>
+        <li><strong>Closing:</strong> 5 → <strong>1</strong>. Next-steps without “Anything else?” now pass on 4 of 5 prior misses.</li>
+      </ul>
+      <p>We missed the 90% bar by <strong>one percentage point</strong> (107/120). Bias flipped: Run 1 was 77% strict; Run 2 is slightly <strong>lenient</strong> (7 lenient / 6 strict). The leftover gap is open-ended over-credit, validate-concern over-credit, name-usage edge cases, and one stubborn outlier call (269768640, still Δ42.9).</p>
+      <p>Perfect-agreement calls went from 1 to <strong>4</strong> (269245474, 271873957, 272352194, 272543647).</p>
+      <p><strong>Shadow 20-call set:</strong> AI 2 also graded 8 new IDs that now have human scores. On all 20: <strong>87.5%</strong> (175/200), 25 disagreements. The new 8 alone are 85% — same leftover drivers (open-ended 7, validate 5). Do not make the 20-call set official until Run 3.0 clears 90% on these 12.</p>
+      <p><strong>→ Open Recommendations</strong> for Run 3.0 copy-paste protocols (open-ended, validate concern, name usage, neutral language) plus the execution checklist.</p>`,
+    questions: [
+      { short: "open_ended_qs", label: "Open-ended questions (2+ distinct)", weight: 7, agree: 9, disagree: 3, total: 12, lenient: 2, strict: 1, dir: "lenient",
+        evidence: []},
+      { short: "name_usage", label: "Asked for name + used it", weight: 3, agree: 10, disagree: 2, total: 12, lenient: 1, strict: 1, dir: "mixed",
+        evidence: []},
+      { short: "validate_concern", label: "Validated caller concern (if expressed)", weight: 5, agree: 10, disagree: 2, total: 12, lenient: 2, strict: 0, dir: "lenient",
+        evidence: []},
+      { short: "neutral_language", label: "Neutral / de-escalating language", weight: 5, agree: 10, disagree: 2, total: 12, lenient: 2, strict: 0, dir: "lenient",
+        evidence: []},
+      { short: "greeting", label: "Greeting (property name + intro)", weight: 4, agree: 11, disagree: 1, total: 12, lenient: 0, strict: 1, dir: "strict",
+        evidence: []},
+      { short: "contact_info", label: "Contact info confirmed (if update requested)", weight: 4, agree: 11, disagree: 1, total: 12, lenient: 0, strict: 1, dir: "strict",
+        evidence: []},
+      { short: "unit_number", label: "Unit / apartment number confirmed", weight: 4, agree: 11, disagree: 1, total: 12, lenient: 0, strict: 1, dir: "strict",
+        evidence: []},
+      { short: "closing", label: "Closing / confirm next steps", weight: 3, agree: 11, disagree: 1, total: 12, lenient: 0, strict: 1, dir: "strict",
+        evidence: []}
+    ],
+    calls: [
+      { id: "269245474", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "269768640", human: 100.0, ai: 57.14, strict: 4, lenient: 0, weightLost: 18, disqualifier: false,
+        note: '4 disagreements — all AI too strict.',
+        details: [
+          { q: "Contact info", w: 4, ai: "No", h: "Yes", reason: "Agent confirmed contact info. AI did not credit it." },
+          { q: "Unit number", w: 4, ai: "No", h: "Yes", reason: "Unit/apartment number was confirmed. AI missed it." },
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." },
+          { q: "Closing", w: 3, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts), Contact info (4pts), Unit number (4pts).' },
+      { id: "269788776", human: 83.33, ai: 100.0, strict: 0, lenient: 1, weightLost: 7, disqualifier: false,
+        note: '1 disagreement — all AI too lenient.',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "Yes", h: "No", reason: "AI counted questions as open-ended; human classified them as closed-ended." }
+        ],
+        recommendation: 'Lenient fixes: Open-ended questions (7pts).' },
+      { id: "270245082", human: 80.95, ai: 100.0, strict: 0, lenient: 2, weightLost: 8, disqualifier: false,
+        note: '2 disagreements — all AI too lenient.',
+        details: [
+          { q: "Name usage", w: 3, ai: "Yes", h: "No", reason: "AI detected name usage but human says name wasn\'t properly used." },
+          { q: "Neutral language", w: 5, ai: "Yes", h: "No", reason: "AI credited neutral language; human found it insufficient." }
+        ],
+        recommendation: 'Lenient fixes: Neutral language (5pts), Name usage (3pts).' },
+      { id: "270543247", human: 83.33, ai: 76.19, strict: 1, lenient: 0, weightLost: 3, disqualifier: false,
+        note: '1 disagreement — all AI too strict.',
+        details: [
+          { q: "Name usage", w: 3, ai: "No", h: "Yes", reason: "Agent used caller\'s name but AI didn\'t detect it." }
+        ],
+        recommendation: 'Strict fixes: Name usage (3pts).' },
+      { id: "270842045", human: 88.1, ai: 90.48, strict: 1, lenient: 1, weightLost: 9, disqualifier: false,
+        note: '2 disagreements: 1 strict, 1 lenient.',
+        details: [
+          { q: "Greeting", w: 4, ai: "No", h: "Yes", reason: "Agent greeted with property name and intro. AI did not detect it." },
+          { q: "Validate concern", w: 5, ai: "Yes", h: "No", reason: "AI credited concern validation; human did not." }
+        ],
+        recommendation: 'Strict fixes: Greeting (4pts). Lenient fixes: Validate concern (5pts).' },
+      { id: "271873957", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "271912426", human: 78.57, ai: 90.48, strict: 0, lenient: 1, weightLost: 5, disqualifier: false,
+        note: '1 disagreement — all AI too lenient.',
+        details: [
+          { q: "Validate concern", w: 5, ai: "Yes", h: "No", reason: "AI credited concern validation; human did not." }
+        ],
+        recommendation: 'Lenient fixes: Validate concern (5pts).' },
+      { id: "272053386", human: 80.95, ai: 92.86, strict: 0, lenient: 1, weightLost: 5, disqualifier: false,
+        note: '1 disagreement — all AI too lenient.',
+        details: [
+          { q: "Neutral language", w: 5, ai: "Yes", h: "No", reason: "AI credited neutral language; human found it insufficient." }
+        ],
+        recommendation: 'Lenient fixes: Neutral language (5pts).' },
+      { id: "272063323", human: 83.33, ai: 100.0, strict: 0, lenient: 1, weightLost: 7, disqualifier: false,
+        note: '1 disagreement — all AI too lenient.',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "Yes", h: "No", reason: "AI counted questions as open-ended; human classified them as closed-ended." }
+        ],
+        recommendation: 'Lenient fixes: Open-ended questions (7pts).' },
+      { id: "272352194", human: 83.33, ai: 83.33, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "272543647", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' }
+    ],
+    recTargetDisagreements: 8,
+    recommendations: [
+      {
+        num: 1,
+        title: "Open-ended: greeting + identity questions are NOT 2 probes — 3 of 12, 7 of 20",
+        severity: "critical",
+        severityLabel: "3 disagreements on 12 · 7 on the 20-call shadow set · this is why we missed 90%",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p><strong>What happened:</strong> Open-ended got slightly worse on the original 12 (2 → 3 disagreements). Run 2 over-credits simple routing calls:</p>
+          <ul>
+            <li><strong>269788776 / 272063323 — lenient (new):</strong> Human No, AI Yes. Caller already stated the request (“reach the office” / “fire-extinguisher inspection, I’m out of town”). Agent used the greeting “How may I assist you?” plus identity questions (name/unit/phone) and maybe “in what regards.” That is not two diagnostic probes. Humans mark No.</li>
+            <li><strong>269768640 — still strict:</strong> Human Yes, AI No. Same shape (Jennifer callback). Human credited “How may I assist?” + “what was this call in regards?” — this one human grade may be generous versus the other two.</li>
+          </ul>
+          <p>The long “already explained → mark YES” exception is fighting human grading. Majority human pattern on simple callback/routing: <strong>No</strong> unless there are two real diagnostic probes <em>after</em> the greeting.</p>
+          <p>On the 20-call shadow set this is the #1 remaining miss (5 lenient + 2 strict).</p>`,
+        protocols: [
+          {
+            label: "Open-ended questions — resident routing calls",
+            current: "Did the agent ask at least two distinct open-ended questions… OR the resident clearly explains their concern at the beginning, making additional probing unnecessary (mark YES).",
+            recommended: "Count only <strong style=\"color:var(--red);\">diagnostic probes after the greeting</strong>. Do <strong style=\"color:var(--red);\">not</strong> count any of these toward the two-question requirement:<br><br>• The greeting itself (“How may I assist/help you today?”)<br>• Identity collection (name, unit, phone, email)<br>• Yes/no confirms (“Are you a resident?”, “Is that correct?”)<br>• “Is there anything else?”<br><br>These <strong style=\"color:var(--red);\">do</strong> count as open-ended probes:<br>• “What was this call in regards / can you tell me more about what’s going on?”<br>• “Can you walk me through what happened?”<br>• Any question that invites the resident to explain the issue in their own words<br><br>Mark YES only if there are <strong style=\"color:var(--red);\">two distinct diagnostic probes</strong>.<br><br>Do <strong style=\"color:var(--red);\">not</strong> auto-YES just because the caller explained the request up front. On simple callback/routing calls where the agent only greets, collects identity, and takes a message, mark NO.<br><br>Mark NO if the agent relies on greeting + identity questions alone."
+          }
+        ]
+      },
+      {
+        num: 2,
+        title: "Validate concern: “I understand / I’ll get this checked” is not empathy — 2 of 12, 5 of 20",
+        severity: "critical",
+        severityLabel: "2 lenient on 12 · 5 on the 20-call shadow set · not updated in Run 2.0 (no blue cell)",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p><strong>What happened:</strong> Validate-concern was <em>not</em> in the Run 1.0 blue-cell updates, and it did not move (still 2 lenient on the original 12). The model credits operational acknowledgment as empathy.</p>
+          <ul>
+            <li><strong>270842045:</strong> Elevator/loading-dock urgency. Agent was operational (“Understood”, maintenance en route). Human No.</li>
+            <li><strong>271912426:</strong> Parcel locker failed “multiple times,” need it today. Agent: “I’ll get this checked.” Human wanted an explicit empathy phrase.</li>
+          </ul>
+          <p>Same pattern on the new IDs (265908165, 273290320, plus one strict miss on 266239119). This will be the second-largest gap on a 20-call set.</p>`,
+        protocols: [
+          {
+            label: "Validate concern — require a real concern + a real validation phrase",
+            current: "If the caller expressed a concern, did the agent use at least one specific phrase to acknowledge and validate the concern? If no concerns were expressed always answer yes.",
+            recommended: "Mark YES if <strong style=\"color:var(--red);\">no concern was expressed</strong> (routine callback, status check, “can I talk to Jennifer?” with no frustration).<br><br>If the caller <strong style=\"color:var(--red);\">does</strong> express a concern (frustration, urgency, repeated failure, safety, something broken), mark YES only when the agent uses an explicit validation / empathy phrase, such as:<br>• “I’m sorry that’s happening / I understand that’s frustrating”<br>• “That shouldn’t be happening — let me help”<br>• “I can see why you’d be concerned”<br><br>Mark NO when the agent is only operational — “Understood,” “I’ll get this checked,” “I’ll send this to the property” — with <strong style=\"color:var(--red);\">no</strong> empathy/validation language, even if they take the right next step. Ownership and validation are separate questions."
+          }
+        ]
+      },
+      {
+        num: 3,
+        title: "Name usage: caller’s personal name, not a company or the resident they’re calling about",
+        severity: "warning",
+        severityLabel: "2 mixed errors · unchanged from Run 1.0",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p>Unchanged from Run 1.0 — protocol was not in the blue-cell set.</p>
+          <ul>
+            <li><strong>270543247 strict:</strong> John from Pressley Ridge, looking for Barry/Tammy. Agent asks name, gets a company, later says a mangled “Prasvi.” Human Yes (soft). AI No. Clarify whether a company name + attempt counts.</li>
+            <li><strong>270245082 lenient:</strong> Wendy calling about Keith Sargent / a package. Agent uses “Wendy.” Human No — likely requires the <em>resident</em> name, or both ask + use of the caller’s personal name more clearly.</li>
+          </ul>
+          <p>Pick one rule and stick to it. Recommended: must ask for (or be offered) the <strong>caller’s</strong> personal name and use <em>that</em> name at least once. Company names and the resident-being-discussed do not satisfy the question by themselves.</p>`,
+        protocols: [
+          {
+            label: "Name usage — personal name of the person on the phone",
+            current: "Does the transcript show that the agent (1) asked for the caller’s name, or was it offered by the caller, and (2) used it at least once during the call? (Both actions must occur for a Yes.)",
+            recommended: "Both (1) and (2) must occur for the <strong style=\"color:var(--red);\">caller’s personal name</strong> (the person speaking).<br><br>Mark YES if the agent asks for the caller’s name (or the caller offers it) and then uses that first name at least once (“Thank you, Yolanda”). A phonetic / transcription mangling of the same name still counts.<br><br>Mark NO if:<br>• The agent only uses a <strong style=\"color:var(--red);\">company / property / third-party resident</strong> name (Pressley Ridge, Keith when Wendy is calling)<br>• The agent asks for a name but never uses the caller’s name<br>• The only “name” used is an onsite staff member the caller asked for (Jennifer, Barry, Tammy)<br><br>If the caller refuses to give a name after being asked, mark YES."
+          }
+        ]
+      },
+      {
+        num: 4,
+        title: "Neutral language: unprofessional / quirky tone is not an auto-Yes",
+        severity: "warning",
+        severityLabel: "2 persistent lenient · N/A→Yes is too broad vs humans",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p>Still 2 lenient, both leftover from Run 1.0. The current protocol says mark YES if the caller is not escalated. Humans do not always do that.</p>
+          <ul>
+            <li><strong>270245082:</strong> Agent rants about software (“anger swirling”, “I beat Silicon”). Caller was not confrontational. Human correctly withheld professional-neutral credit. AI Yes.</li>
+            <li><strong>272053386:</strong> Short calm lease-renewal callback. Human No is surprising — possible grader noise — but don’t auto-Yes on odd phrasing (“hectic at work”) if the human bar is “professional throughout.”</li>
+          </ul>`,
+        protocols: [
+          {
+            label: "Neutral / de-escalating language",
+            current: "Mark YES if the caller does not express strong, confrontational, or escalated language, or if the agent responds in a neutral and professional way.",
+            recommended: "If the caller is not escalated, mark YES <strong style=\"color:var(--red);\">only if the agent stays professional</strong>.<br><br>Mark NO if the agent uses unprofessional, sarcastic, ranting, or oddly personal language (software rants, “I beat Silicon,” joking at the caller’s expense) even when the caller was calm.<br><br>If the caller <strong>is</strong> escalated, mark YES only when the agent stays calm and de-escalates; follow the attorney protocol when legal action is mentioned."
+          }
+        ]
+      },
+      {
+        num: 5,
+        title: "Outlier 269768640: still 4 strict (contact, unit, open-ended, closing) — transcription / crosstalk",
+        severity: "warning",
+        severityLabel: "1 call · 4 of the 6 remaining strict errors · Δ 42.9 pts",
+        owner: "Myles",
+        ownerClass: "info",
+        problem: `<p>This is the same worst call as Run 1.0. Hold and ownership are now fixed. Remaining:</p>
+          <ul>
+            <li><strong>Unit number (regression Yes→No):</strong> Agent asked “could you please help me with your unit number, first name and last name.” Caller gave a street address (828 Chapelwood Boulevard). Asking for the unit should be Yes. Channel overlap likely hid it.</li>
+            <li><strong>Contact info:</strong> Callback offered; caller declined. Human N/A→Yes. AI still No.</li>
+            <li><strong>Closing:</strong> Agent explained centralized team can’t transfer Jennifer and offered to arrange a callback. Only remaining closing miss.</li>
+          </ul>
+          <p>Greeting miss on <strong>270842045</strong> is the same crosstalk pattern (property name + intro overlapped with caller “hold one second”).</p>`,
+        protocols: [
+          {
+            label: "Transcript noise — identity + unit on overlapped channels",
+            current: "Generic TRANSCRIPT NOISE guidance (infer intent, phonetic misspellings).",
+            recommended: "When channels overlap at the open, still credit greeting if property name + agent name appear anywhere in the first ~20s.<br><br>If the agent <strong style=\"color:var(--red);\">asks for unit number</strong>, mark unit YES even if the caller answers with a street address instead of an apartment number.<br><br>If a callback is offered and the caller refuses, contact-info is N/A → YES (attempt is enough)."
+          }
+        ]
+      },
+      {
+        num: 6,
+        title: "Run 3.0 checklist: clear 90% on these 12, then lock the 20-call set",
+        severity: "success",
+        severityLabel: "89.2% → target 90%+ · then expand",
+        owner: "Austin + AI Engineering",
+        ownerClass: "info",
+        problem: `<p><strong>Do not change the official 12-call benchmark yet.</strong> AI 2 already scored 8 extra IDs (human grades exist). Shadow results: 20-call agreement <strong>87.5%</strong>; new-8 only <strong>85%</strong>. Same leftover drivers, plus one new ownership miss (269829113, H 81 / AI 45).</p>
+          <p>Transcripts for the original 12 were enough to evaluate Run 2.0. Transcripts for the 8 new IDs would help debug 269829113 (ownership regression on unseen data) and the extra open-ended/validate misses — optional for Run 3.0 protocol writing, useful for the writeup after.</p>
+          <p><strong>Success for Run 3.0:</strong> ≥90% scored agreement on the same 12 IDs, open-ended disagreements ≤1, validate-concern disagreements ≤1. Then promote all 20 IDs as the locked resident benchmark.</p>`,
+        protocols: [
+          {
+            label: "Run 3.0 execution checklist",
+            current: "Run 2.0: 89.2% on 12 calls (107/120), 13 disagreements, 10.7% avg delta. Hold/ownership/secure-info cleared. Closing almost cleared.",
+            recommended: "(1) Ship recs 1–4 (open-ended, validate, name, neutral) plus rec 5 transcript-noise note.<br>(2) Re-score the <strong style=\"color:var(--red);\">same 12 call IDs</strong> as Resident Run 3.0.<br>(3) If ≥90% on those 12, re-score the 8 new IDs and lock a 20-call set.<br>(4) Optional: drop transcripts for 265908165, 266239119, 269829113, 270583790, 273100258, 273290320, 273900663, 274349154 into Downloads as <code>{call_id}.json</code> so the next writeup can cite them.<br><br>Target: <strong style=\"color:var(--red);\">&lt;8 disagreements / ≥90% agreement</strong> on the original 12."
+          }
+        ]
+      }
+    ],
+    rootCause: {
+      overall: "Run 2.0 proves the grader can follow resident message-taking protocols. Hold, ownership, and secure-info DQ — the four P0s from Run 1.0 — are effectively solved on this set. We are 1pp short of 90% because leftover errors are a different class: open-ended over-credit on simple routing, validate-concern over-credit, name/neutral edge cases, and one crosstalk-heavy outlier.",
+      what_worked: "Blue-cell protocol updates landed. Hold 7→0, ownership 4→0, secure-info DQ 3→0, closing 5→1. Strict errors 20→6. Perfect-agreement calls 1→4. Same 12 humans, so this is a real model/protocol gain, not a sample change.",
+      what_didnt: "Open-ended got slightly worse (2→3) — the ‘already explained → Yes’ exception over-fires on greeting + identity collection. Validate concern was never updated and did not move. Name usage and neutral language unchanged. Call 269768640 still carries 4 of 6 remaining strict errors (unit number even regressed Yes→No).",
+      path_to_90: "Apply recs 1–4 (open-ended, validate, name, neutral) and rec 5 (transcript noise on 269768640 / 270842045). Re-run the same 12 calls. That is enough to cross 90%. Then lock the 20-call set — do not expand first.",
+      strictDetail: `<p><strong>Mostly one call now.</strong> 4 of 6 remaining strict errors sit on 269768640 (contact, unit, open-ended, closing) — overlapped transcript, callback refused, unit asked-but-answered-as-street-address.</p>
+        <p><strong>Name usage (270543247)</strong> — company / third-party / mangled name. Unchanged from Run 1.0.</p>
+        <p><strong>Greeting (270842045)</strong> — property + intro present but overlapped. Unchanged.</p>
+        <p>Hold and ownership strict errors: gone.</p>`,
+      lenientDetail: `<p><strong>Open-ended (2 new lenients)</strong> — 269788776, 272063323. Greeting + identity (and “in what regards”) counted as two probes on simple routing calls. Human No.</p>
+        <p><strong>Validate concern (2, unchanged)</strong> — operational “Understood / I’ll get this checked” credited as empathy. 270842045, 271912426. Will be worse on the 20-call set (5 misses).</p>
+        <p><strong>Neutral language (2, unchanged)</strong> — 270245082 unprofessional rant; 272053386 possible grader noise.</p>
+        <p><strong>Name usage (270245082)</strong> — Wendy calling about Keith; AI credited “Wendy.”</p>
+        <p>See the <strong>Recommendations</strong> tab for Run 3.0 copy-paste protocols.</p>`
     }
   }
 ];
@@ -4637,9 +4910,11 @@ function renderRootCause(run) {
 function renderRecommendations(run) {
   const el = document.getElementById(`recs-${run.id}`);
   if (!run.recommendations || run.recommendations.length === 0) { el.innerHTML = '<p style="color:var(--text-3);">Recommendations not yet available for this run.</p>'; return; }
-  const callCount = (run.calls && run.calls.length) ? run.calls.length : leadConfig[activeLeadType].callCount;
-  const targetDisagreements = Math.max(1, Math.floor(callCount * leadConfig[activeLeadType].scoredQuestions * (1 - (run.meta.target || 90) / 100)));
-  let html = `<h2>Protocol Changes for Model Alignment</h2>
+    const callCount = (run.calls && run.calls.length) ? run.calls.length : leadConfig[activeLeadType].callCount;
+    const targetDisagreements = run.recTargetDisagreements != null
+      ? run.recTargetDisagreements
+      : Math.max(1, Math.floor(callCount * leadConfig[activeLeadType].scoredQuestions * (1 - (run.meta.target || 90) / 100)));
+    let html = `<h2>Protocol Changes for Model Alignment</h2>
     <p style="font-size:14px; color:var(--text-2); margin-bottom:8px;">Each recommendation shows the current protocol from the scorecard and the exact updated text to copy-paste into the model. <span style="color:var(--red); font-weight:700;">Red bold text</span> = new language added. Target: ${run.meta.totalDisagreements} → &lt;${targetDisagreements} disagreements (${run.meta.target || 90}%+ agreement).</p>
     <p style="font-size:13px; color:var(--text-3); margin-bottom:24px;">Copy-paste ready. Apply these protocol updates, re-run the model on these ${callCount} calls, and update this dashboard to measure improvement.</p>`;
 
@@ -4672,7 +4947,7 @@ function renderRecommendations(run) {
 
   html += `<div class="stats-row" style="grid-template-columns: repeat(3, 1fr); margin-top: 32px;">
     <div class="stat-card danger"><div class="stat-value">${run.meta.totalDisagreements}</div><div class="stat-label">Current disagreements</div></div>
-    <div class="stat-card warning"><div class="stat-value">~35</div><div class="stat-label">Target after recs 1–5</div></div>
+    <div class="stat-card warning"><div class="stat-value">&lt;${targetDisagreements}</div><div class="stat-label">Target after these recs</div></div>
     <div class="stat-card success"><div class="stat-value">&gt;90%</div><div class="stat-label">Target agreement rate</div></div>
   </div>`;
   el.innerHTML = html;
