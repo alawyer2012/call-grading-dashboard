@@ -50,14 +50,14 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 
 ### Resident Run 2.0 (August 20, 2026) — Protocol updates from Run 1 recs 1–4
 - **Tab:** `AI 2` → Run 2.0
-- **Set:** Same 12 call IDs (apples-to-apples). AI 2 also graded 8 extra IDs that now have human scores — treated as a **shadow 20-call set**, not the official benchmark yet.
+- **Set:** Same 12 call IDs as Run 1 (apples-to-apples Overview). Eight extra IDs were graded in AI 2; recs now cover all 20 for Run 3.0.
 - **What changed (blue cells in AI Resident Fundamentals):** hold lookup≠hold; ownership credits callback/note language; closing = next steps without requiring “anything else?”; secure-info phone readback is not a DQ.
 - **Results (same 12):** **89.2%** (+10.9pp), 13 disagreements (26→13), 6 strict / 7 lenient (20→6 / 6→7), **10.7%** avg score delta (15.1→10.7)
 - **Cleared:** hold 7→0, ownership 4→0, secure-info DQ 3→0, closing 5→1. Perfect-agreement calls 1→4.
 - **Missed 90% by 1pp.** Leftover: open-ended over-credit (got slightly worse, 2→3), validate-concern unchanged (2), name/neutral unchanged, outlier 269768640 still 4 strict (unit even regressed).
 - **Shadow 20-call:** 87.5% (175/200), 25 disagreements. New 8 alone 85%. Same leftover drivers (open-ended 7, validate 5) plus ownership miss on 269829113.
-- **Next:** Run 3.0 recs on open-ended, validate concern, name usage, neutral language; re-run same 12; then lock 20.
-- Transcripts: original 12 were enough. The 8 new IDs do **not** yet have `~/Downloads/{id}.json` — optional for Run 3.0 writeup.
+- **Next:** Run 3.0 recs on the dashboard Recommendations tab now cover **all 20 calls** (open-ended two poles, validate split, voicemail-forward ownership, contact N/A, name, neutral/third-party). Keep R1/R2 on 12 for the trend. Run 3.0 grades all 20.
+- Transcripts: all 20 IDs in `~/Downloads/{id}.json`.
 - Writeup: `RESIDENT-RUN2-EVAL.md`
 
 ### How to Add Data for a New Lead Type Run
