@@ -3595,7 +3595,7 @@ const residentRuns = [
     keyFindings: `<p><strong>The Run 1.0 protocol changes worked on the official 12-call set.</strong> Agreement <strong>78.3% → 89.2%</strong> (+10.9pp). Disagreements 26 → 13. Strict 20 → 6. Hold, ownership, and secure-info DQ cleared on these 12. Closing 5 → 1. Missed 90% by 1pp.</p>
       <p><strong>Run 3.0 will be graded on all 20 calls</strong> (the original 12 + 8 new IDs). Overview for Run 1 vs Run 2 stays apples-to-apples on 12. The Recommendations tab below is the full protocol pack for that 20-call run.</p>
       <p>Shadow 20-call score today: <strong>87.5%</strong> (175/200). New 8 alone: 85%. Extra failures the 12-set did not show: ownership miss on voicemail-forward (269829113), more open-ended over-credit, validate split (real apology vs generic close), contact N/A on lockout-policy calls.</p>
-      <p>All 20 transcripts are in. <strong>→ Open Recommendations</strong> and ship recs 1–7 before Run 3.0.</p>`,
+      <p>All 20 transcripts are in. <strong>→ Open Recommendations</strong> and ship recs 1–6 before Run 3.0.</p>`,
     questions: [
       { short: "open_ended_qs", label: "Open-ended questions (2+ distinct)", weight: 7, agree: 9, disagree: 3, total: 12, lenient: 2, strict: 1, dir: "lenient",
         evidence: []},
@@ -3820,24 +3820,6 @@ const residentRuns = [
             label: "Neutral / de-escalating language — LC agent only",
             current: "Mark YES if the caller is not escalated, or the agent responds in a neutral professional way.",
             recommended: "Score <strong style=\"color:var(--red);\">only the Leasing Center agent</strong>, not onsite maintenance, vendors, or other parties joined to the call (273100258).<br><br>If the caller is not escalated, mark YES only if the <strong style=\"color:var(--red);\">LC agent</strong> stays professional.<br><br>Mark NO if the LC agent uses unprofessional, sarcastic, ranting, or oddly personal language (software rants, “I beat Silicon”) even when the caller was calm.<br><br>If the caller is escalated, mark YES only when the LC agent stays calm and de-escalates; follow the attorney protocol when legal action is mentioned."
-          }
-        ]
-      },
-      {
-        num: 7,
-        title: "Run 3.0: ship recs 1–6, then grade all 20 calls",
-        severity: "success",
-        severityLabel: "Keep R1/R2 on 12 for the trend · Run 3.0 = full 20",
-        owner: "Austin + AI Engineering",
-        ownerClass: "info",
-        problem: `<p><strong>Do not change Run 1.0 or Run 2.0 membership.</strong> Those stay the original 12 so Overview stays apples-to-apples (78.3% → 89.2%).</p>
-          <p><strong>Run 3.0 is the 20-call run.</strong> Same humans. New AI tab. Protocols must already include the new-8 findings (voicemail-forward, lockout contact N/A, open-ended two poles, validate split). Otherwise we will re-learn 269829113.</p>
-          <p>Today’s shadow 20: 87.5% / 25 disagreements. Original 12: 89.2% / 13. New 8: 85% / 12. Perfect-agreement controls to protect: 270583790, 273100258, 274349154, plus the original four.</p>`,
-        protocols: [
-          {
-            label: "Run 3.0 execution checklist",
-            current: "Run 2.0 official: 89.2% on 12 calls. Shadow 20: 87.5%. Transcripts for all 20 are in Downloads.",
-            recommended: "(1) Ship recs 1–6 into AI Resident Fundamentals / the grader prompt (open-ended two poles, validate split, voicemail-forward ownership, name, contact N/A, neutral/third-party).<br>(2) Do <strong style=\"color:var(--red);\">not</strong> regress hold (lookup ≠ hold; real “can I put you on hold?” still Yes) or secure-info (caller’s own phone is not a DQ; disclosing leaseholder names to a third party still is — 266239119).<br>(3) Re-score <strong style=\"color:var(--red);\">all 20 call IDs</strong> as Resident Run 3.0.<br>(4) Success: ≥90% on the original 12 <strong style=\"color:var(--red);\">and</strong> ≥90% on the full 20, with open-ended the main mover (7 → ≤2 on 20).<br><br>Call IDs for Run 3.0: the original 12 plus 265908165, 266239119, 269829113, 270583790, 273100258, 273290320, 273900663, 274349154."
           }
         ]
       }
