@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Leasing Center — AI vs Human Grading Dashboard</title>
-<!-- deploy-bust: 2026-08-12-resident-recs -->
+<!-- deploy-bust: 2026-08-21-resident-run3 -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   :root {
@@ -3353,6 +3353,28 @@ const residentRunAnswerData = {
     "273290320": {greeting:[1,1],name_usage:[1,1],contact_info:[1,0],unit_number:[1,1],open_ended_qs:[0,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
     "273900663": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
     "274349154": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]}
+  },
+  3: {
+    "265908165": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[1,0]},
+    "266239119": {greeting:[1,1],name_usage:[1,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,1],closing:[0,0],hold_permission:[1,1],validate_concern:[1,0],neutral_language:[1,1],fha:[0,0],secure_info:[1,1]},
+    "269245474": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "269768640": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "269788776": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "269829113": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,0],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "270245082": {greeting:[1,1],name_usage:[0,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[0,1],fha:[0,0],secure_info:[0,0]},
+    "270543247": {greeting:[1,1],name_usage:[1,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "270583790": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "270842045": {greeting:[1,0],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "271873957": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "271912426": {greeting:[1,1],name_usage:[1,0],contact_info:[1,1],unit_number:[0,0],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "272053386": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[0,1],fha:[0,0],secure_info:[0,0]},
+    "272063323": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "272352194": {greeting:[1,1],name_usage:[0,0],contact_info:[1,1],unit_number:[0,0],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "272543647": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "273100258": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,0],acknowledged:[1,1],closing:[1,0],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "273290320": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,0],closing:[1,1],hold_permission:[1,1],validate_concern:[0,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "273900663": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[0,0],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]},
+    "274349154": {greeting:[1,1],name_usage:[1,1],contact_info:[1,1],unit_number:[1,1],open_ended_qs:[1,1],acknowledged:[1,1],closing:[1,1],hold_permission:[1,1],validate_concern:[1,1],neutral_language:[1,1],fha:[0,0],secure_info:[0,0]}
   }
 };
 
@@ -3892,7 +3914,281 @@ const residentRuns = [
         <p><strong>Neutral:</strong> 270245082 rant. Don’t ding LC agents for conferenced onsite staff (273100258).</p>
         <p>See <strong>Recommendations</strong> — recs 1–6 are the protocol pack for the next run on these same 20.</p>`
     }
+  },
+  {
+    id: 3,
+    label: "Run 3.0",
+    date: "August 21, 2026",
+    description: "Protocol pack from Run 2.0 recs 1–6 on the same 20 calls. Open-ended leftovers cleared, then over-corrected. Contact N/A and voicemail-forward landed. Missed the 90% target.",
+    changes: "Open-ended two-pole rule, validate split, voicemail-forward ownership, contact N/A on policy-only / refused callback. Same 20 call IDs as Run 2.0.",
+    meta: {
+      agreement: 87.0,
+      totalDisagreements: 26,
+      avgDelta: 9.9,
+      strictErrors: 18,
+      lenientErrors: 8,
+      target: 90
+    },
+    keyFindings: `<p><strong>Run 3.0 missed the 90% target.</strong> Scored agreement <strong>87.0%</strong> (174/200) — 1.5pp below Run 2.0. Disagreements 23 → 26 (18 strict / 8 lenient). Avg score delta 10.0 → 9.9. Perfect agreement: 9 → 4 of 20. Mean AI score fell 86.7% → 79.9% while mean human stayed 86.3%.</p>
+      <p><strong>Open-ended over-corrected.</strong> All 5 Run 2.0 leftovers cleared, then the model dinged 10 calls that were already Yes — including ops-corrected 269788776 / 272063323 and the 273100258 positive control. That is the whole miss. Reverse those 10 stricts and this set is 92% before any other work.</p>
+      <p>What did land: <strong>269768640</strong> (worst leftover, 4 strict / AI 57) is now perfect. Contact and unit are 20/20. Ownership credited voicemail-forward on 269829113 (45 → 86). New-8 slice improved 85.0% → 88.8%; original 12 dropped 90.8% → 85.8%. <strong>→ Open Recommendations</strong> — recs 1–4 are the protocol pack for Run 4.0 on these same 20.</p>`,
+    questions: [
+      { short: "open_ended_qs", label: "Open-ended questions (2+ distinct)", weight: 7, agree: 10, disagree: 10, total: 20, lenient: 0, strict: 10, dir: "strict",
+        evidence: []},
+      { short: "validate_concern", label: "Validated caller concern (if expressed)", weight: 5, agree: 14, disagree: 6, total: 20, lenient: 5, strict: 1, dir: "lenient",
+        evidence: []},
+      { short: "name_usage", label: "Asked for name + used it", weight: 3, agree: 16, disagree: 4, total: 20, lenient: 1, strict: 3, dir: "strict",
+        evidence: []},
+      { short: "closing", label: "Closing / confirm next steps", weight: 3, agree: 18, disagree: 2, total: 20, lenient: 0, strict: 2, dir: "strict",
+        evidence: []},
+      { short: "neutral_language", label: "Neutral / de-escalating language", weight: 5, agree: 18, disagree: 2, total: 20, lenient: 2, strict: 0, dir: "lenient",
+        evidence: []},
+      { short: "greeting", label: "Greeting (property name + intro)", weight: 4, agree: 19, disagree: 1, total: 20, lenient: 0, strict: 1, dir: "strict",
+        evidence: []},
+      { short: "acknowledged", label: "Acknowledged caller / took ownership", weight: 5, agree: 19, disagree: 1, total: 20, lenient: 0, strict: 1, dir: "strict",
+        evidence: []},
+      { short: "secure_info", label: "Secure info (DQ)", weight: 0, agree: 19, disagree: 1, total: 20, lenient: 0, strict: 1, dir: "strict",
+        evidence: []}
+    ],
+    calls: [
+      { id: "265908165", human: 57.14, ai: 83.33, strict: 1, lenient: 1, weightLost: 5, disqualifier: true,
+        note: '2 disagreements. Open-ended leftover cleared. New: missed CSO mobile secure-info DQ (both flagged in Run 2.0). Validate still lenient.',
+        details: [
+          { q: "Validate concern", w: 5, ai: "Yes", h: "No", reason: "AI credited concern validation; human did not." },
+          { q: "Secure info (DQ)", w: "DQ", ai: "No", h: "Yes", reason: "Human flagged a secure-info DQ. AI did not. On-site staff personal/direct numbers still count." }
+        ],
+        recommendation: 'Lenient fixes: Validate concern (5pts). Also restore CSO-mobile secure-info DQ.' },
+      { id: "266239119", human: 60.95, ai: 45.71, strict: 2, lenient: 0, weightLost: 8, disqualifier: false,
+        note: '2 disagreements — name (don\'t loosen to match generous human Yes) and garbled validate. Closing leftover cleared.',
+        details: [
+          { q: "Name usage", w: 3, ai: "No", h: "Yes", reason: "Agent used caller\'s name but AI didn\'t detect it." },
+          { q: "Validate concern", w: 5, ai: "No", h: "Yes", reason: "Human credited concern validation. AI did not." }
+        ],
+        recommendation: 'Strict fixes: Validate concern (5pts), Name usage (3pts).' },
+      { id: "269245474", human: 100.0, ai: 83.33, strict: 1, lenient: 0, weightLost: 7, disqualifier: false,
+        note: '1 disagreement — open-ended strict. Was perfect 100/100 in Run 2.0.',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts).' },
+      { id: "269768640", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — contact N/A, unit, open-ended, and closing all landed. Was the worst leftover (4 strict, AI 57).',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "269788776", human: 100.0, ai: 83.33, strict: 1, lenient: 0, weightLost: 7, disqualifier: false,
+        note: '1 disagreement — open-ended strict. Ops-corrected Yes flipped back to No. Rec 1 said keep this as Yes.',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts).' },
+      { id: "269829113", human: 80.95, ai: 85.71, strict: 1, lenient: 1, weightLost: 8, disqualifier: false,
+        note: '2 disagreements. Ownership voicemail-forward fixed (45 → 86). Still closing strict + new validate lenient.',
+        details: [
+          { q: "Closing", w: 3, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." },
+          { q: "Validate concern", w: 5, ai: "Yes", h: "No", reason: "AI credited concern validation; human did not." }
+        ],
+        recommendation: 'Strict fixes: Closing (3pts). Lenient fixes: Validate concern (5pts).' },
+      { id: "270245082", human: 80.95, ai: 83.33, strict: 1, lenient: 2, weightLost: 15, disqualifier: false,
+        note: '3 disagreements. New open-ended strict on top of existing name/neutral lenient.',
+        details: [
+          { q: "Name usage", w: 3, ai: "Yes", h: "No", reason: "AI detected name usage but human says name wasn\'t properly used." },
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." },
+          { q: "Neutral language", w: 5, ai: "Yes", h: "No", reason: "AI credited neutral language; human found it insufficient." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts). Lenient fixes: Neutral language (5pts), Name usage (3pts).' },
+      { id: "270543247", human: 83.33, ai: 76.19, strict: 1, lenient: 0, weightLost: 3, disqualifier: false,
+        note: '1 disagreement — name usage still unmatched (company / mangled name).',
+        details: [
+          { q: "Name usage", w: 3, ai: "No", h: "Yes", reason: "Agent used caller\'s name but AI didn\'t detect it." }
+        ],
+        recommendation: 'Strict fixes: Name usage (3pts).' },
+      { id: "270583790", human: 76.19, ai: 76.19, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — greeting + identity still correctly No on open-ended.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "270842045", human: 88.1, ai: 90.48, strict: 1, lenient: 1, weightLost: 9, disqualifier: false,
+        note: '2 disagreements — greeting crosstalk still unmatched; validate leftover still lenient.',
+        details: [
+          { q: "Greeting", w: 4, ai: "No", h: "Yes", reason: "Agent greeted with property name and intro. AI did not detect it." },
+          { q: "Validate concern", w: 5, ai: "Yes", h: "No", reason: "AI credited concern validation; human did not." }
+        ],
+        recommendation: 'Strict fixes: Greeting (4pts). Lenient fixes: Validate concern (5pts).' },
+      { id: "271873957", human: 100.0, ai: 83.33, strict: 1, lenient: 0, weightLost: 7, disqualifier: false,
+        note: '1 disagreement — open-ended strict. Was perfect 100/100 in Run 2.0.',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts).' },
+      { id: "271912426", human: 78.57, ai: 66.67, strict: 2, lenient: 1, weightLost: 15, disqualifier: false,
+        note: '3 disagreements. New name + open-ended strict; validate leftover still lenient.',
+        details: [
+          { q: "Name usage", w: 3, ai: "No", h: "Yes", reason: "Agent used caller\'s name but AI didn\'t detect it." },
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." },
+          { q: "Validate concern", w: 5, ai: "Yes", h: "No", reason: "AI credited concern validation; human did not." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts), Name usage (3pts). Lenient fixes: Validate concern (5pts).' },
+      { id: "272053386", human: 80.95, ai: 76.19, strict: 1, lenient: 1, weightLost: 12, disqualifier: false,
+        note: '2 disagreements. New open-ended strict on top of existing neutral lenient.',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." },
+          { q: "Neutral language", w: 5, ai: "Yes", h: "No", reason: "AI credited neutral language; human found it insufficient." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts). Lenient fixes: Neutral language (5pts).' },
+      { id: "272063323", human: 100.0, ai: 83.33, strict: 1, lenient: 0, weightLost: 7, disqualifier: false,
+        note: '1 disagreement — open-ended strict. Same ops-Yes regression as 269788776.',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts).' },
+      { id: "272352194", human: 83.33, ai: 66.67, strict: 1, lenient: 0, weightLost: 7, disqualifier: false,
+        note: '1 disagreement — open-ended strict. Was perfect agreement in Run 2.0.',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts).' },
+      { id: "272543647", human: 100.0, ai: 83.33, strict: 1, lenient: 0, weightLost: 7, disqualifier: false,
+        note: '1 disagreement — open-ended strict. Was perfect 100/100 in Run 2.0.',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts).' },
+      { id: "273100258", human: 100.0, ai: 76.19, strict: 2, lenient: 0, weightLost: 10, disqualifier: false,
+        note: '2 disagreements — all AI too strict. Was the 100/100 positive control. Open-ended (2+ diagnostic probes) and closing (conference to maintenance).',
+        details: [
+          { q: "Open-ended questions", w: 7, ai: "No", h: "Yes", reason: "Human counted questions as open-ended. AI grammar-parsed too literally." },
+          { q: "Closing", w: 3, ai: "No", h: "Yes", reason: "Agent confirmed next steps. AI required more formal closing structure." }
+        ],
+        recommendation: 'Strict fixes: Open-ended questions (7pts), Closing (3pts).' },
+      { id: "273290320", human: 71.43, ai: 71.43, strict: 1, lenient: 1, weightLost: 10, disqualifier: false,
+        note: '2 disagreements that cancel on score (ownership −5, validate +5). Contact N/A and open-ended leftover cleared. Do not withhold the lockout sorry.',
+        details: [
+          { q: "Acknowledged/ownership", w: 5, ai: "No", h: "Yes", reason: "Agent acknowledged caller / took ownership. AI did not credit it." },
+          { q: "Validate concern", w: 5, ai: "Yes", h: "No", reason: "AI credited concern validation; human did not." }
+        ],
+        recommendation: 'Strict fixes: Acknowledged/ownership (5pts). Lenient fixes: Validate concern (5pts).' },
+      { id: "273900663", human: 83.33, ai: 83.33, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — open-ended leftover correctly flipped to No (greeting + one regarding / identity).',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "274349154", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' }
+    ],
+    recTargetDisagreements: 16,
+    recommendations: [
+      {
+        num: 1,
+        title: "Open-ended: undo the over-correction — restore the 10 Yeses Rec 1 already named",
+        severity: "critical",
+        severityLabel: "10 of 20 · 10 strict / 0 lenient · the whole miss",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p>Run 2.0 rec 1 asked for two poles. Run 3.0 shipped only the “already explained → No” pole. The five leftovers all cleared (265908165, 273290320, 273900663, 269768640, 269829113). Then the model dinged <strong>10 previously matching Yeses</strong>.</p>
+          <p><strong>Restore YES (were Yes in Run 2.0; Rec 1 said keep):</strong></p>
+          <ul>
+            <li>269788776, 272063323 — ops-corrected. Greeting + “what is this regarding?” counts. Do not flip these back to No.</li>
+            <li>273100258 — caller explained up front <em>and</em> agent asked 2+ real follow-ups. Positive control. Do not auto-No “already explained.”</li>
+            <li>269245474, 271873957, 272543647, 272352194 — were perfect. Same shape as the ops-Yes calls.</li>
+            <li>270245082, 271912426, 272053386 — new stricts on top of leftover noise.</li>
+          </ul>
+          <p><strong>Keep NO (Run 3.0 got these right):</strong></p>
+          <ul>
+            <li>270583790, 265908165, 273290320, 273900663 — greeting + identity only, or caller stated the ask and agent only collected identity.</li>
+          </ul>
+          <p><strong>Keep YES (Run 3.0 also got these right):</strong> 269768640 regarding probe, 269829113 voicemail probe, 274349154 2+ follow-ups.</p>`,
+        protocols: [
+          {
+            label: "Open-ended questions — restore both poles",
+            current: "Mark NO when the caller already explained. Count diagnostic probes after the greeting. Do not count identity.",
+            recommended: "“Already explained → No” must <strong style=\"color:var(--red);\">not</strong> veto a later diagnostic probe, and must <strong style=\"color:var(--red);\">not</strong> veto “what is this regarding?” as a real probe.<br><br>These <strong style=\"color:var(--red);\">do</strong> count as probes:<br>• “What was this call in regards / what is going on?” (269788776, 272063323 = YES)<br>• “What is the voicemail you want me to place?”<br>• Follow-ups that gather issue details (273100258, 274349154)<br><br>Mark YES when the agent asked a real regarding/diagnostic probe beyond identity. Restore the 10 Run 3.0 strict Nos that were Yes in Run 2.0.<br><br>Mark NO only when it is greeting + identity, with no regarding/diagnostic probe (270583790, 265908165, 273290320, 273900663).<br><br>Do not auto-NO because the caller explained up front if the agent still probed (273100258)."
+          }
+        ]
+      },
+      {
+        num: 2,
+        title: "Secure-info DQ: restore on-site staff personal numbers (265908165 CSO mobile)",
+        severity: "critical",
+        severityLabel: "1 of 20 · true-positive DQ dropped",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p>Run 2.0 rec 4 was “reading back the caller’s own phone is never a DQ.” That held on callback readbacks. Run 3.0 over-generalized it.</p>
+          <p><strong>265908165:</strong> Agent gave courtesy officer John Fulton’s mobile <strong>813-992-9423</strong>. Human Yes (DQ). AI No. Both sides flagged this in Run 2.0. It is a true positive — on-site staff personal/direct numbers, not the caller’s own phone.</p>`,
+        protocols: [
+          {
+            label: "Secure information DQ — caller readback vs staff numbers",
+            current: "Reading back the caller’s own phone number is never a secure-info DQ.",
+            recommended: "Keep: mark NO when the agent only confirms information the caller just provided (their own phone, unit, or name) for a callback/message.<br><br>Mark YES for true disclosures, including:<br>• Another resident’s personal data<br>• <strong style=\"color:var(--red);\">On-site staff personal / direct / mobile numbers</strong> (CSO, courtesy officer, maintenance cell) — 265908165 John Fulton 813-992-9423<br>• Passwords, gate codes, account numbers, payment details<br>• Leaseholder names given to a third party (266239119 — both sides already flag this)<br><br>Caller phone readback is still not a DQ. Staff personal numbers still are."
+          }
+        ]
+      },
+      {
+        num: 3,
+        title: "Ownership: don’t steal credit on policy-only lockouts (273290320)",
+        severity: "warning",
+        severityLabel: "1 of 20 · voicemail-forward worked; lockout did not",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p>Voicemail-forward on <strong>269829113</strong> landed (ownership strict cleared; 45 → 86). Contact N/A on lockout <strong>273290320</strong> also landed. Then ownership on that same lockout went from Yes to No.</p>
+          <p>Contact N/A means “don’t require a phone when no callback is being arranged.” It does <strong>not</strong> mean the agent failed to take ownership. Explaining locksmith-at-caller’s-expense / “let me check the protocol” is still first-person ownership.</p>`,
+        protocols: [
+          {
+            label: "Acknowledged / took ownership — policy-only still counts",
+            current: "Credit callback / note / voicemail-forward / conference maintenance. Contact N/A on policy-only lockouts.",
+            recommended: "Keep Run 2.0 + voicemail-forward positives.<br><br>Also mark YES when the agent <strong style=\"color:var(--red);\">explains the policy and owns the answer</strong> even if no callback is arranged: “Let me check the protocol,” “the property does not handle lockouts — here’s the locksmith path,” “I can tell you what happens next.”<br><br>Contact-info N/A (no phone required) and ownership are separate questions. 273290320 should keep ownership Yes."
+          }
+        ]
+      },
+      {
+        num: 4,
+        title: "Closing: a conference / committed next step is enough (273100258, 269829113)",
+        severity: "warning",
+        severityLabel: "2 of 20 · both strict",
+        owner: "AI Engineering",
+        ownerClass: "info",
+        problem: `<p><strong>273100258</strong> was a 100/100 control. Agent conferenced onsite maintenance. That is the next step. Run 3.0 marked closing No.</p>
+          <p><strong>269829113</strong> is still the truncated-transcript voicemail-forward. Human Yes from the committed next step. Don’t over-require a wrap-up when the recording ends mid-call.</p>
+          <p>269768640 closing leftover did clear — keep that win.</p>`,
+        protocols: [
+          {
+            label: "Closing / next steps — conference and committed action",
+            current: "Mark YES if the agent states the next step and the call ends cooperatively. “Anything else?” is not required.",
+            recommended: "Mark YES if the agent clearly states or <strong style=\"color:var(--red);\">executes</strong> the next step: callback arranged, notes sent, voicemail forwarded, <strong style=\"color:var(--red);\">maintenance conferenced</strong> (273100258), locksmith protocol explained.<br><br>“Is there anything else?” is sufficient but not required.<br><br>If the transcript is truncated after a committed next step (269829113 voicemail-forward), still mark YES.<br><br>Mark NO only when the agent ends with no next step and no confirmation the request was handled."
+          }
+        ]
+      },
+      {
+        num: 5,
+        title: "Leave hold, FHA, contact, and unit alone — protect the wins",
+        severity: "success",
+        severityLabel: "Hold / FHA 20/20 · contact + unit now 20/20",
+        owner: "Austin + AI Engineering",
+        ownerClass: "info",
+        problem: `<p>Contact N/A and unit on 269768640 / 273290320 landed. Hold is still perfect. FHA is still clean. Validate (6) and name (4) are leftover human/AI noise — they are not why this run missed 90%.</p>
+          <p><strong>Plan:</strong> Ship recs 1–4. Re-score these same 20. Do not retune hold, contact, unit, or FHA. Validate split from Run 2.0 rec 2 still stands (operational / generic close = No; issue-apology = Yes, including the lockout sorry on 273290320).</p>`,
+        protocols: [
+          {
+            label: "Run 4.0 execution checklist",
+            current: "Run 3.0: 87.0% agreement, 26 disagreements (18 strict / 8 lenient), 9.9% avg delta. Open-ended 10 strict.",
+            recommended: "Restore the 10 open-ended Yeses. Restore 265908165 CSO DQ. Keep lockout ownership and conference-as-close. Success = <strong style=\"color:var(--red);\">&gt;90% scored agreement</strong> (at most 16 disagreements if only those 10 reverse). Same 20 call IDs. Do not expand the set."
+          }
+        ]
+      }
+    ],
+    rootCause: {
+      overall: "Run 3.0 is the same 20 calls at 87.0% — 1.5pp below Run 2.0 and short of 90%. Contact N/A, unit, and voicemail-forward landed (269768640 is now perfect). The miss is open-ended: “already explained → No” over-fired on 10 prior Yeses, including the two ops-corrected regarding probes and the 273100258 2+ probe control.",
+      what_worked: "269768640 4-strict leftover → perfect. Contact 18→20/20, unit 19→20/20. Ownership voicemail-forward on 269829113 (45 → 86). Open-ended leftovers 265908165 / 273290320 / 273900663 correctly No. Hold and FHA still 20/20. New-8 slice 85.0% → 88.8%.",
+      what_didnt: "Open-ended 5 → 10 disagrees, all strict. Original 12 90.8% → 85.8%. Perfect calls 9 → 4. 273100258 100/100 → 76 (open-ended + closing). Secure-info dropped the 265908165 CSO mobile true positive. New ownership miss on lockout 273290320. Validate 5 → 6, none of the four lenient leftovers moved.",
+      path_to_90: "Ship recs 1–4 and re-score these same 20. Restore the 10 open-ended Yeses without undoing the four correct Nos. Restore staff-number DQ. 90% = at most 20 disagreements; reversing the 10 open-ended stricts alone is 16 / 92%.",
+      strictDetail: `<p><strong>Open-ended (10):</strong> 269788776, 272063323 (ops Yes), 273100258 (2+ probes), plus six orig-12 calls that were already matching. This is the Run 4.0 P0.</p>
+        <p><strong>Other strict:</strong> closing on 273100258 (conference) and 269829113 (truncated voicemail). Ownership on 273290320 lockout. Name 270543247 / 271912426 / 266239119 (don’t loosen 266239119). Greeting crosstalk 270842045. Secure-info miss 265908165 (dashboard polarity: H Yes / AI No).</p>`,
+      lenientDetail: `<p><strong>Validate (5 leftover + 1 new):</strong> operational 270842045 / 271912426, generic close 265908165, lockout sorry 273290320 (keep AI Yes), garbled 266239119, new 269829113.</p>
+        <p><strong>Neutral:</strong> 270245082 rant, 272053386. Unchanged.</p>
+        <p><strong>Name lenient:</strong> 270245082 Wendy/Keith. Unchanged.</p>
+        <p>See <strong>Recommendations</strong> — recs 1–4 are the protocol pack for Run 4.0 on these same 20.</p>`
+    }
   }
+
 ];
 
 const residentMatrixQuestions = [
@@ -3951,7 +4247,7 @@ const leadConfig = {
     answerData: residentAnswerData,
     runAnswerData: residentRunAnswerData,
     matrixQuestions: residentMatrixQuestions,
-    subtitle: (r) => r ? `${(r.calls && r.calls.length) ? r.calls.length : 20} resident calls \u00b7 12 scoring criteria \u00b7 ${r.label} \u2014 ${r.date}` : `Run 1.0: 12 calls \u00b7 Run 2.0: 20 calls \u00b7 12 scoring criteria`,
+    subtitle: (r) => r ? `${(r.calls && r.calls.length) ? r.calls.length : 20} resident calls \u00b7 12 scoring criteria \u00b7 ${r.label} \u2014 ${r.date}` : `Run 1.0: 12 calls \u00b7 Run 2.0–3.0: 20 calls \u00b7 12 scoring criteria`,
     formulaDesc: '42 total weighted points across 10 regular questions (weights from AI Resident Fundamentals). Score = (earned points / 42) \u00d7 100%.',
     dqDesc: 'Each disqualifier triggered (FHA violation, secure info disclosure) applies a 20% reduction.',
   }

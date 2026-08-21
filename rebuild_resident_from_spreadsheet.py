@@ -10,7 +10,7 @@ import re
 import sys
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (1).xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (3).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
 AI_TABS = [
@@ -29,6 +29,14 @@ AI_TABS = [
         "date": "August 20, 2026",
         "description": "Protocol updates from Run 1.0 recs 1–4 (hold, ownership, closing, secure-info DQ). Same 12-call benchmark. Blue cells in AI Resident Fundamentals.",
         "changes": "Hold: lookup language is not a hold. Ownership: credit callback/note language. Closing: next steps without requiring “anything else?”. Secure-info: caller phone readback is not a DQ.",
+    },
+    {
+        "tab": "AI 3",
+        "id": 3,
+        "label": "Run 3.0",
+        "date": "August 21, 2026",
+        "description": "Protocol pack from Run 2.0 recs 1–6 on the same 20 calls. Open-ended leftovers cleared, then over-corrected.",
+        "changes": "Open-ended two-pole rule, validate split, voicemail-forward ownership, contact N/A on policy-only / refused callback.",
     },
 ]
 

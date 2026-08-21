@@ -37,7 +37,7 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **10 scored questions, 42 weighted points**, 2 DQs (FHA, Secure info) — matches the New Manual / AI tabs (definitions sheet lists 11 scored incl. a split closing; we use the 10 graded in the comparison sheet)
 - Score = (earned / 42) × 100%, with 20% reduction per DQ
 - **Rebuild script:** `rebuild_resident_from_spreadsheet.py`
-- **Source data:** `~/Downloads/20 Call Resident Comparison (1).xlsx` (New Manual + AI + AI 2 tabs; ignore old Manual tab)
+- **Source data:** `~/Downloads/20 Call Resident Comparison (3).xlsx` (New Manual + AI + AI 2 + AI 3 tabs; ignore old Manual tab and empty AI 4)
 - **Definitions:** `AI_ QA 2026 (6).xlsx` → tab `AI Resident Fundamentals` (blue cells = Run 2.0 protocol updates)
 
 ### Resident Run 1.0 (August 11, 2026) — Baseline
@@ -56,9 +56,19 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **Results (all 20):** **88.5%** (177/200), 23 disagreements (12 strict / 11 lenient), **10.0%** avg score delta. Perfect agreement: 9 of 20.
 - **Comparable 12 vs Run 1.0:** **90.8%** (109/120), 11 disagreements (6 strict / 5 lenient), 7.9% avg delta. Hold 7→0, ownership 4→0, secure-info DQ 3→0, closing 5→1.
 - **Top leftovers on 20:** open-ended 5, validate 5, name 3, closing 3. Worst new ID: 269829113 ownership miss on voicemail-forward (H 81 / AI 45). Worst original: 269768640 (4 strict).
-- **Next:** Recs 1–6 on the Recommendations tab are the protocol pack for the next run on these same 20.
+- **Next:** Recs 1–6 on the Recommendations tab were the protocol pack for Run 3.0 on these same 20.
 - Transcripts: all 20 IDs in `~/Downloads/{id}.json`.
 - Writeup: `RESIDENT-RUN2-EVAL.md`
+
+### Resident Run 3.0 (August 21, 2026) — Same 20, open-ended over-correction
+- **Tab:** `AI 3` → Run 3.0
+- **Set:** Same **20 calls** as Run 2.0.
+- **Results (all 20):** **87.0%** (174/200), 26 disagreements (18 strict / 8 lenient), **9.9%** avg score delta. Perfect agreement: 4 of 20. Missed the 90% / ≤20-disagreement target (−1.5pp vs Run 2.0).
+- **Comparable 12:** 90.8% → **85.8%**. New 8: 85.0% → **88.8%**.
+- **What landed:** 269768640 (worst leftover) now perfect. Contact + unit 20/20. Voicemail-forward ownership on 269829113 (45 → 86). Open-ended leftovers 265908165 / 273290320 / 273900663 correctly No.
+- **What broke:** Open-ended 5 → 10 disagrees, all strict — including ops-Yes 269788776 / 272063323 and positive control 273100258. Secure-info dropped the 265908165 CSO mobile true positive.
+- **Next:** Recs 1–4 on the Recommendations tab. Reverse the 10 open-ended stricts without undoing the four correct Nos. Same 20. Target still 90%.
+- Writeup: `RESIDENT-RUN3-EVAL.md`
 
 ### How to Add Data for a New Lead Type Run
 1. Download fresh `.xlsx` from Google Sheet
