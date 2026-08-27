@@ -10,9 +10,11 @@ import re
 import sys
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (3).xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (7).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
+# Full rebuild wipes hand-written keyFindings / recs / rootCause.
+# To add a run without that, patch index.html only (see git history for Run 4.0).
 AI_TABS = [
     {
         "tab": "AI",
@@ -27,7 +29,7 @@ AI_TABS = [
         "id": 2,
         "label": "Run 2.0",
         "date": "August 20, 2026",
-        "description": "Protocol updates from Run 1.0 recs 1–4 (hold, ownership, closing, secure-info DQ). Same 12-call benchmark. Blue cells in AI Resident Fundamentals.",
+        "description": "Protocol updates from Run 1.0 recs 1–4 (hold, ownership, closing, secure-info DQ). Full 20-call set.",
         "changes": "Hold: lookup language is not a hold. Ownership: credit callback/note language. Closing: next steps without requiring “anything else?”. Secure-info: caller phone readback is not a DQ.",
     },
     {
@@ -37,6 +39,14 @@ AI_TABS = [
         "date": "August 21, 2026",
         "description": "Protocol pack from Run 2.0 recs 1–6 on the same 20 calls. Open-ended leftovers cleared, then over-corrected.",
         "changes": "Open-ended two-pole rule, validate split, voicemail-forward ownership, contact N/A on policy-only / refused callback.",
+    },
+    {
+        "tab": "AI 5",
+        "id": 4,
+        "label": "Run 4.0",
+        "date": "August 27, 2026",
+        "description": "Same 20 calls. Spreadsheet tab AI 5 published as Run 4.0 (AI 4 tab was not shipped). Open-ended recovered 1; closing went 20/20. Still short of 90% and of Run 2.0’s 9 perfects.",
+        "changes": "Resident I6 rewrite still in place (not the Run 2.0 revert). Closing conference/voicemail leftover cleared. Keep-No open-ended restored on 270583790 / 265908165.",
     },
 ]
 
@@ -213,13 +223,17 @@ for run_info in AI_TABS:
     ai_runs[tab_name] = ai_data
     print(f"Extracted {len(ai_data)} unique calls from '{tab_name}' tab")
 
-# Only calls with BOTH human + AI grades
-benchmark_call_ids = sorted(set(human_data.keys()) & set(ai_runs[AI_TABS[0]["tab"]].keys()))
-print(f"\nBenchmark set (matching IDs only): {len(benchmark_call_ids)} calls")
+# Run 1.0 is a 12-call slice; later runs use every ID that has both human + that tab's AI grades.
+def matching_ids(tab_name):
+    return sorted(set(human_data.keys()) & set(ai_runs[tab_name].keys()))
+
+
+benchmark_call_ids = matching_ids(AI_TABS[0]["tab"])
+print(f"\nRun 1.0 matching set: {len(benchmark_call_ids)} calls")
 print("  " + ", ".join(benchmark_call_ids))
 human_only = sorted(set(human_data.keys()) - set(benchmark_call_ids))
 if human_only:
-    print(f"  Excluded human-only (no AI): {', '.join(human_only)}")
+    print(f"  Human IDs not in Run 1.0 AI tab (used on later runs): {', '.join(human_only)}")
 
 print("\n" + "=" * 70)
 print("SCORE VALIDATION — New Manual (benchmark calls)")
@@ -384,7 +398,9 @@ for run_info in AI_TABS:
     print(f"\n{'=' * 70}")
     print(f"BUILDING {run_info['label']} (tab: {tab_name})")
     print(f"{'=' * 70}")
-    rd = build_run_data(human_data, ai_runs[tab_name], benchmark_call_ids)
+    run_ids = matching_ids(tab_name)
+    print(f"  Matching IDs: {len(run_ids)}")
+    rd = build_run_data(human_data, ai_runs[tab_name], run_ids)
     rd["info"] = run_info
     all_runs.append(rd)
     m = rd["meta"]
@@ -585,7 +601,7 @@ resident_matrix_js = """const residentMatrixQuestions = [
   { short: "Secure info (DQ)", key: "secure_info" },
 ];"""
 
-n_calls = len(benchmark_call_ids)
+n_calls = max(len(rd["calls"]) for rd in all_runs) if all_runs else len(benchmark_call_ids)
 resident_lead_config = f"""  resident: {{
     label: 'Residents',
     callCount: {n_calls},
@@ -596,7 +612,7 @@ resident_lead_config = f"""  resident: {{
     answerData: residentAnswerData,
     runAnswerData: residentRunAnswerData,
     matrixQuestions: residentMatrixQuestions,
-    subtitle: (r) => r ? `{n_calls} resident calls \\u00b7 12 scoring criteria \\u00b7 ${{r.label}} \\u2014 ${{r.date}}` : `{n_calls} resident calls \\u00b7 12 scoring criteria \\u00b7 ${{runs.length}} model runs tracked`,
+    subtitle: (r) => r ? `${{(r.calls && r.calls.length) ? r.calls.length : {n_calls}}} resident calls \\u00b7 12 scoring criteria \\u00b7 ${{r.label}} \\u2014 ${{r.date}}` : `Run 1.0: 12 calls \\u00b7 Run 2.0–4.0: 20 calls \\u00b7 12 scoring criteria`,
     formulaDesc: '{TOTAL_POINTS} total weighted points across {len(SCORED_KEYS)} regular questions (weights from AI Resident Fundamentals). Score = (earned points / {TOTAL_POINTS}) \\u00d7 100%.',
     dqDesc: 'Each disqualifier triggered (FHA violation, secure info disclosure) applies a 20% reduction.',
   }}"""
