@@ -37,7 +37,7 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **10 scored questions, 42 weighted points**, 2 DQs (FHA, Secure info) — matches the New Manual / AI tabs (definitions sheet lists 11 scored incl. a split closing; we use the 10 graded in the comparison sheet)
 - Score = (earned / 42) × 100%, with 20% reduction per DQ
 - **Rebuild script:** `rebuild_resident_from_spreadsheet.py`
-- **Source data:** `~/Downloads/20 Call Resident Comparison (7).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0; ignore old Manual tab and unpublished AI 4)
+- **Source data:** `~/Downloads/20 Call Resident Comparison (8).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0 + AI 6 as Run 5.0; ignore old Manual tab and unpublished AI 4)
 - **Definitions:** `AI_ QA 2026 (12).xlsx` → tab `AI Resident Fundamentals` (I6 is still the Run 3 rewrite, not the Run 2.0 revert)
 
 ### Resident Run 1.0 (August 11, 2026) — Baseline
@@ -79,6 +79,16 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **What missed:** Open-ended still 10/20 (7S/3L) vs Run 2.0’s 15/20. Ops-Yes 269788776 / 272063323 still No. New false Yeses 266239119 / 273900663. Perfects 6 vs 9.
 - **Protocol:** `AI_ QA 2026 (12).xlsx` I6 is identical to (11) — not the Run 2.0 revert. Lead G5 still has the resident paste.
 - **Next:** Rec 1 — paste exact Run 2.0 I6 from file (6). Restore Lead G5. Do not retune validate/name.
+
+### Resident Run 5.0 (August 31, 2026) — Same 20, AI 6 tab published as 5.0
+- **Tab:** `AI 6` → dashboard **Run 5.0**
+- **Set:** Same **20 calls** as Run 2.0 / 3.0 / 4.0.
+- **Results (all 20):** **87.5%** (175/200), 25 disagreements (14 strict / 11 lenient), **8.7%** avg score delta. Perfect agreement: 6 of 20. Missed 90% by 5 agreements (−1.0pp vs Run 4.0 and Run 2.0).
+- **Comparable 12:** **86.7%** (flat vs 4.0). New 8: **88.8%** (down from 91.2%).
+- **What landed:** Ops-Yes 269788776 recovered to perfect. 271912426 open-ended recovered. 273900663 false Yes cleared. Contact, unit, hold, FHA still 20/20.
+- **What missed:** Open-ended 10 → 9/20 (8S/3L). Lost Yeses 272543647, 274349154, 270842045. Keep-No 265908165 broke. Ops-Yes 272063323 still No. Closing 20 → 19/20 (269829113 leftover returned). Perfects still 6 vs Run 2.0’s 9.
+- **90% path:** Need 5 more scored agreements. Open-ended is 11 of 25 disagrees; Run 2.0 had 5. Restoring those 6 plus the closing leftover is 182 / 91%. Paste exact file (6) I6; restore 269829113 closing; do not retune validate/name.
+- **Next:** Recs 1–3 on the Recommendations tab. Same 20. Target still 90%.
 
 ### How to Add Data for a New Lead Type Run
 1. Download fresh `.xlsx` from Google Sheet

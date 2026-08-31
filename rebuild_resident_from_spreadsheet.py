@@ -10,11 +10,11 @@ import re
 import sys
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (7).xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (8).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
 # Full rebuild wipes hand-written keyFindings / recs / rootCause.
-# To add a run without that, patch index.html only (see git history for Run 4.0).
+# To add a run without that, patch index.html only (see git history for Run 4.0 / 5.0).
 AI_TABS = [
     {
         "tab": "AI",
@@ -47,6 +47,14 @@ AI_TABS = [
         "date": "August 27, 2026",
         "description": "Same 20 calls. Spreadsheet tab AI 5 published as Run 4.0 (AI 4 tab was not shipped). Open-ended recovered 1; closing went 20/20. Still short of 90% and of Run 2.0’s 9 perfects.",
         "changes": "Resident I6 rewrite still in place (not the Run 2.0 revert). Closing conference/voicemail leftover cleared. Keep-No open-ended restored on 270583790 / 265908165.",
+    },
+    {
+        "tab": "AI 6",
+        "id": 5,
+        "label": "Run 5.0",
+        "date": "August 31, 2026",
+        "description": "Same 20 calls. Spreadsheet tab AI 6 published as Run 5.0. Open-ended 10→9/20. Closing 20→19/20. Agreement 88.5% → 87.5%, still short of 90%.",
+        "changes": "Ops-Yes 269788776 landed. 271912426 open-ended recovered. 273900663 false Yes cleared. Lost Yeses on 272543647 / 274349154 / 270842045. Keep-No 265908165 broke. Closing leftover on 269829113 returned.",
     },
 ]
 
@@ -612,7 +620,7 @@ resident_lead_config = f"""  resident: {{
     answerData: residentAnswerData,
     runAnswerData: residentRunAnswerData,
     matrixQuestions: residentMatrixQuestions,
-    subtitle: (r) => r ? `${{(r.calls && r.calls.length) ? r.calls.length : {n_calls}}} resident calls \\u00b7 12 scoring criteria \\u00b7 ${{r.label}} \\u2014 ${{r.date}}` : `Run 1.0: 12 calls \\u00b7 Run 2.0–4.0: 20 calls \\u00b7 12 scoring criteria`,
+    subtitle: (r) => r ? `${{(r.calls && r.calls.length) ? r.calls.length : {n_calls}}} resident calls \\u00b7 12 scoring criteria \\u00b7 ${{r.label}} \\u2014 ${{r.date}}` : `Run 1.0: 12 calls \\u00b7 Run 2.0–5.0: 20 calls \\u00b7 12 scoring criteria`,
     formulaDesc: '{TOTAL_POINTS} total weighted points across {len(SCORED_KEYS)} regular questions (weights from AI Resident Fundamentals). Score = (earned points / {TOTAL_POINTS}) \\u00d7 100%.',
     dqDesc: 'Each disqualifier triggered (FHA violation, secure info disclosure) applies a 20% reduction.',
   }}"""
