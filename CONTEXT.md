@@ -37,7 +37,7 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **10 scored questions, 42 weighted points**, 2 DQs (FHA, Secure info) — matches the New Manual / AI tabs (definitions sheet lists 11 scored incl. a split closing; we use the 10 graded in the comparison sheet)
 - Score = (earned / 42) × 100%, with 20% reduction per DQ
 - **Rebuild script:** `rebuild_resident_from_spreadsheet.py`
-- **Source data:** `~/Downloads/20 Call Resident Comparison (8).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0 + AI 6 as Run 5.0; ignore old Manual tab and unpublished AI 4)
+- **Source data:** `~/Downloads/20 Call Resident Comparison (9).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0 + AI 6 as Run 5.0 + AI 8 as Run 8.0; ignore old Manual tab and unpublished AI 4 / AI 7)
 - **Definitions:** `AI_ QA 2026 (12).xlsx` → tab `AI Resident Fundamentals` (I6 is still the Run 3 rewrite, not the Run 2.0 revert)
 
 ### Resident Run 1.0 (August 11, 2026) — Baseline
@@ -88,7 +88,18 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **What landed:** Ops-Yes 269788776 recovered to perfect. 271912426 open-ended recovered. 273900663 false Yes cleared. Contact, unit, hold, FHA still 20/20.
 - **What missed:** Open-ended 10 → 9/20 (8S/3L). Lost Yeses 272543647, 274349154, 270842045. Keep-No 265908165 broke. Ops-Yes 272063323 still No. Closing 20 → 19/20 (269829113 leftover returned). Perfects still 6 vs Run 2.0’s 9.
 - **90% path:** Need 5 more scored agreements. Open-ended is 11 of 25 disagrees; Run 2.0 had 5. Restoring those 6 plus the closing leftover is 182 / 91%. Paste exact file (6) I6; restore 269829113 closing; do not retune validate/name.
-- **Next:** Recs 1–3 on the Recommendations tab. Same 20. Target still 90%.
+- **Next:** Recs 1–3 on the Recommendations tab. Same 20. Target still 90%. That next shipped tab was AI 8 (Run 8.0), not a Run 6.0.
+
+### Resident Run 8.0 (August 31, 2026) — Same 20, AI 8 tab, new C6 question
+- **Tab:** `AI 8` → dashboard **Run 8.0** (spreadsheet AI 7 was not shipped)
+- **Set:** Same **20 calls** as Run 2.0 / 3.0 / 4.0 / 5.0.
+- **New question:** C6 is now “Did the agent capture the reason for the call?” (replaces 2+ open-ended, still 7 pts). New Manual was **not** re-graded — human answers in that slot are still the open-ended column.
+- **Results (all 20):** **89.5%** (179/200), 21 disagreements (10 strict / 11 lenient), **8.2%** avg score delta. Perfect agreement: **8 of 20**. One scored agreement short of 90%.
+- **Comparable 12:** **90.8%** (109/120) — +4.1pp vs 5.0. New 8: **87.5%** (70/80).
+- **What landed:** Reason-for-call 9/20 → **15/20** (2S/3L). Ops-Yes 272063323 recovered. Open-ended-only misses 269245474 / 271873957 / 272543647 / 274349154 now perfect. Contact, unit, hold, FHA still 20/20. Keep-No held on 270583790 / 270543247 / 273900663.
+- **What missed:** Closing 19 → **17/20** (269829113 leftover + new Nos on 273100258 and 269768640). Lost Run 5.0 perfects 269788776 / 269768640 / 273100258. Reason-for-call Keep-No broke on 265908165 / 273290320. Validate 15 and name 16 unchanged.
+- **90% path:** Need **1** more scored agreement (180/200). Cheapest: any one closing leftover (269829113 / 273100258 / 269768640) or either reason-for-call strict (269788776 / 269768640). Keep the new question. Do not ship AI 7 (it hit 90.5% by over-crediting reason-for-call: 14 lenient / 5 strict).
+- **Next:** Recs 1–3 on the dashboard. Same 20. Target still 90%.
 
 ### How to Add Data for a New Lead Type Run
 1. Download fresh `.xlsx` from Google Sheet

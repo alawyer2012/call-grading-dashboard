@@ -10,11 +10,12 @@ import re
 import sys
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (8).xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (9).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
 # Full rebuild wipes hand-written keyFindings / recs / rootCause.
-# To add a run without that, patch index.html only (see git history for Run 4.0 / 5.0).
+# To add a run without that, patch index.html only (see git history for Run 4.0 / 5.0 / 8.0).
+# AI 8 C6 is a NEW question (reason for the call) replacing open-ended. Use ai_col_overrides.
 AI_TABS = [
     {
         "tab": "AI",
@@ -56,6 +57,16 @@ AI_TABS = [
         "description": "Same 20 calls. Spreadsheet tab AI 6 published as Run 5.0. Open-ended 10→9/20. Closing 20→19/20. Agreement 88.5% → 87.5%, still short of 90%.",
         "changes": "Ops-Yes 269788776 landed. 271912426 open-ended recovered. 273900663 false Yes cleared. Lost Yeses on 272543647 / 274349154 / 270842045. Keep-No 265908165 broke. Closing leftover on 269829113 returned.",
     },
+    {
+        "tab": "AI 8",
+        "id": 8,
+        "label": "Run 8.0",
+        "date": "August 31, 2026",
+        "description": "Same 20 calls. Spreadsheet tab AI 8 published as Run 8.0 (AI 7 was not shipped). C6 is now reason-for-call (replaces open-ended, still 7 pts). Agreement 87.5% → 89.5%, one scored agreement short of 90%.",
+        "changes": "New question: “Did the agent capture the reason for the call?” Reason-for-call 9/20 → 15/20. Ops-Yes 272063323 recovered. Closing 19 → 17/20. Perfects 6 → 8.",
+        "ai_col_overrides": {6: "reason_for_call"},
+        "human_alias": {"reason_for_call": "open_ended_qs"},
+    },
 ]
 
 # New Manual: Col 1=Overall Score, Col 2=Call Id, Cols 3-14=answers
@@ -96,15 +107,17 @@ WEIGHTS = {
     "contact_info": 4,
     "unit_number": 4,
     "open_ended_qs": 7,
+    "reason_for_call": 7,
     "acknowledged": 5,
     "closing": 3,
     "hold_permission": 2,
     "validate_concern": 5,
     "neutral_language": 5,
 }
-TOTAL_POINTS = sum(WEIGHTS.values())  # 42
+# open-ended and reason-for-call share the same 7-pt slot; never sum both
+TOTAL_POINTS = 42
 DQ_KEYS = ["fha", "secure_info"]
-SCORED_KEYS = list(WEIGHTS.keys())
+SCORED_KEYS = [k for k in WEIGHTS if k != "reason_for_call"]
 ALL_KEYS = SCORED_KEYS + DQ_KEYS
 
 Q_LABELS = {
@@ -113,6 +126,7 @@ Q_LABELS = {
     "contact_info": "Contact info",
     "unit_number": "Unit number",
     "open_ended_qs": "Open-ended questions",
+    "reason_for_call": "Reason for the call",
     "acknowledged": "Acknowledged/ownership",
     "closing": "Closing",
     "hold_permission": "Hold permission",
@@ -128,6 +142,7 @@ Q_FULL_LABELS = {
     "contact_info": "Contact info confirmed (if update requested)",
     "unit_number": "Unit / apartment number confirmed",
     "open_ended_qs": "Open-ended questions (2+ distinct)",
+    "reason_for_call": "Reason for the call (replaces open-ended)",
     "acknowledged": "Acknowledged caller / took ownership",
     "closing": "Closing / confirm next steps",
     "hold_permission": "Asked permission before hold",
@@ -141,6 +156,7 @@ STRICT_REASONS = {
     "contact_info": "Agent confirmed contact info. AI did not credit it.",
     "unit_number": "Unit/apartment number was confirmed. AI missed it.",
     "open_ended_qs": "Human counted questions as open-ended. AI grammar-parsed too literally.",
+    "reason_for_call": "Human credited capturing the reason for the call. AI marked No.",
     "acknowledged": "Agent acknowledged caller / took ownership. AI did not credit it.",
     "closing": "Agent confirmed next steps. AI required more formal closing structure.",
     "hold_permission": "Agent asked hold permission (or hold not needed). AI did not credit it.",
@@ -154,6 +170,7 @@ LENIENT_REASONS = {
     "contact_info": "AI credited contact confirmation; human disagrees.",
     "unit_number": "AI credited unit confirmation; human disagrees.",
     "open_ended_qs": "AI counted questions as open-ended; human classified them as closed-ended.",
+    "reason_for_call": "AI credited capturing the reason for the call; human open-ended grade is No.",
     "acknowledged": "AI credited acknowledgment; human required more explicit ownership.",
     "closing": "AI counted a generic goodbye; human required confirmed next steps.",
     "hold_permission": "AI credited hold permission; human says it was not properly asked.",
@@ -170,8 +187,16 @@ def parse_yes_no(val):
     return 1 if str(val).strip().lower().startswith("y") else 0
 
 
+def slot_keys(answers):
+    """Use reason-for-call instead of open-ended when that 7-pt slot is present."""
+    if "reason_for_call" in answers:
+        return ["reason_for_call" if k == "open_ended_qs" else k for k in SCORED_KEYS]
+    return list(SCORED_KEYS)
+
+
 def calc_score(answers):
-    earned = sum(WEIGHTS[q] for q in SCORED_KEYS if answers.get(q) == 1)
+    scored = slot_keys(answers)
+    earned = sum(WEIGHTS[q] for q in scored if answers.get(q) == 1)
     base = (earned / TOTAL_POINTS) * 100 if TOTAL_POINTS else 0
     dq_count = sum(1 for dq in DQ_KEYS if answers.get(dq) == 1)
     return round(base * max(0, 1 - 0.20 * dq_count), 2)
@@ -223,7 +248,9 @@ for run_info in AI_TABS:
         if call_id_raw is None:
             continue
         call_id = str(int(float(call_id_raw)))
-        answers = {q_key: parse_yes_no(ws_ai.cell(row, col).value) for col, q_key in AI_COL_MAP.items()}
+        col_map = dict(AI_COL_MAP)
+        col_map.update(run_info.get("ai_col_overrides") or {})
+        answers = {q_key: parse_yes_no(ws_ai.cell(row, col).value) for col, q_key in col_map.items()}
         if call_id in ai_data:
             print(f"  Skipping duplicate AI row for {call_id}")
             continue
@@ -258,12 +285,19 @@ for call_id in benchmark_call_ids:
 print(f"\nScore validation: {score_mismatches} mismatches out of {len(benchmark_call_ids)} (tolerance ±2pts)")
 
 
-def build_run_data(human_data, ai_data, benchmark_ids):
+def build_run_data(human_data, ai_data, benchmark_ids, run_info=None):
+    alias = (run_info or {}).get("human_alias") or {}
+    sample_ai = next(iter(ai_data.values()), {}).get("answers", {}) if ai_data else {}
+    run_scored = slot_keys(sample_ai)
+    run_keys = run_scored + DQ_KEYS
     answer_data = {}
     for call_id in benchmark_ids:
-        h = human_data[call_id]["answers"]
-        a = ai_data.get(call_id, {}).get("answers", {})
-        answer_data[call_id] = {q_key: [h.get(q_key), a.get(q_key)] for q_key in ALL_KEYS}
+        h = dict(human_data[call_id]["answers"])
+        a = dict(ai_data.get(call_id, {}).get("answers", {}))
+        for new_key, old_key in alias.items():
+            if new_key not in h and old_key in h:
+                h[new_key] = h[old_key]
+        answer_data[call_id] = {q_key: [h.get(q_key), a.get(q_key)] for q_key in run_keys}
 
     calls_data = []
     total_agree_scored = 0
@@ -275,15 +309,15 @@ def build_run_data(human_data, ai_data, benchmark_ids):
 
     for call_id in sorted(answer_data.keys()):
         cd = answer_data[call_id]
-        h_score = calc_score({q: cd[q][0] for q in ALL_KEYS})
-        ai_answers = {q: cd[q][1] for q in ALL_KEYS}
-        has_ai = any(v is not None for q, v in ai_answers.items() if q in SCORED_KEYS)
+        h_score = calc_score({q: cd[q][0] for q in run_keys})
+        ai_answers = {q: cd[q][1] for q in run_keys}
+        has_ai = any(v is not None for q, v in ai_answers.items() if q in run_scored)
         a_score = calc_score(ai_answers) if has_ai else None
 
         strict, lenient = 0, 0
         details = []
 
-        for q in ALL_KEYS:
+        for q in run_keys:
             h_val, a_val = cd[q]
             if a_val is None or h_val is None:
                 continue
@@ -347,7 +381,7 @@ def build_run_data(human_data, ai_data, benchmark_ids):
         })
 
     questions_data = []
-    for q_key in ALL_KEYS:
+    for q_key in run_keys:
         agree = disagree = strict = lenient = total = 0
         for call_id, cd in answer_data.items():
             h, a = cd[q_key]
@@ -408,7 +442,7 @@ for run_info in AI_TABS:
     print(f"{'=' * 70}")
     run_ids = matching_ids(tab_name)
     print(f"  Matching IDs: {len(run_ids)}")
-    rd = build_run_data(human_data, ai_runs[tab_name], run_ids)
+    rd = build_run_data(human_data, ai_runs[tab_name], run_ids, run_info)
     rd["info"] = run_info
     all_runs.append(rd)
     m = rd["meta"]
@@ -568,7 +602,7 @@ for rd in all_runs:
     for call_id in sorted(ad.keys()):
         cd = ad[call_id]
         parts = []
-        for q in ALL_KEYS:
+        for q in cd.keys():
             h, a = cd[q]
             h_str = str(h) if h is not None else "null"
             a_str = str(a) if a is not None else "null"
@@ -620,7 +654,7 @@ resident_lead_config = f"""  resident: {{
     answerData: residentAnswerData,
     runAnswerData: residentRunAnswerData,
     matrixQuestions: residentMatrixQuestions,
-    subtitle: (r) => r ? `${{(r.calls && r.calls.length) ? r.calls.length : {n_calls}}} resident calls \\u00b7 12 scoring criteria \\u00b7 ${{r.label}} \\u2014 ${{r.date}}` : `Run 1.0: 12 calls \\u00b7 Run 2.0–5.0: 20 calls \\u00b7 12 scoring criteria`,
+    subtitle: (r) => r ? `${{(r.calls && r.calls.length) ? r.calls.length : {n_calls}}} resident calls \\u00b7 12 scoring criteria \\u00b7 ${{r.label}} \\u2014 ${{r.date}}` : `Run 1.0: 12 calls \\u00b7 Run 2.0–5.0 + 8.0: 20 calls \\u00b7 12 scoring criteria`,
     formulaDesc: '{TOTAL_POINTS} total weighted points across {len(SCORED_KEYS)} regular questions (weights from AI Resident Fundamentals). Score = (earned points / {TOTAL_POINTS}) \\u00d7 100%.',
     dqDesc: 'Each disqualifier triggered (FHA violation, secure info disclosure) applies a 20% reduction.',
   }}"""
