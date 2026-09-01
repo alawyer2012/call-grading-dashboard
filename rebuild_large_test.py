@@ -391,17 +391,26 @@ recs = [
         "owner": "AI Engineering",
         "ownerClass": "info",
         "problem": f"""<p>Name is the worst question on 490 calls. Agreement {name_pct}%. AI misses <strong>26%</strong> of human-Yes names ({name_q['strict']}/{name_q['agree'] + name_q['strict']}). False Yeses are only {name_q['lenient']} — this is not a loosen-vs-tighten toss-up. Recovering all {name_q['strict']} stricts would land at {round((total_agree + name_q['strict']) / total_comp * 100, 1)}%. Recovering half ({name_q['strict'] // 2}) gets to {round((total_agree + name_q['strict'] // 2) / total_comp * 100, 1)}%, one point shy of 90% by itself.</p>
-<p>Same pattern we already saw on the 20-call set (16/20), now undeniable at n=490: one-time confirmatory use and volunteered names.</p>""",
+<p>The live protocol is stricter than the question humans graded. Humans see “asked for the caller’s name, or it was offered, and used it at least once.” The model is told to require <strong>full name (first and last)</strong> before the first-name-use counts. Resident callers often give a first name only. That mismatch is the leading hypothesis for the {name_q['strict']} stricts — not “sales-style repeated use.”</p>""",
         "protocols": [
             {
-                "label": "Name usage — credit one-time use + volunteered names",
-                "current": "Both required: (1) agent asked for the name or caller offered it, AND (2) agent used it at least once.",
+                "label": "Name usage — drop the last-name requirement; keep ask-or-offer + one first-name use",
+                "current": (
+                    "The transcript must show that the agent either asked for the caller’s full name (first and last name) "
+                    "or the caller voluntarily provided their full name without being asked, and the agent must use the caller’s "
+                    "first name at least once during the conversation. Both actions must occur for a “Yes” answer. If the agent "
+                    "requests the caller’s full name and the caller refuses to provide it then mark \"yes\"<br><br>"
+                    "If the caller wants to remain anonymous and does not give name, phone, email, and/or apartment number, mark Yes."
+                ),
                 "recommended": (
-                    "Keep both conditions, but mark YES when either is clearly met in a resident service call:<br><br>"
-                    "1. Caller volunteers a name and the agent uses it once (“Thanks, Mia” / “Okay, John”). That is asked-or-offered + used.<br>"
-                    "2. Agent confirms (“Can I get your first name?” / “Can you confirm your name?”) and later uses it once. Do not require a third reuse.<br>"
-                    "3. Phonetic / transcript-garbled names still count if the agent is clearly addressing the caller by name.<br><br>"
-                    f"Do <strong style=\"color:var(--red);\">not</strong> require sales-style repeated name use. Gate: name ≥ 85% agreement on this 490, strict &lt; 70. Leave the {name_q['lenient']} false Yeses unless they move with the loosen."
+                    "Keep ask-or-offer + one first-name use. <strong style=\"color:var(--red);\">Do not require last name.</strong><br><br>"
+                    "The transcript must show that the agent either asked for the caller’s name (first name is enough) or the caller "
+                    "volunteered it, and the agent used the caller’s first name at least once. Both must occur for Yes.<br><br>"
+                    "<strong style=\"color:var(--red);\">Keep these Yeses:</strong> agent asks for the name and the caller refuses; "
+                    "caller stays anonymous and gives no name / phone / email / unit.<br><br>"
+                    "<strong style=\"color:var(--red);\">Also Yes:</strong> first-name-only volunteer (“This is Mia”) + one use; "
+                    "“Can I get your name / first name?” + one use; transcript-garbled name if the agent is clearly addressing the caller by name.<br><br>"
+                    f"Do not require a second reuse. Gate: name ≥ 85% on this 490, strict &lt; 70. Leave the {name_q['lenient']} false Yeses unless they move with the loosen."
                 ),
             }
         ],

@@ -110,7 +110,7 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **90% path:** Need **76** more scored agreements (3969/4410). Half of name-strict + half of next-steps-strict = 103 → 90.6%. All 118 name-strict recovered is 91.0% by itself.
 - **Where it works:** Hold 99.4%, FHA 100%, secure-info 99.4%, contact 96.1%. Greeting 91.2% (43S/0L), ownership 91.6% (39S/2L), unit 91.8% (40S/0L) are second-tier.
 - **Where it does not:**
-  - **Name usage 74.1%** (363/490, 118S/9L) — worst. AI Yes 69% vs human 91%. Misses 26% of human-Yes names.
+  - **Name usage 74.1%** (363/490, 118S/9L) — worst. AI Yes 69% vs human 91%. Live protocol requires **full name (first and last)** then one first-name use; humans graded the weaker stem (name asked/offered + used). Drop the last-name bar. Keep refusal + anonymous Yeses.
   - **Next steps 80.0%** (392/490, 88S/10L) — AI Yes 81% vs human 97%. Closing problem at scale.
   - **Reason for the call 84.5%** (414/490, 63S/13L) — highest weighted miss (7×63 = 441 pts). Both sides graded the same question (unlike Run 8.0 vs human open-ended). Still too strict. Do not revert to open-ended; do not copy AI 7 over-credit.
   - **Validate concern 85.7%** (420/490, 3S/67L) — only large lenient miss. AI Yes 99% vs human 86%. Auto-Yes-when-no-concern over-fires.
