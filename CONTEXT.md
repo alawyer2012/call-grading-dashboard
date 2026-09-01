@@ -37,7 +37,7 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **10 scored questions, 42 weighted points**, 2 DQs (FHA, Secure info) — matches the New Manual / AI tabs (definitions sheet lists 11 scored incl. a split closing; we use the 10 graded in the comparison sheet)
 - Score = (earned / 42) × 100%, with 20% reduction per DQ
 - **Rebuild script:** `rebuild_resident_from_spreadsheet.py`
-- **Source data:** `~/Downloads/20 Call Resident Comparison (9).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0 + AI 6 as Run 5.0 + AI 8 as Run 8.0; ignore old Manual tab and unpublished AI 4 / AI 7)
+- **Source data:** `~/Downloads/20 Call Resident Comparison (10).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0 + AI 6 as Run 5.0 + AI 8 as Run 8.0; **Large Test** from `Manual Grades JulyAugust Reside` vs `AI JulyAugust Resident Simuluat`; ignore old Manual tab and unpublished AI 4 / AI 7)
 - **Definitions:** `AI_ QA 2026 (12).xlsx` → tab `AI Resident Fundamentals` (I6 is still the Run 3 rewrite, not the Run 2.0 revert)
 
 ### Resident Run 1.0 (August 11, 2026) — Baseline
@@ -101,6 +101,22 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **90% path:** Need **1** more scored agreement (180/200). Cheapest: any one closing leftover (269829113 / 273100258 / 269768640) or either reason-for-call strict (269788776 / 269768640). Keep the new question. Do not ship AI 7 (it hit 90.5% by over-crediting reason-for-call: 14 lenient / 5 strict).
 - **Next:** Recs 1–3 on the dashboard. Same 20. Target still 90%.
 
+### Resident Large Test (September 1, 2026) — 490-call July/August simulation
+- **Dashboard tab:** `Large Test` (id 90, `largeEval: true`) — not Run 9.0. Overview trend charts stay on the 20-call protocol series.
+- **Tabs:** `Manual Grades JulyAugust Reside` vs `AI JulyAugust Resident Simuluat`. `Graded stats` is Yes-rates only (matches).
+- **Set:** **490 matching call IDs** (1 duplicate row skipped on each side). Human is the reference, not ground truth.
+- **Scorecard overlap:** 9 scored questions + 2 DQs = **37 pts**. Human-only “final closing question” (92% Yes) and AI-only “neutral language” (99.8% Yes) are excluded because only one side graded them. Next-steps (3 pts) is the shared closing slot.
+- **Results:** **88.3%** scored agreement (3893/4410), 517 disagreements (**401 strict / 116 lenient**, 78% strict), **9.9%** avg score delta. Perfect: **181 of 490**. Mean AI 89.0% vs mean human 95.1%.
+- **90% path:** Need **76** more scored agreements (3969/4410). Half of name-strict + half of next-steps-strict = 103 → 90.6%. All 118 name-strict recovered is 91.0% by itself.
+- **Where it works:** Hold 99.4%, FHA 100%, secure-info 99.4%, contact 96.1%. Greeting 91.2% (43S/0L), ownership 91.6% (39S/2L), unit 91.8% (40S/0L) are second-tier.
+- **Where it does not:**
+  - **Name usage 74.1%** (363/490, 118S/9L) — worst. AI Yes 69% vs human 91%. Misses 26% of human-Yes names.
+  - **Next steps 80.0%** (392/490, 88S/10L) — AI Yes 81% vs human 97%. Closing problem at scale.
+  - **Reason for the call 84.5%** (414/490, 63S/13L) — highest weighted miss (7×63 = 441 pts). Both sides graded the same question (unlike Run 8.0 vs human open-ended). Still too strict. Do not revert to open-ended; do not copy AI 7 over-credit.
+  - **Validate concern 85.7%** (420/490, 3S/67L) — only large lenient miss. AI Yes 99% vs human 86%. Auto-Yes-when-no-concern over-fires.
+- **Rebuild:** `rebuild_large_test.py` (appends/refreshes Large Test only; does not wipe Run 1–8 recs).
+- **Next:** Recs 1–3 on the Large Test Recommendations tab (name, next steps, reason). Same 490 IDs. Target 90%. Validate is a second paste.
+
 ### How to Add Data for a New Lead Type Run
 1. Download fresh `.xlsx` from Google Sheet
 2. Add new tab entry to `AI_TABS` in the appropriate rebuild script
@@ -108,6 +124,8 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 4. Run the other rebuild scripts too if needed (they don't interfere with each other's data)
 5. Manually add recommendations and rootCause for the new run
 6. Deploy: `git add -A && git commit -m "update" && git push`
+
+**Large Test (490-call eval):** `python3 rebuild_large_test.py` — appends/refreshes only the Large Test run. Do **not** use `rebuild_resident_from_spreadsheet.py` for this; a full resident rebuild wipes handwritten Run 1–8 recs / rootCause.
 
 **File:** `/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html`  
 **Live URL:** https://alawyer2012.github.io/call-grading-dashboard/  
