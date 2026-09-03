@@ -37,8 +37,8 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **10 scored questions, 42 weighted points**, 2 DQs (FHA, Secure info) — matches the New Manual / AI tabs (definitions sheet lists 11 scored incl. a split closing; we use the 10 graded in the comparison sheet)
 - Score = (earned / 42) × 100%, with 20% reduction per DQ
 - **Rebuild script:** `rebuild_resident_from_spreadsheet.py`
-- **Source data:** `~/Downloads/20 Call Resident Comparison (12).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0 + AI 6 as Run 5.0 + AI 8 as Run 8.0; **Large Test** from `Manual Grades JulyAugust Reside` vs `AI JulyAugust Resident Simuluat`; **Large Test 2** uses same manual tab vs `Sheet14`; ignore old Manual tab and unpublished AI 4 / AI 7)
-- **Definitions:** `AI_ QA 2026 (20).xlsx` → tab `AI Resident Fundamentals`. Column I now has I11 written; I3 last-name dropped; I6 reverted to file (16)-style bar; I8 YES list expanded.
+- **Source data:** `~/Downloads/20 Call Resident Comparison (13).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0 + AI 6 as Run 5.0 + AI 8 as Run 8.0; **Large Test 1/2/3** all use `Manual Grades 500 Simuluation` vs `AI 500 Resident Simuluation 1.0` / `2.0` / `3.0` respectively; ignore old Manual tab and unpublished AI 4 / AI 7)
+- **Definitions:** `AI_ QA 2026 (21).xlsx` → tab `AI Resident Fundamentals`. Column I additions vs (20): I2 greeting, I3 name, I5 unit, and I7 acknowledged were all rewritten to "Mark YES by default" with explicit trigger lists. I4 / I6 / I8 / I10 / I11 / I13 / I14 unchanged from (20).
 
 ### Resident Run 1.0 (August 11, 2026) — Baseline
 - **Tab:** `AI` → Run 1.0
@@ -136,6 +136,22 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
   3. Name — expand "using the name" list in I3 to explicitly credit spell-back, message-summary readback, hold-return address, and truncated names.
   4. Second tier (greeting / unit / acknowledged) — enforcement via column J with 5 example call IDs each, no I2 / I5 / I7 rewrite.
   5. Don't touch hold / contact / FHA / secure info.
+
+### Resident Large Test 3 (September 3, 2026) — Same 490 calls, file (21) Yes-by-default rewrites — 94.3%
+- **Dashboard tab:** `Large Test 3` (id 92, `largeEval: true`). Third run of the 490-call resident series; cleared 94% for the first time.
+- **Tabs:** `Manual Grades 500 Simuluation` (unchanged) vs `AI 500 Resident Simuluation 3.0`. File (13) renamed all three AI simulation tabs (was `AI JulyAugust Resident Simuluat` / `Sheet14` for Runs 1–2); manual tab was renamed from `Manual Grades JulyAugust Reside`. Same 490 call IDs throughout.
+- **Set:** Same **490 matching call IDs** as Large Test 1/2.
+- **Results:** **94.3%** scored agreement (4160/4410, **+3.1pp** vs Large Test 2). Disagreements **250** (−137 vs LT2, −267 vs LT1). Strict **71** (−198 vs LT2 — from 269 to 71). Lenient **179** (+61 vs LT2). Avg score delta **5.5%** (−2.0pp). Perfect: **297 of 490** (+68 vs LT2). Mean AI **97.8%** (was 92.3%), mean human unchanged at 95.1%.
+- **What shipped (file (21) column I changes):** I2 (greeting), I3 (name), I5 (unit), I7 (acknowledged) all rewritten to "Mark YES by default" with explicit trigger lists. I4, I6, I8, I10, I11, I13, I14 not touched.
+- **What landed:** Greeting 91.6% → **100.0%** (41S → 0S). Acknowledged 92.7% → **99.0%** (34S → 0S). Unit 92.4% → **95.1%** (37S → 1S). Name usage 79.8% → **91.2%** (84S → 1S). The Yes-by-default rewrites hit the second-tier cluster hard — 196 strict recovered on those four questions alone. Next steps also crossed 90% for the first time (91.6% → 90.2%, small drift within noise).
+- **What regressed / trade-off:** Model is now slightly over-crediting on the loosened questions — lenient counts moved 15 → 42 (name), 0 → 23 (unit), 2 → 5 (ack), 13 → 42 net across the four rewritten cells. Net still very favorable (strict drop 196 >> lenient rise 63). Validate concern flat: 83.7% → **83.9%** (I11 unchanged — 32S/48L → 22S/57L). AI Yes-rate on the whole card is now 97.8% vs human 95.1% — first run where AI is above humans on average.
+- **Still locked:** Hold 99.4%, FHA 100%, secure-info 99.4% → 99.8%. Reason for the call 94.1% → 93.9%. Contact 95.7% → 96.3%. All the "do-not-touch" cells from LT2 rec 5 held.
+- **Live protocol source:** `~/Downloads/AI_ QA 2026 (21).xlsx` → `AI Resident Fundamentals` → column I.
+- **Rebuild:** `python3 rebuild_large_test.py` — now emits three Large Test runs (90 / 91 / 92) between `// ═══ LARGE TEST START/END ═══` markers.
+- **Next-cycle recs (on dashboard):**
+  1. Freeze I2 / I3 / I5 / I7 as file (21) shipped. Do not roll back the Yes-by-default rewrites.
+  2. Tighten I11 trigger to expressed emotion / repetition; expand the validating-phrase list to include "let me help you with that," "I can help with that," "I'll take care of that." Only 490-call open item after this run.
+  3. Do not touch I4 / I6 / I8 / I10 / I13 / I14. Every locked cell held through the (21) paste; another rewrite is more likely to break the current agreement than improve it.
 
 ### How to Add Data for a New Lead Type Run
 1. Download fresh `.xlsx` from Google Sheet

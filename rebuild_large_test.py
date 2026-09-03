@@ -3,16 +3,17 @@
 Append (or refresh) the Residents → Large Test dashboard runs from the
 July/August 490-call comparison tabs.
 
-Two runs today:
-  - Large Test   (id 90) — AI JulyAugust Resident Simuluat (baseline / file 17 protocols)
-  - Large Test 2 (id 91) — Sheet14 (file 20 protocols: I3 last-name drop, I6 revert, I8 expansion, I11 written)
+Three runs today:
+  - Large Test   (id 90) — AI 500 Resident Simuluation 1.0 (baseline / file 17 protocols)
+  - Large Test 2 (id 91) — AI 500 Resident Simuluation 2.0 (file 20 protocols: I3 last-name drop, I6 revert, I8 expansion, I11 written)
+  - Large Test 3 (id 92) — AI 500 Resident Simuluation 3.0 (file 21 protocols: Yes-by-default rewrites of I2 greeting, I3 name, I5 unit, I7 acknowledged)
 
-Both share the same human/manual tab and column layout. Only the AI tab changes.
+All share the same human/manual tab and column layout. Only the AI tab changes.
 
 Does NOT rebuild Runs 1–8. Hand-written recs / rootCause on those runs stay put.
 
-Source grades: ~/Downloads/20 Call Resident Comparison (12).xlsx
-Live protocols (column I / Other Prompt): ~/Downloads/AI_ QA 2026 (20).xlsx
+Source grades: ~/Downloads/20 Call Resident Comparison (13).xlsx
+Live protocols (column I / Other Prompt): ~/Downloads/AI_ QA 2026 (21).xlsx
   - Sheet: AI Resident Fundamentals
   - Column H (Protocols) is empty. Recs quote column I, not the question stem.
 """
@@ -21,10 +22,10 @@ import openpyxl
 import re
 from datetime import date
 
-XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (12).xlsx"
+XLSX_PATH = "/Users/alawyer/Downloads/20 Call Resident Comparison (13).xlsx"
 HTML_PATH = "/Users/alawyer/Entrata PM/Dashboard/call-grading/index.html"
 
-MANUAL_TAB = "Manual Grades JulyAugust Reside"
+MANUAL_TAB = "Manual Grades 500 Simuluation"
 
 # Each entry becomes one Large Test run. Order matters — the runs are emitted
 # in this order after residentRuns baseline.
@@ -33,19 +34,28 @@ LARGE_TESTS = [
         "run_id": 90,
         "label": "Large Test",
         "date": "September 1, 2026",
-        "ai_tab": "AI JulyAugust Resident Simuluat",
+        "ai_tab": "AI 500 Resident Simuluation 1.0",
         "protocol_file": "AI_ QA 2026 (17).xlsx",
         "description": "July/August resident simulation — 490 matching human vs AI grades on the overlapping 9-question card (reason-for-call scorecard, not the 20-call protocol series).",
-        "changes": "New 490-call eval, not a protocol run. Compared Manual Grades JulyAugust Reside vs AI JulyAugust Resident Simuluat. Shared questions only (37 pts). Human-only final-closing and AI-only neutral language excluded.",
+        "changes": "New 490-call eval, not a protocol run. Compared Manual Grades 500 Simuluation vs AI 500 Resident Simuluation 1.0. Shared questions only (37 pts). Human-only final-closing and AI-only neutral language excluded.",
     },
     {
         "run_id": 91,
         "label": "Large Test 2",
         "date": "September 3, 2026",
-        "ai_tab": "Sheet14",
+        "ai_tab": "AI 500 Resident Simuluation 2.0",
         "protocol_file": "AI_ QA 2026 (20).xlsx",
-        "description": "Second 490-call July/August resident simulation. Same manual tab, same 490 call IDs. AI tab is Sheet14 (renamed 'AI JulyAugust Resident Simulation 2.0').",
+        "description": "Second 490-call July/August resident simulation. Same manual tab, same 490 call IDs. AI tab is AI 500 Resident Simuluation 2.0.",
         "changes": "Live protocol changes (column I) shipped between runs: I3 dropped the last-name requirement, I6 reverted the (17) tightening (specific reason + next-step action = Yes), I8 expanded next-steps YES list, I11 (validate) was written from scratch (was empty in file 17).",
+    },
+    {
+        "run_id": 92,
+        "label": "Large Test 3",
+        "date": "September 3, 2026",
+        "ai_tab": "AI 500 Resident Simuluation 3.0",
+        "protocol_file": "AI_ QA 2026 (21).xlsx",
+        "description": "Third 490-call July/August resident simulation. Same manual tab, same 490 call IDs. AI tab is AI 500 Resident Simuluation 3.0.",
+        "changes": "Live protocol changes vs file (20): I2 greeting, I3 name, I5 unit, and I7 acknowledged were rewritten to Yes-by-default with explicit trigger lists. I4, I6, I8, I10, I11, I13, I14 were not touched. Target is the second-tier strict cluster (greeting / unit / acknowledged) and the remaining name strict pile.",
     },
 ]
 
@@ -865,10 +875,171 @@ def build_run2_content(run, run1):
     return key_findings, root_cause, recs
 
 
+# ── Run 3 (Large Test 3) content — file (21) Yes-by-default rewrites ────────
+def build_run3_content(run, run2, run1):
+    m = run["metrics"]
+    r2 = run2["metrics"]
+    r1 = run1["metrics"]
+    cfg = run["cfg"]
+    qmap = {q["short"]: q for q in run["questions_data"]}
+    q2map = {q["short"]: q for q in run2["questions_data"]}
+    q1map = {q["short"]: q for q in run1["questions_data"]}
+
+    name_q, next_q, reason_q, val_q = qmap["name_usage"], qmap["next_steps"], qmap["reason_for_call"], qmap["validate_concern"]
+    greet_q, unit_q, ack_q, contact_q, hold_q = qmap["greeting"], qmap["unit_number"], qmap["acknowledged"], qmap["contact_info"], qmap["hold_permission"]
+    name_q2, next_q2, reason_q2, val_q2 = q2map["name_usage"], q2map["next_steps"], q2map["reason_for_call"], q2map["validate_concern"]
+    greet_q2, unit_q2, ack_q2, contact_q2, hold_q2 = q2map["greeting"], q2map["unit_number"], q2map["acknowledged"], q2map["contact_info"], q2map["hold_permission"]
+
+    def pct(q):
+        return round(q["agree"] / q["total"] * 100, 1) if q["total"] else 0
+
+    name_pct, next_pct, reason_pct, val_pct = pct(name_q), pct(next_q), pct(reason_q), pct(val_q)
+    name_pct2, next_pct2, reason_pct2, val_pct2 = pct(name_q2), pct(next_q2), pct(reason_q2), pct(val_q2)
+    contact_pct, ack_pct, unit_pct, greet_pct, hold_pct = pct(contact_q), pct(ack_q), pct(unit_q), pct(greet_q), pct(hold_q)
+    contact_pct2, ack_pct2, unit_pct2, greet_pct2, hold_pct2 = pct(contact_q2), pct(ack_q2), pct(unit_q2), pct(greet_q2), pct(hold_q2)
+
+    strict_share = round(m["total_s"] / m["total_dis"] * 100) if m["total_dis"] else 0
+    agree_delta = round(m["agreement_pct"] - r2["agreement_pct"], 1)
+    dis_delta = m["total_dis"] - r2["total_dis"]
+    strict_delta = m["total_s"] - r2["total_s"]
+    lenient_delta = m["total_l"] - r2["total_l"]
+    delta_delta = round(m["avg_delta"] - r2["avg_delta"], 1)
+    perfect_delta = m["perfect"] - r2["perfect"]
+
+    key_findings = f"""<p><strong>Large Test 3 lands at {m['agreement_pct']}% on the same 490 July/August resident calls ({agree_delta:+.1f}pp vs Large Test 2).</strong> Spreadsheet tabs <strong>Manual Grades 500 Simuluation</strong> vs <strong>AI 500 Resident Simuluation 3.0</strong>. Disagreements {r2['total_dis']} → <strong>{m['total_dis']}</strong> ({dis_delta:+d}). Strict {r2['total_s']} → <strong>{m['total_s']}</strong> ({strict_delta:+d}). Lenient {r2['total_l']} → <strong>{m['total_l']}</strong> ({lenient_delta:+d}). Avg score delta {r2['avg_delta']}% → <strong>{m['avg_delta']}%</strong> ({delta_delta:+.1f}pp). Perfect agreement {r2['perfect']} → <strong>{m['perfect']}</strong> of {len(run['both'])} ({perfect_delta:+d}). Mean AI {r2['mean_a']} → <strong>{m['mean_a']}%</strong>, mean human unchanged at {m['mean_h']}%.</p>
+<p><strong>What shipped in file (21):</strong> I2 (greeting), I3 (name), I5 (unit), and I7 (acknowledged) were all rewritten to "Mark YES by default" with explicit trigger lists — the second-tier strict cluster Large Test 2 flagged. I4, I6, I8, I10, I11, I13, I14 were <strong>not</strong> touched.</p>
+<p><strong>How the second-tier cluster moved:</strong> Greeting {greet_pct2}% → <strong>{greet_pct}%</strong> ({greet_q2['strict']}S → {greet_q['strict']}S). Name usage {name_pct2}% → <strong>{name_pct}%</strong> ({name_q2['strict']}S → {name_q['strict']}S). Unit {unit_pct2}% → <strong>{unit_pct}%</strong> ({unit_q2['strict']}S → {unit_q['strict']}S). Acknowledged {ack_pct2}% → <strong>{ack_pct}%</strong> ({ack_q2['strict']}S → {ack_q['strict']}S). AI Yes-rates now: greeting {round(greet_q['ai_yes']/greet_q['total']*100,1)}%, name {round(name_q['ai_yes']/name_q['total']*100,1)}%, unit {round(unit_q['ai_yes']/unit_q['total']*100,1)}%, acknowledged {round(ack_q['ai_yes']/ack_q['total']*100,1)}%.</p>
+<p><strong>What held:</strong> Reason for the call {reason_pct2}% → <strong>{reason_pct}%</strong> ({reason_q['strict']}S / {reason_q['lenient']}L). Next steps {next_pct2}% → <strong>{next_pct}%</strong> ({next_q['strict']}S / {next_q['lenient']}L). Hold {hold_pct2}% → <strong>{hold_pct}%</strong>. Contact {contact_pct2}% → <strong>{contact_pct}%</strong>. FHA 100%. Freezing I6 / I8 (rec 1 from Large Test 2) was the right call.</p>
+<p><strong>What is still open:</strong> Validate concern {val_pct2}% → <strong>{val_pct}%</strong> ({val_q['strict']}S / {val_q['lenient']}L, AI Yes {round(val_q['ai_yes']/val_q['total']*100,1)}% vs human {round(val_q['h_yes']/val_q['total']*100,1)}%). I11 was not touched between (20) and (21) — the strict/lenient mix on validate matches Large Test 2 almost exactly. Rec 2 from Large Test 2 (narrow the I11 trigger to expressed emotion) is still the next-cycle move. <strong>→ Open Recommendations</strong>.</p>"""
+
+    root_strict = f"""<p><strong>Name usage ({name_q['strict']} strict / {name_q['lenient']} lenient, {name_q['weight']*name_q['strict']} weighted pts):</strong> {name_pct}% (was {name_pct2}%). AI Yes-rate {round(name_q['ai_yes']/name_q['total']*100,1)}% vs human {round(name_q['h_yes']/name_q['total']*100,1)}%. The file (21) I3 rewrite ("Yes by default, name interaction anywhere in the call") explicitly credited spell-back, hold-return address, and message-summary readback — exactly the moves rec 3 in Large Test 2 asked for.</p>
+<p><strong>Greeting ({greet_q['strict']}S/{greet_q['lenient']}L):</strong> {greet_pct}% (was {greet_pct2}%). I2 now Yes-by-default with a standard-openers list plus a Spanish list plus a fallback rule. AI Yes-rate {round(greet_q['ai_yes']/greet_q['total']*100,1)}% (was {round(greet_q2['ai_yes']/greet_q2['total']*100,1)}%).</p>
+<p><strong>Unit number ({unit_q['strict']}S/{unit_q['lenient']}L):</strong> {unit_pct}% (was {unit_pct2}%). I5 now Yes-by-default with unit / apartment / building / floor / address all counted and asking-is-enough spelled out. AI Yes-rate {round(unit_q['ai_yes']/unit_q['total']*100,1)}% (was {round(unit_q2['ai_yes']/unit_q2['total']*100,1)}%).</p>
+<p><strong>Acknowledged / ownership ({ack_q['strict']}S/{ack_q['lenient']}L):</strong> {ack_pct}% (was {ack_pct2}%). I7 now Yes-by-default with an acknowledgment + willingness + ownership phrase inventory.</p>
+<p><strong>Reason for the call ({reason_q['strict']}S/{reason_q['lenient']}L):</strong> {reason_pct}% (was {reason_pct2}%). I6 was not touched — the file (20) revert held.</p>
+<p><strong>Next steps ({next_q['strict']}S/{next_q['lenient']}L):</strong> {next_pct}% (was {next_pct2}%). I8 not touched.</p>
+<p><strong>Validate concern strict ({val_q['strict']}S):</strong> {val_pct}% (was {val_pct2}%). I11 not touched — same over-strict trigger list from file (20).</p>"""
+
+    root_lenient = f"""<p><strong>Validate concern lenient ({val_q['lenient']}L, was {val_q2['lenient']}L):</strong> Still the largest lenient bucket. AI Yes-rate {round(val_q['ai_yes']/val_q['total']*100,1)}% vs human {round(val_q['h_yes']/val_q['total']*100,1)}%. I11 unchanged from (20). Rec 2 (narrow the trigger + expand the phrase list) still applies.</p>
+<p><strong>Loosening trade-offs on I2 / I3 / I5 / I7:</strong> Greeting lenient {greet_q['lenient']} (was {greet_q2['lenient']}). Name lenient {name_q['lenient']} (was {name_q2['lenient']}). Unit lenient {unit_q['lenient']} (was {unit_q2['lenient']}). Acknowledged lenient {ack_q['lenient']} (was {ack_q2['lenient']}). Any Yes-by-default rewrite trades some strict for some lenient — the net matters, not each column.</p>
+<p><strong>Everything else lenient is noise.</strong> Contact {contact_q['lenient']}L, reason {reason_q['lenient']}L, next steps {next_q['lenient']}L, hold {hold_q['lenient']}L, secure-info {qmap['secure_info']['lenient']}L. Do not write protocols against these.</p>"""
+
+    def _delta_line(label, q_new, q_old, is_dq=False):
+        p_new = pct(q_new)
+        p_old = pct(q_old)
+        s_arrow = f"{q_old['strict']}S → {q_new['strict']}S"
+        l_arrow = f"{q_old['lenient']}L → {q_new['lenient']}L"
+        return f"<li><strong>{label}:</strong> {p_old}% → <strong>{p_new}%</strong> ({s_arrow}, {l_arrow})</li>"
+
+    recs = [
+        {
+            "num": 1,
+            "title": f"Freeze the file (21) Yes-by-default rewrites on I2 / I3 / I5 / I7",
+            "severity": "success" if agree_delta >= 0 else "warning",
+            "severityLabel": f"{m['agreement_pct']}% ({agree_delta:+.1f}pp vs Large Test 2) · {dis_delta:+d} disagrees · {strict_delta:+d} strict",
+            "owner": "Austin + AI Engineering",
+            "ownerClass": "info",
+            "problem": f"""<p>File (21) shipped the four "Mark YES by default" rewrites Large Test 2 rec 4 pointed at. Result on the same 490 calls:</p>
+<ul>
+{_delta_line('Greeting (I2)', greet_q, greet_q2)}
+{_delta_line('Name usage (I3)', name_q, name_q2)}
+{_delta_line('Unit number (I5)', unit_q, unit_q2)}
+{_delta_line('Acknowledged / ownership (I7)', ack_q, ack_q2)}
+</ul>
+<p>The four cells not touched stayed on their (20) baseline: reason {reason_pct2}% → {reason_pct}%, next steps {next_pct2}% → {next_pct}%, contact {contact_pct2}% → {contact_pct}%, hold {hold_pct2}% → {hold_pct}%. FHA still 100%. Secure info {pct(q2map['secure_info'])}% → {pct(qmap['secure_info'])}%.</p>
+<p>Whatever the net on this run, do not roll back I2 / I3 / I5 / I7. The next cycle's target is validate (rec 2), not the second-tier cluster.</p>""",
+            "protocols": [
+                {
+                    "label": "Baseline — freeze I2 / I3 / I5 / I7 as file (21) shipped",
+                    "current": (
+                        "AI_ QA 2026 (21).xlsx · AI Resident Fundamentals · rows 2 / 3 / 5 / 7 rewritten "
+                        "to Yes-by-default with explicit trigger lists."
+                    ),
+                    "recommended": (
+                        "<strong style=\"color:var(--red);\">Freeze I2, I3, I5, I7 as the new resident baseline.</strong> "
+                        "Do not add negative examples in the next paste. Do not re-introduce a last-name requirement in I3. "
+                        "Do not shorten the standard-openers list in I2. The next protocol change should target I11 (rec 2)."
+                    ),
+                }
+            ],
+        },
+        {
+            "num": 2,
+            "title": f"Validate concern — I11 unchanged from (20); still {val_pct}% ({val_q['strict']}S/{val_q['lenient']}L)",
+            "severity": "critical",
+            "severityLabel": f"{val_pct}% · {val_q['strict']}S / {val_q['lenient']}L · AI Yes {round(val_q['ai_yes']/val_q['total']*100,1)}% vs human {round(val_q['h_yes']/val_q['total']*100,1)}%",
+            "owner": "AI Engineering",
+            "ownerClass": "info",
+            "problem": f"""<p>Validate concern was already the top open item after Large Test 2 ({val_pct2}%, {val_q2['strict']}S/{val_q2['lenient']}L). File (21) did not touch I11, so the mix is essentially flat ({val_pct}%, {val_q['strict']}S/{val_q['lenient']}L). The lever from Large Test 2 rec 2 is the same:</p>
+<ul>
+<li>Narrow the I11 trigger to <strong>expressed emotion / repetition</strong> (not any problem-adjacent request).</li>
+<li>Expand the validating-phrase list to include "let me help you with that," "I can help with that," "I'll take care of that," "let's get this sorted."</li>
+</ul>
+<p>Do not touch I2 / I3 / I5 / I7 in the same paste — those are the file (21) freeze from rec 1.</p>""",
+            "protocols": [
+                {
+                    "label": "Validate concern — tighten I11 trigger, expand validating-phrase list",
+                    "current": (
+                        "If no concern, problem, delay, or frustration is in the transcript, mark YES.<br><br>"
+                        "If the caller states a problem, delay, missed callback, outage, lockout, access issue, billing surprise, safety issue, or clear frustration, the agent must use at least one validating phrase."
+                    ),
+                    "recommended": (
+                        "<strong style=\"color:var(--red);\">Narrow the trigger.</strong> A first-turn transactional request is not automatically a concern that requires validation.<br><br>"
+                        "<strong>Mark YES if any:</strong><br>"
+                        "- No concern, problem, delay, or frustration in the transcript.<br>"
+                        "- Caller stated a request in a neutral tone; agent moved to next steps without a validating phrase.<br>"
+                        "- Agent used a validating / empathetic phrase (\"I'm sorry,\" \"I'm sorry to hear that,\" \"I understand,\" \"that makes sense,\" \"that's frustrating,\" \"oh no,\" <strong style=\"color:var(--red);\">or</strong> \"let me help you with that,\" \"I can help with that,\" \"I'll take care of that,\" \"let's get this sorted\").<br><br>"
+                        "<strong>Mark NO only when both:</strong><br>"
+                        "1. Caller expressed clear frustration, repetition (\"this is the third time,\" \"I've been waiting\"), safety concern, or emotional distress; AND<br>"
+                        "2. Agent responded without any validating or empathetic phrase.<br><br>"
+                        f"Gate: validate ≥ 90%, strict &lt; 15, lenient &lt; 40."
+                    ),
+                }
+            ],
+        },
+        {
+            "num": 3,
+            "title": f"Reason / next steps / contact / hold / FHA — do not touch",
+            "severity": "success",
+            "severityLabel": f"Reason {reason_pct}% · next steps {next_pct}% · contact {contact_pct}% · hold {hold_pct}% · FHA 100%",
+            "owner": "Austin + AI Engineering",
+            "ownerClass": "info",
+            "problem": f"""<p>I4, I6, I8, I10, I13, I14 all held through the file (21) paste because they were not touched. Any of these rewritten in the next cycle is more likely to break the current agreement than to improve it. Freeze.</p>
+<p><strong>Next-cycle target math:</strong> {m['total_agree']}/{m['total_comp']} today ({m['agreement_pct']}%). If rec 2 (validate) drops the strict pile to ≤10 without adding more than 5 lenient, that's roughly +{max(0, val_q['strict']-10)} net → {round((m['total_agree']+max(0, val_q['strict']-10)-5)/m['total_comp']*100,1)}%. Combined with holding the file (21) gains, target ≥{max(92, int(m['agreement_pct'])+1)}% on Large Test 4.</p>""",
+            "protocols": [
+                {
+                    "label": "Locked — do not modify",
+                    "current": (
+                        f"I4 (contact): {contact_pct}% · I6 (reason): {reason_pct}% · I8 (next steps): {next_pct}% · "
+                        f"I10 (hold): {hold_pct}% · I13 (FHA): 100% · I14 (secure info): {pct(qmap['secure_info'])}%."
+                    ),
+                    "recommended": (
+                        "<strong style=\"color:var(--red);\">Freeze.</strong> The next protocol paste should be I11 only. "
+                        "Do not stack a second edit against I4 / I6 / I8 / I10 / I13 / I14 — every simultaneous change costs "
+                        "read-noise. If validate clears 90%, the next cycle is name follow-through (I3 additional examples in column J), not a rewrite."
+                    ),
+                }
+            ],
+        },
+    ]
+
+    root_cause = {
+        "overall": f"Large Test 3 is {m['agreement_pct']}% on the same 490 July/August resident calls ({agree_delta:+.1f}pp vs Large Test 2). File (21) shipped Yes-by-default rewrites on I2 / I3 / I5 / I7 (the second-tier cluster Large Test 2 rec 4 flagged). I4 / I6 / I8 / I10 / I11 / I13 / I14 unchanged. Dominant bias is still AI too strict ({strict_share}% of disagrees), but the strict pile moved {r2['total_s']}→{m['total_s']}.",
+        "what_worked": f"Greeting {greet_pct2}%→{greet_pct}%, name usage {name_pct2}%→{name_pct}%, unit {unit_pct2}%→{unit_pct}%, acknowledged {ack_pct2}%→{ack_pct}%. Reason, next steps, contact, hold, FHA, secure info all held (I4/I6/I8/I10/I13/I14 were not touched — freeze from Large Test 2 rec 1 worked as designed). Perfect calls {r2['perfect']}→{m['perfect']} ({perfect_delta:+d}).",
+        "what_didnt": f"Validate concern {val_pct2}%→{val_pct}% (I11 unchanged — same over-strict trigger). Any residual strict on the four rewritten cells is model follow-through vs the new I text, not missing rules.",
+        "path_to_90": f"Already past 90%. Next-cycle target: ≥{max(92, int(m['agreement_pct'])+1)}%. Only change I11 (validate — rec 2). Freeze I2 / I3 / I5 / I7 (rec 1). Do not touch I4 / I6 / I8 / I10 / I13 / I14 (rec 3). Re-run on the same 490 IDs.",
+        "strictDetail": root_strict,
+        "lenientDetail": root_lenient,
+    }
+
+    return key_findings, root_cause, recs
+
+
 # Content builders per run
 CONTENT_BUILDERS = {
     90: build_run1_content,
     91: build_run2_content,
+    92: build_run3_content,
 }
 
 
@@ -947,6 +1118,11 @@ def emit_run_js(run, other_runs):
         # Run 2 references Run 1 for deltas
         run1 = next(r for r in other_runs if r["cfg"]["run_id"] == 90)
         key_findings, root_cause, recs = build_run2_content(run, run1)
+    elif cfg["run_id"] == 92:
+        # Run 3 references Run 2 (primary deltas) and Run 1 (context)
+        run1 = next(r for r in other_runs if r["cfg"]["run_id"] == 90)
+        run2 = next(r for r in other_runs if r["cfg"]["run_id"] == 91)
+        key_findings, root_cause, recs = build_run3_content(run, run2, run1)
     else:
         raise SystemExit(f"No content builder for run id {cfg['run_id']}")
 
@@ -1064,20 +1240,28 @@ else:
     )
     print(f"  Inserted Large Test answer block(s) — {len(answer_blocks)} run(s) inside")
 
-# Subtitle
-old_sub_1 = "Run 1.0: 12 calls \\u00b7 Run 2.0–5.0 + 8.0: 20 calls \\u00b7 12 scoring criteria"
-old_sub_2 = "Run 1.0: 12 \\u00b7 Run 2.0\\u20138.0: 20 \\u00b7 Large Test: 490 calls \\u00b7 overlapping 9 scored + 2 DQs"
-new_sub = "Run 1.0: 12 \\u00b7 Run 2.0\\u20138.0: 20 \\u00b7 Large Test 1+2: 490 calls each \\u00b7 overlapping 9 scored + 2 DQs"
+# Subtitle — the fallback string mixes raw · characters with \u00b7 escapes.
+# Match both variants defensively.
+old_subs = [
+    "Run 1.0: 12 calls \\u00b7 Run 2.0–5.0 + 8.0: 20 calls \\u00b7 12 scoring criteria",
+    "Run 1.0: 12 \\u00b7 Run 2.0\\u20138.0: 20 \\u00b7 Large Test: 490 calls \\u00b7 overlapping 9 scored + 2 DQs",
+    "Run 1.0: 12 \\u00b7 Run 2.0\\u20138.0: 20 \\u00b7 Large Test 1+2: 490 calls each \\u00b7 overlapping 9 scored + 2 DQs",
+    "Run 1.0: 12 · Run 2.0–8.0: 20 · Large Test: 490 calls \\u00b7 overlapping 9 scored + 2 DQs",
+    "Run 1.0: 12 · Run 2.0–8.0: 20 · Large Test 1+2: 490 calls each \\u00b7 overlapping 9 scored + 2 DQs",
+]
+new_sub = "Run 1.0: 12 · Run 2.0–8.0: 20 · Large Test 1–3: 490 calls each \\u00b7 overlapping 9 scored + 2 DQs"
 if new_sub in html:
-    print("  Subtitle already mentions Large Test 1+2")
-elif old_sub_2 in html:
-    html = html.replace(old_sub_2, new_sub)
-    print("  Updated resident leadConfig subtitle (from Large Test 1 baseline)")
-elif old_sub_1 in html:
-    html = html.replace(old_sub_1, new_sub)
-    print("  Updated resident leadConfig subtitle (from Run 1-8 baseline)")
+    print("  Subtitle already mentions Large Test 1–3")
 else:
-    print("  WARNING: could not update subtitle (pattern changed)")
+    replaced = False
+    for old_sub in old_subs:
+        if old_sub in html:
+            html = html.replace(old_sub, new_sub)
+            print(f"  Updated resident leadConfig subtitle (from '{old_sub[:60]}…')")
+            replaced = True
+            break
+    if not replaced:
+        print("  WARNING: could not update subtitle (pattern changed)")
 
 with open(HTML_PATH, "w") as f:
     f.write(html)
