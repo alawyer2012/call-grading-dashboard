@@ -37,8 +37,8 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **10 scored questions, 42 weighted points**, 2 DQs (FHA, Secure info) — matches the New Manual / AI tabs (definitions sheet lists 11 scored incl. a split closing; we use the 10 graded in the comparison sheet)
 - Score = (earned / 42) × 100%, with 20% reduction per DQ
 - **Rebuild script:** `rebuild_resident_from_spreadsheet.py`
-- **Source data:** `~/Downloads/20 Call Resident Comparison (10).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0 + AI 6 as Run 5.0 + AI 8 as Run 8.0; **Large Test** from `Manual Grades JulyAugust Reside` vs `AI JulyAugust Resident Simuluat`; ignore old Manual tab and unpublished AI 4 / AI 7)
-- **Definitions:** `AI_ QA 2026 (12).xlsx` → tab `AI Resident Fundamentals` (I6 is still the Run 3 rewrite, not the Run 2.0 revert)
+- **Source data:** `~/Downloads/20 Call Resident Comparison (12).xlsx` (New Manual + AI + AI 2 + AI 3 + AI 5 as Run 4.0 + AI 6 as Run 5.0 + AI 8 as Run 8.0; **Large Test** from `Manual Grades JulyAugust Reside` vs `AI JulyAugust Resident Simuluat`; **Large Test 2** uses same manual tab vs `Sheet14`; ignore old Manual tab and unpublished AI 4 / AI 7)
+- **Definitions:** `AI_ QA 2026 (20).xlsx` → tab `AI Resident Fundamentals`. Column I now has I11 written; I3 last-name dropped; I6 reverted to file (16)-style bar; I8 YES list expanded.
 
 ### Resident Run 1.0 (August 11, 2026) — Baseline
 - **Tab:** `AI` → Run 1.0
@@ -109,13 +109,33 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
 - **Results:** **88.3%** scored agreement (3893/4410), 517 disagreements (**401 strict / 116 lenient**, 78% strict), **9.9%** avg score delta. Perfect: **181 of 490**. Mean AI 89.0% vs mean human 95.1%.
 - **90% path:** Need **76** more scored agreements (3969/4410). Half of name-strict + half of next-steps-strict = 103 → 90.6%. All 118 name-strict recovered is 91.0% by itself.
 - **Where it works:** Hold 99.4%, FHA 100%, secure-info 99.4%, contact 96.1%. Greeting 91.2% (43S/0L), ownership 91.6% (39S/2L), unit 91.8% (40S/0L) are second-tier.
+- **Live protocol source:** `~/Downloads/AI_ QA 2026 (17).xlsx` → sheet `AI Resident Fundamentals` → **column I (Other Prompt)**. Column H is empty. Recs quote I, not the question stem. File (17) tightened reason-for-call vs file (16).
 - **Where it does not:**
-  - **Name usage 74.1%** (363/490, 118S/9L) — worst. AI Yes 69% vs human 91%. Live protocol requires **full name (first and last)** then one first-name use; humans graded the weaker stem (name asked/offered + used). Drop the last-name bar. Keep refusal + anonymous Yeses.
-  - **Next steps 80.0%** (392/490, 88S/10L) — AI Yes 81% vs human 97%. Closing problem at scale.
-  - **Reason for the call 84.5%** (414/490, 63S/13L) — highest weighted miss (7×63 = 441 pts). Both sides graded the same question (unlike Run 8.0 vs human open-ended). Still too strict. Do not revert to open-ended; do not copy AI 7 over-credit.
-  - **Validate concern 85.7%** (420/490, 3S/67L) — only large lenient miss. AI Yes 99% vs human 86%. Auto-Yes-when-no-concern over-fires.
-- **Rebuild:** `rebuild_large_test.py` (appends/refreshes Large Test only; does not wipe Run 1–8 recs).
-- **Next:** Recs 1–3 on the Large Test Recommendations tab (name, next steps, reason). Same 490 IDs. Target 90%. Validate is a second paste.
+  - **Name usage 74.1%** (363/490, 118S/9L) — worst. AI Yes 69% vs human 91%. **I3** requires **full name (first and last)** then one first-name use; humans graded the weaker stem. Drop the last-name bar. Keep refusal + anonymous Yeses already in I3.
+  - **Next steps 80.0%** (392/490, 88S/10L) — AI Yes 81% vs human 97%. **I8 already credits** callback / notes / voicemail / someone will reach out / cooperative ending; “anything else?” not required; truncation not a No. The 88 are the model not following I8 — do not rewrite I8.
+  - **Reason for the call 84.5%** (414/490, 63S/13L) — highest weighted miss (7×63 = 441 pts). **I6 (17) fights the humans:** “caller stating the reason is not sufficient,” and package + generic callback is explicitly No. Humans Yes 95% (file 16 bar). Revert I6 toward (16). Do not revert to open-ended; do not copy AI 7 over-credit.
+  - **Validate concern 85.7%** (420/490, 3S/67L) — only large lenient miss. AI Yes 99% vs human 86%. **I11 is empty** — write it; do not edit a protocol that does not exist.
+- **Already Yes-friendly (do not rewrite):** I2 greeting, I4 contact, I5 unit (asking is enough), I7 ownership (callback/note language), I10 hold (lookup ≠ hold), I13 FHA, I14 secure-info.
+- **Rebuild:** `rebuild_large_test.py` (appends/refreshes both Large Test runs; does not wipe Run 1–8 recs).
+- **Next:** Recs 1 + 3 protocol edits (I3 last-name, I6 revert) and I8 enforcement via column J. Same 490 IDs. Target 90%. Validate I11 is a second paste.
+
+### Resident Large Test 2 (September 3, 2026) — Same 490 calls, file (20) protocols — cleared 90%
+- **Dashboard tab:** `Large Test 2` (id 91, `largeEval: true`). First run of the entire resident series to cross the 90% agreement target.
+- **Tabs:** `Manual Grades JulyAugust Reside` (unchanged) vs `Sheet14` (= “AI JulyAugust Resident Simulation 2.0”). Graded stats sheet includes new AI Pass Rate / Accuracy columns for Run 2 (rows 18–29).
+- **Set:** Same **490 matching call IDs** as Large Test.
+- **Results:** **91.2%** scored agreement (4023/4410, **+2.9pp** vs Large Test). Disagreements **387** (−130). Strict **269** (−132). Lenient **118** (+2). Avg score delta **7.5%** (−2.4pp). Perfect: **229 of 490** (+48). Mean AI 92.3% (was 89.0%), mean human unchanged at 95.1%.
+- **What shipped (file (20) column I changes):** I3 dropped the last-name requirement; I6 reverted the file (17) tightening (specific stated reason + next-step action = Yes, package/callback example flipped to YES); I8 expanded YES list (transfers, "let the office know," "already being worked," cooperative declines all count); I11 written from empty (validating-phrase list); I12 rewrote neutral / attorney protocol; I14 clarified reading back caller's own info ≠ DQ. Not touched: I2, I4, I5, I7, I10, I13.
+- **What landed:** Reason for the call 84.5% → **94.1%** (63S → 6S). Next steps 80.0% → **91.6%** (88S → 28S). Name usage 74.1% → **79.8%** (118S → 84S). Unit 91.8% → 92.4%. Greeting 91.2% → 91.6%. Acknowledged 91.6% → 92.7%.
+- **What regressed:** Validate concern 85.7% → **83.7%** (3S/67L → 32S/48L). Writing I11 cut 19 lenient but created 29 new strict Nos — trigger list ("problem, delay, missed callback, outage, lockout, access issue, billing surprise…") is too broad; model is now demanding "I'm sorry" on calm transactional maintenance requests. Net: −2.0pp on this question. Contact drifted 96.1% → 95.7% (noise).
+- **Still locked:** Hold 99.4%, FHA 100%, secure-info 99.4% → 99.6%. Do not touch I4, I10, I13, I14 next cycle.
+- **Live protocol source:** `~/Downloads/AI_ QA 2026 (20).xlsx` → `AI Resident Fundamentals` → column I. Column H still empty.
+- **Rebuild:** `python3 rebuild_large_test.py` — now emits both Large Test and Large Test 2 between the `// ═══ LARGE TEST START/END ═══` markers. Adds a run block per entry in the top-of-file `LARGE_TESTS` list.
+- **Next-cycle recs (on dashboard):**
+  1. Ship — freeze I3 / I6 / I8; do not roll back.
+  2. Validate — tighten I11 trigger to expressed emotion / repetition (not any problem-adjacent language). Expand the validating-phrase list to include "let me help you with that," "I can help," "I'll take care of that."
+  3. Name — expand "using the name" list in I3 to explicitly credit spell-back, message-summary readback, hold-return address, and truncated names.
+  4. Second tier (greeting / unit / acknowledged) — enforcement via column J with 5 example call IDs each, no I2 / I5 / I7 rewrite.
+  5. Don't touch hold / contact / FHA / secure info.
 
 ### How to Add Data for a New Lead Type Run
 1. Download fresh `.xlsx` from Google Sheet
