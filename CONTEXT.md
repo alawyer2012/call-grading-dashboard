@@ -2,14 +2,14 @@
 
 ## What This Is
 
-A self-contained HTML dashboard comparing AI model call-grading scores against human grader scores for Leasing Center calls. Supports **Cold Leads, Warm Leads, and Residents** (Work Orders / Other still pending) with independent run tracking for each. The goal is to tune the AI model until it aligns with human graders (target: 90%+ agreement, <3% avg score delta).
+A self-contained HTML dashboard comparing AI model call-grading scores against human grader scores for Leasing Center calls. Supports **Cold Leads, Warm Leads, Residents, and Other** (Work Orders still pending) with independent run tracking for each. The goal is to tune the AI model until it aligns with human graders (target: 90%+ agreement, <3% avg score delta).
 
 ## Dual Lead Type Architecture (added June 8, 2026; Residents Aug 11, 2026)
 
-The dashboard uses a **top-level lead-type selector** (Cold Leads | Warm Leads | Residents | …) above the run selector. Each lead type has its own:
-- Data: `coldRuns`/`warmRuns`/`residentRuns`, matching `*AnswerData` / `*RunAnswerData`
-- Config: `leadConfig.cold`/`warm`/`resident` (scoring formula, question count, labels)
-- Matrix questions: `coldMatrixQuestions`/`warmMatrixQuestions`/`residentMatrixQuestions`
+The dashboard uses a **top-level lead-type selector** (Cold Leads | Warm Leads | Residents | Other | …) above the run selector. Each lead type has its own:
+- Data: `coldRuns`/`warmRuns`/`residentRuns`/`otherRuns`, matching `*AnswerData` / `*RunAnswerData`
+- Config: `leadConfig.cold`/`warm`/`resident`/`other` (scoring formula, question count, labels)
+- Matrix questions: `coldMatrixQuestions`/`warmMatrixQuestions`/`residentMatrixQuestions`/`otherMatrixQuestions`
 
 Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are swapped by `switchLeadType()`.
 
@@ -153,10 +153,29 @@ Active references (`runs`, `answerData`, `runAnswerData`, `matrixQuestions`) are
   2. Tighten I11 trigger to expressed emotion / repetition; expand the validating-phrase list to include "let me help you with that," "I can help with that," "I'll take care of that." Only 490-call open item after this run.
   3. Do not touch I4 / I6 / I8 / I10 / I13 / I14. Every locked cell held through the (21) paste; another rewrite is more likely to break the current agreement than improve it.
 
+### Other Calls
+- **2 scored questions, 100 total weighted points** (Q1=50, Q2=50), **no DQs**
+- Score = (Q1_yes×50 + Q2_yes×50) / 100 × 100% → only 0% / 50% / 100% possible
+- **Rebuild script:** `rebuild_other_from_spreadsheet.py`
+- **Source data:** `~/Downloads/20 Call Other Comparison.xlsx` — sheets: `New Manual` (20 human rows w/ `Submitted as` + `Correct Call Submission` metadata) and `AI 1.0`
+- **Protocol source:** `~/Downloads/AI_ QA 2026 (22).xlsx` → tab `AI Other` (rows 2–3 hold Q1 + Q2 weight/text/protocol). The Q1 protocol is the full 7-category definition list (Lead / Resident / Work Order / Market Survey / Solicitor / Vendor / Wrong Number / Spam / Test / Abandoned / No Result). Q2 is the probing-question rubric.
+
+### Other Run 1.0 (September 4, 2026) — Baseline
+- **Tab:** `AI 1.0` → dashboard **Run 1.0**
+- **Set:** **20 calls** (all matched between New Manual + AI 1.0)
+- **Results (all 20):** **77.5%** scored agreement (31/40), 9 disagreements (**0 strict / 9 lenient**), **22.5%** avg score delta. Perfect agreement: **11 of 20**. Mean human 82.5% vs mean AI 97.5% — AI is uniformly too generous.
+- **Q1 (submission) — 6 lenient, all Solicitor→Lead/Resident:** 273801118 (package for a friend who is a resident → Resident), 273055082 (rental verification for a resident → Resident), 270974570 (broken shower work order from resident → Resident), 268573697 (resident safety complaint → Resident), 272773798 (should be Lead), 269549141 (should be Lead). Root cause: AI accepts the agent's category at face value instead of grading it against the transcript.
+- **Q2 (probing) — 3 lenient:** 272954069, 271843479, 268637585 — all cases where the agent asked zero questions to determine who the caller was, and AI still credited probing. Root cause: AI treats any interrogative sentence as probing.
+- **Downstream implication:** 4 of the 6 Q1 errors are resident calls that never got scored on the Resident 10-question card — the Resident 490-call denominator is under-counting by whatever fraction of Solicitor calls are secretly residents. Fix the Q1 protocol first; re-pull the Other set; migrate re-classified calls into the Resident benchmark.
+- **Next (recs on dashboard):**
+  1. Q1 protocol rewrite — AI must independently classify from the transcript before comparing to the agent's category. Resident/Lead signal lists provided.
+  2. Q2 protocol rewrite — define probing narrowly: a question aimed at identifying WHO the caller is or WHY they are calling. Administrative questions (name, callback number, email) do not count.
+  3. Downstream cleanup — after Run 2.0, migrate former-Solicitor Residents into the Resident benchmark.
+
 ### How to Add Data for a New Lead Type Run
 1. Download fresh `.xlsx` from Google Sheet
 2. Add new tab entry to `AI_TABS` in the appropriate rebuild script
-3. Run the rebuild script (cold, warm, or resident)
+3. Run the rebuild script (cold, warm, resident, or other)
 4. Run the other rebuild scripts too if needed (they don't interfere with each other's data)
 5. Manually add recommendations and rootCause for the new run
 6. Deploy: `git add -A && git commit -m "update" && git push`

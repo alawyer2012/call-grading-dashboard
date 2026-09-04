@@ -14734,6 +14734,236 @@ const residentMatrixQuestions = [
   { short: "Secure info (DQ)", key: "secure_info" },
 ];
 
+// ═══ OTHER DATA ═══
+const otherAnswerData = {
+  "268573697": {correct_submission:[0,1],probing_qs:[1,1]},
+  "268637585": {correct_submission:[1,1],probing_qs:[0,1]},
+  "269499708": {correct_submission:[1,1],probing_qs:[1,1]},
+  "269549141": {correct_submission:[0,1],probing_qs:[1,1]},
+  "269588488": {correct_submission:[1,1],probing_qs:[0,0]},
+  "270942736": {correct_submission:[1,1],probing_qs:[1,1]},
+  "270974570": {correct_submission:[0,1],probing_qs:[1,1]},
+  "271402992": {correct_submission:[1,1],probing_qs:[1,1]},
+  "271843479": {correct_submission:[1,1],probing_qs:[0,1]},
+  "272300353": {correct_submission:[1,1],probing_qs:[1,1]},
+  "272773798": {correct_submission:[0,1],probing_qs:[1,1]},
+  "272812357": {correct_submission:[1,1],probing_qs:[1,1]},
+  "272954069": {correct_submission:[1,1],probing_qs:[0,1]},
+  "273055082": {correct_submission:[0,1],probing_qs:[1,1]},
+  "273144395": {correct_submission:[1,1],probing_qs:[1,1]},
+  "273150235": {correct_submission:[1,1],probing_qs:[1,1]},
+  "273801118": {correct_submission:[0,1],probing_qs:[1,1]},
+  "274172325": {correct_submission:[1,1],probing_qs:[1,1]},
+  "274226262": {correct_submission:[1,1],probing_qs:[1,1]},
+  "274293124": {correct_submission:[1,1],probing_qs:[1,1]}
+};
+
+const otherRunAnswerData = {
+  1: {
+    "268573697": {correct_submission:[0,1],probing_qs:[1,1]},
+    "268637585": {correct_submission:[1,1],probing_qs:[0,1]},
+    "269499708": {correct_submission:[1,1],probing_qs:[1,1]},
+    "269549141": {correct_submission:[0,1],probing_qs:[1,1]},
+    "269588488": {correct_submission:[1,1],probing_qs:[0,0]},
+    "270942736": {correct_submission:[1,1],probing_qs:[1,1]},
+    "270974570": {correct_submission:[0,1],probing_qs:[1,1]},
+    "271402992": {correct_submission:[1,1],probing_qs:[1,1]},
+    "271843479": {correct_submission:[1,1],probing_qs:[0,1]},
+    "272300353": {correct_submission:[1,1],probing_qs:[1,1]},
+    "272773798": {correct_submission:[0,1],probing_qs:[1,1]},
+    "272812357": {correct_submission:[1,1],probing_qs:[1,1]},
+    "272954069": {correct_submission:[1,1],probing_qs:[0,1]},
+    "273055082": {correct_submission:[0,1],probing_qs:[1,1]},
+    "273144395": {correct_submission:[1,1],probing_qs:[1,1]},
+    "273150235": {correct_submission:[1,1],probing_qs:[1,1]},
+    "273801118": {correct_submission:[0,1],probing_qs:[1,1]},
+    "274172325": {correct_submission:[1,1],probing_qs:[1,1]},
+    "274226262": {correct_submission:[1,1],probing_qs:[1,1]},
+    "274293124": {correct_submission:[1,1],probing_qs:[1,1]}
+  }
+};
+
+const otherRuns = [
+  {
+    id: 1,
+    label: "Run 1.0",
+    date: "September 4, 2026",
+    description: "Baseline — Other-calls scorecard (2 scored questions, 100 pts). 20-call benchmark.",
+    changes: "Initial Other benchmark run (20 matching call IDs).",
+    meta: {
+      agreement: 77.5,
+      totalDisagreements: 9,
+      avgDelta: 22.5,
+      strictErrors: 0,
+      lenientErrors: 9,
+      target: 90
+    },
+    keyFindings: `<p>Baseline Other-calls run against the 2-question scorecard (<em>Based on the transcript did the agent submit the call correctly</em> and <em>Did the agent use probing questions to determine the caller's needs?</em>). Agreement is <strong>77.5%</strong> (31/40) with <strong>9 disagreements</strong> (<strong>0 strict / 9 lenient</strong>). Perfect agreement: <strong>11 of 20</strong>. Avg score delta <strong>22.5%</strong>.</p><p>The bias is one-sided: AI is <strong>lenient on every disagreement</strong>. There are no strict errors. On the submission question (14/20 = 70%), AI accepts the agent's 'Solicitor' label at face value on calls where the human graders re-categorize the caller as a <em>Lead</em> or, more commonly, a <em>Resident</em> — usually because the transcript reveals the caller is a current or past resident (rental verification, package pickup, safety complaint) and the agent never asked enough to figure that out. That miscategorization also breaks the downstream Resident routing and skews the resident-call denominator.</p><p>On the probing question (17/20 = 85%), the 3 lenient errors are all cases where the human wrote a note like 'No Questions were asked to determine who the caller was' — the agent handled the call transactionally without asking a single clarifying question, and AI still credited probing.</p><p>→ Open the <strong>Recommendations</strong> tab for protocol tightening on both questions.</p>`,
+    questions: [
+      { short: "correct_submission", label: "Based on the transcript did the agent submit the call correctly", weight: 50, agree: 14, disagree: 6, total: 20, lenient: 6, strict: 0, dir: "lenient",
+        evidence: []},
+      { short: "probing_qs", label: "Did the agent use probing questions to determine the caller\'s needs?", weight: 50, agree: 17, disagree: 3, total: 20, lenient: 3, strict: 0, dir: "lenient",
+        evidence: []}
+    ],
+    calls: [
+      { id: "268573697", human: 50.0, ai: 100.0, strict: 0, lenient: 1, weightLost: 50, disqualifier: false,
+        note: '1 disagreement — AI too lenient.',
+        details: [
+          { q: "Submitted correctly", w: 50, ai: "Yes", h: "No", reason: "AI accepted the agent\'s category at face value; human found it should have been a different category (usually Lead or Resident, not Solicitor). Agent submitted as \'Solicitor\'; correct category \'Resident\'." }
+        ],
+        recommendation: 'Lenient: Submitted correctly (50pts).' },
+      { id: "268637585", human: 50.0, ai: 100.0, strict: 0, lenient: 1, weightLost: 50, disqualifier: false,
+        note: '1 disagreement — AI too lenient.',
+        details: [
+          { q: "Probing questions", w: 50, ai: "Yes", h: "No", reason: "AI credited probing on a light call where the agent asked no questions to determine who the caller was." }
+        ],
+        recommendation: 'Lenient: Probing questions (50pts).' },
+      { id: "269499708", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "269549141", human: 50.0, ai: 100.0, strict: 0, lenient: 1, weightLost: 50, disqualifier: false,
+        note: '1 disagreement — AI too lenient.',
+        details: [
+          { q: "Submitted correctly", w: 50, ai: "Yes", h: "No", reason: "AI accepted the agent\'s category at face value; human found it should have been a different category (usually Lead or Resident, not Solicitor). Agent submitted as \'Solicitor\'; correct category \'Lead\'." }
+        ],
+        recommendation: 'Lenient: Submitted correctly (50pts).' },
+      { id: "269588488", human: 50.0, ai: 50.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "270942736", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "270974570", human: 50.0, ai: 100.0, strict: 0, lenient: 1, weightLost: 50, disqualifier: false,
+        note: '1 disagreement — AI too lenient.',
+        details: [
+          { q: "Submitted correctly", w: 50, ai: "Yes", h: "No", reason: "AI accepted the agent\'s category at face value; human found it should have been a different category (usually Lead or Resident, not Solicitor). Agent submitted as \'Solicitor\'; correct category \'Resident\'." }
+        ],
+        recommendation: 'Lenient: Submitted correctly (50pts).' },
+      { id: "271402992", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "271843479", human: 50.0, ai: 100.0, strict: 0, lenient: 1, weightLost: 50, disqualifier: false,
+        note: '1 disagreement — AI too lenient.',
+        details: [
+          { q: "Probing questions", w: 50, ai: "Yes", h: "No", reason: "AI credited probing on a light call where the agent asked no questions to determine who the caller was." }
+        ],
+        recommendation: 'Lenient: Probing questions (50pts).' },
+      { id: "272300353", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "272773798", human: 50.0, ai: 100.0, strict: 0, lenient: 1, weightLost: 50, disqualifier: false,
+        note: '1 disagreement — AI too lenient.',
+        details: [
+          { q: "Submitted correctly", w: 50, ai: "Yes", h: "No", reason: "AI accepted the agent\'s category at face value; human found it should have been a different category (usually Lead or Resident, not Solicitor). Agent submitted as \'Solicitor\'; correct category \'Lead\'." }
+        ],
+        recommendation: 'Lenient: Submitted correctly (50pts).' },
+      { id: "272812357", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "272954069", human: 50.0, ai: 100.0, strict: 0, lenient: 1, weightLost: 50, disqualifier: false,
+        note: '1 disagreement — AI too lenient.',
+        details: [
+          { q: "Probing questions", w: 50, ai: "Yes", h: "No", reason: "AI credited probing on a light call where the agent asked no questions to determine who the caller was." }
+        ],
+        recommendation: 'Lenient: Probing questions (50pts).' },
+      { id: "273055082", human: 50.0, ai: 100.0, strict: 0, lenient: 1, weightLost: 50, disqualifier: false,
+        note: '1 disagreement — AI too lenient.',
+        details: [
+          { q: "Submitted correctly", w: 50, ai: "Yes", h: "No", reason: "AI accepted the agent\'s category at face value; human found it should have been a different category (usually Lead or Resident, not Solicitor). Agent submitted as \'Solicitor\'; correct category \'Resident\'." }
+        ],
+        recommendation: 'Lenient: Submitted correctly (50pts).' },
+      { id: "273144395", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "273150235", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "273801118", human: 50.0, ai: 100.0, strict: 0, lenient: 1, weightLost: 50, disqualifier: false,
+        note: '1 disagreement — AI too lenient.',
+        details: [
+          { q: "Submitted correctly", w: 50, ai: "Yes", h: "No", reason: "AI accepted the agent\'s category at face value; human found it should have been a different category (usually Lead or Resident, not Solicitor). Agent submitted as \'Solicitor\'; correct category \'Resident\'." }
+        ],
+        recommendation: 'Lenient: Submitted correctly (50pts).' },
+      { id: "274172325", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "274226262", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' },
+      { id: "274293124", human: 100.0, ai: 100.0, strict: 0, lenient: 0, weightLost: 0, disqualifier: false,
+        note: 'Perfect agreement — AI and human matched on every question.',
+        details: [],
+        recommendation: 'No action needed — perfect agreement.' }
+    ],
+    recommendations: [
+      {
+        num: 1,
+        title: "Grade submission from the transcript, not the agent\'s category",
+        severity: "critical",
+        severityLabel: "6 lenient errors, all Solicitor→Lead/Resident",
+        owner: "Monica",
+        ownerClass: "warning",
+        problem: `<p><strong>All 6 Q1 lenient errors are the same failure mode:</strong> the agent picked Solicitor, and AI accepted it. The transcript said otherwise every time.</p><ul style="font-size:13px; line-height:1.7;"><li><strong>273801118</strong> — package for a friend who is a current resident → should be <strong>Resident</strong>.</li><li><strong>273055082</strong> — rental verification for a current resident → should be <strong>Resident</strong>.</li><li><strong>270974570</strong> — broken shower work-order request from a resident → should be <strong>Resident</strong>.</li><li><strong>268573697</strong> — resident escalating a safety complaint about her baby → should be <strong>Resident</strong>.</li><li><strong>272773798</strong> — inquiry that should have been routed as a <strong>Lead</strong>.</li><li><strong>269549141</strong> — inquiry that should have been routed as a <strong>Lead</strong>.</li></ul><p>Solicitor is a bucket for people trying to sell TO the property. It is not a fallback for 'agent didn't know what to do with this caller.'</p>`,
+        protocols: [
+          {
+            label: "Q1 Protocol — replace face-value acceptance",
+            current: "Reads the agent\'s submitted category and confirms whether it matches the caller\'s stated intent.",
+            recommended: "<strong>Do not use the agent\'s category as input.</strong> Read the transcript first and independently classify the caller into one of the seven buckets (Lead, Resident, Work Order, Market Survey, Solicitor, Vendor, Wrong Number). Then compare to the agent\'s submission.<br><br><strong>Resident signals that override \'Solicitor\':</strong> caller mentions current or past tenancy, rent, lease, deposit, unit issues, package pickup, callbacks about property staff, complaints, rental verification requests, or gives a unit number that resolves in the system.<br><br><strong>Lead signals that override \'Solicitor\':</strong> caller asks about availability, pricing, floor plans, tours, applications, or is a locator/broker.<br><br><strong>Only mark Yes</strong> when the agent\'s category matches the transcript-derived category.",
+            labelOverride: "Q1 Recommended Protocol"
+          }
+        ]
+      },
+      {
+        num: 2,
+        title: "\'Probing questions\' means clarifying who the caller is — not just any question",
+        severity: "warning",
+        severityLabel: "3 lenient errors on \'no-question\' calls",
+        owner: "Monica",
+        ownerClass: "warning",
+        problem: `<p><strong>All 3 Q2 lenient errors</strong> came with the same human note: 'no questions were asked to determine who the caller was.' The agent asked things like <em>What is this in regards to?</em> or confirmed a callback number — administrative logistics, not probing.</p><ul style="font-size:13px; line-height:1.7;"><li><strong>272954069</strong> — 'No Questions were asked to determine who the caller was'</li><li><strong>271843479</strong> — verification call, agent went straight to reading the email</li><li><strong>268637585</strong> — 'MD either way, rental verification for a current resident, but the agent did not ask for more info'</li></ul><p>The AI is treating any interrogative sentence as probing.</p>`,
+        protocols: [
+          {
+            label: "Q2 Protocol — define probing narrowly",
+            current: "Mark \'Yes\' if the transcript shows the agent identifying the caller\'s needs through probing questions, clarifying questions, or if the caller clearly explained their reason for calling. Mark \'No\' if the agent quickly redirects the caller, requests a callback, or provides limited assistance without first attempting to understand the caller\'s needs.",
+            recommended: "Mark \'Yes\' only if <strong>at least one of the following is true</strong>:<br><br>1. The agent asked a question intended to identify WHO the caller is or WHY they are calling (e.g., \'Are you a current resident?\', \'What is this regarding?\', \'Are you calling about your unit?\', \'Are you a prospect?\', \'Are you with a company that has a contract with us?\'), OR<br>2. The caller volunteered a clear reason for the call in the first turn.<br><br><strong>Mark \'No\'</strong> when the agent only asked administrative questions (name, callback number, best time to reach you, email address to send info to) without any attempt to determine the caller\'s identity or purpose. Confirming a phone number back or reading an email address is not probing.",
+            labelOverride: "Q2 Recommended Protocol"
+          }
+        ]
+      },
+      {
+        num: 3,
+        title: "Downstream impact — miscategorized Solicitors pollute the Resident dataset",
+        severity: "info",
+        severityLabel: "4 of 6 Q1 errors are hidden Resident calls",
+        owner: "Austin / Data",
+        ownerClass: "info",
+        problem: `<p>4 of the 6 Q1 errors (273801118, 273055082, 270974570, 268573697) are resident calls submitted as Solicitor. That means:</p><ul style="font-size:13px; line-height:1.7;"><li>The Resident 490-call benchmark is <strong>under-counting resident calls</strong> by whatever fraction of Solicitor-labelled calls are actually residents.</li><li>These calls never got the Resident scorecard (10 Qs + 2 DQs) applied — they were graded on Other's 2-question card instead, which does not check hold permission, closing, ownership, or the secure-info DQ.</li><li>Fixing Q1 protocol will re-route these calls to the Resident bucket for future runs. Expect the Resident denominator to grow slightly and Solicitor volume to drop.</li></ul><p>Recommendation: after Q1 protocol is updated, re-pull the Other set and confirm how many former Solicitors are now Residents/Leads. Add those to the Resident benchmark rather than re-scoring them on Other.</p>`,
+        protocols: []
+      }
+    ],
+    rootCause: {
+      correct_submission: "AI trusts the agent\'s category selection instead of grading the transcript. All 6 lenient errors are Solicitor submissions where the correct answer was Lead (2) or Resident (4). The AI needs to independently reason about who the caller is based on transcript evidence (mentions of a current lease, rent, unit issues, callbacks, verifications, package pickups from residents, deliveries).",
+      probing_qs: "AI credits probing whenever the agent asks any question (name, phone, callback preference), even when the agent never tried to determine WHO the caller was or WHY they were calling. The 3 lenient errors are calls where the agent moved straight to logistics without any clarifying question about the caller\'s relationship to the property."
+    }
+  }
+];
+
+const otherMatrixQuestions = [
+  { short: "Submitted correctly", key: "correct_submission" },
+  { short: "Probing questions", key: "probing_qs" },
+];
+
+
 
 // ═══ LEAD TYPE CONFIG ═══
 const leadConfig = {
@@ -14778,6 +15008,20 @@ const leadConfig = {
     subtitle: (r) => r ? `${(r.calls && r.calls.length) ? r.calls.length : 20} resident calls \u00b7 ${(r.criteriaCount || 12)} scoring criteria \u00b7 ${r.label} \u2014 ${r.date}` : `Run 1.0: 12 · Run 2.0–8.0: 20 · Large Test 1–3: 490 calls each \u00b7 overlapping 9 scored + 2 DQs`,
     formulaDesc: '42 total weighted points across 10 regular questions (weights from AI Resident Fundamentals). Score = (earned points / 42) \u00d7 100%.',
     dqDesc: 'Each disqualifier triggered (FHA violation, secure info disclosure) applies a 20% reduction.',
+  },
+  other: {
+    label: 'Other',
+    callCount: 20,
+    criteriaCount: 2,
+    totalPoints: 100,
+    scoredQuestions: 2,
+    runs: otherRuns,
+    answerData: otherAnswerData,
+    runAnswerData: otherRunAnswerData,
+    matrixQuestions: otherMatrixQuestions,
+    subtitle: (r) => r ? `${(r.calls && r.calls.length) ? r.calls.length : 20} Other calls \u00b7 2 scoring criteria \u00b7 ${r.label} \u2014 ${r.date}` : `20 Other calls \u00b7 2 scoring criteria \u00b7 ${runs.length} model runs tracked`,
+    formulaDesc: 'Two Yes/No questions weighted 50 / 50 (from the AI Other tab of AI_ QA 2026 (22).xlsx). Score = (earned points / 100) \u00d7 100%. No disqualifiers.',
+    dqDesc: 'No disqualifiers apply to Other-category calls.',
   }
 };
 
@@ -14790,7 +15034,6 @@ let matrixQuestions = coldMatrixQuestions;
 
 const PENDING_TYPES = {
   workorder: { label: 'Work Orders', icon: '🔧' },
-  other: { label: 'Other', icon: '📋' },
 };
 
 function switchLeadType(type) {
