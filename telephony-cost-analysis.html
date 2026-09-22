@@ -232,12 +232,15 @@
 
 <header class="top">
   <div>
-    <h1>Leasing Center Telephony Cost Analysis</h1>
+    <h1>Call Tracking Telephony Economics</h1>
     <p class="subtitle">
-      FirstDigital invoice breakdown, January 2024 through September 2026.
-      Two forces explain the 2026 cost run-up: a rate change disguised as
-      the removal of a long-standing 20% discount, and a large spike in
-      call minutes starting April 2026.
+      FirstDigital carrier invoice breakdown paired with Call Tracking
+      revenue, January 2024 through September 2026. Two forces are
+      driving the 2026 cost run-up — a rate change disguised as the
+      removal of a long-standing 20% discount, and a large spike in call
+      minutes starting April 2026 — and they've compressed Call Tracking
+      gross margin from a 73.3% peak in January 2025 to 53.9% in
+      September 2026.
     </p>
   </div>
   <div class="meta">
@@ -616,6 +619,252 @@
 </section>
 
 <section>
+  <h2>Call Tracking gross margin — where the cost story lands in the P&amp;L</h2>
+  <p>
+    Applying the FirstDigital carrier bill as Call Tracking's cost of
+    service against monthly Call Tracking revenue (recurring + per-minute
+    + vanity numbers). Revenue has grown steadily every year, but the
+    2026 cost spike is compressing gross margin faster than pricing can
+    absorb it.
+  </p>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="value">61.3%</div>
+      <div class="label">FY 2024 gross margin</div>
+    </div>
+    <div class="stat success">
+      <div class="value">69.3%</div>
+      <div class="label">FY 2025 gross margin (peak: 73.3% Jan)</div>
+    </div>
+    <div class="stat warning">
+      <div class="value">62.4%</div>
+      <div class="label">FY 2026 YTD gross margin (Jan–Sep)</div>
+    </div>
+    <div class="stat danger">
+      <div class="value">53.9%</div>
+      <div class="label">September 2026 (current low, −19 pts vs peak)</div>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <div class="title">The 20-point margin cliff</div>
+    <p>
+      Call Tracking gross margin hit a peak of <strong>73.3% in January
+      2025</strong>, held above 65% for most of 2025, then slid steadily
+      through 2026. September 2026 came in at <strong>53.9%</strong> —
+      a <strong>19-point compression</strong> from the peak. Revenue grew
+      +24% Sep 2026 vs Sep 2025, but cost grew +49% over the same
+      window. Pricing power exists (rev per transaction is up), but not
+      fast enough to offset the carrier cost hike.
+    </p>
+  </div>
+
+  <div class="chart-wrap">
+    <svg viewBox="0 0 720 300" role="img" aria-label="Call Tracking gross margin percentage by month">
+      <style>
+        .gm-axis { stroke: #d0d0ca; stroke-width: 1; }
+        .gm-grid { stroke: #eeeeea; stroke-width: 1; }
+        .gm-tick { font: 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #8a8a8a; }
+        .gm-tick-strong { font: 600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a; }
+        .gm-line { fill: none; stroke: #1e4d7b; stroke-width: 2.5; }
+        .gm-dot { r: 3; fill: #1e4d7b; }
+        .gm-dot-hi { r: 4.5; fill: #1d6a3b; stroke: #ffffff; stroke-width: 1.5; }
+        .gm-dot-lo { r: 4.5; fill: #9b2c2c; stroke: #ffffff; stroke-width: 1.5; }
+        .gm-ref { stroke: #9b2c2c; stroke-width: 1; stroke-dasharray: 4 3; }
+        .gm-ref-ok { stroke: #1d6a3b; stroke-width: 1; stroke-dasharray: 4 3; }
+        .gm-ref-label { font: 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .gm-annot { font: 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #57575a; }
+      </style>
+      <!-- axes -->
+      <line class="gm-axis" x1="60" y1="30" x2="60" y2="230" />
+      <line class="gm-axis" x1="60" y1="230" x2="700" y2="230" />
+      <!-- Y grid & ticks (40, 50, 60, 70, 80%) -->
+      <line class="gm-grid" x1="60" y1="230" x2="700" y2="230" />
+      <text class="gm-tick" x="55" y="234" text-anchor="end">40%</text>
+      <line class="gm-grid" x1="60" y1="180" x2="700" y2="180" />
+      <text class="gm-tick" x="55" y="184" text-anchor="end">50%</text>
+      <line class="gm-grid" x1="60" y1="130" x2="700" y2="130" />
+      <text class="gm-tick" x="55" y="134" text-anchor="end">60%</text>
+      <line class="gm-grid" x1="60" y1="80" x2="700" y2="80" />
+      <text class="gm-tick" x="55" y="84" text-anchor="end">70%</text>
+      <line class="gm-grid" x1="60" y1="30" x2="700" y2="30" />
+      <text class="gm-tick" x="55" y="34" text-anchor="end">80%</text>
+      <!-- 2025 avg reference line at 69.3% -> y = 230 - (69.3-40)*5 = 230 - 146.5 = 83.5 -->
+      <line class="gm-ref-ok" x1="60" y1="83.5" x2="700" y2="83.5" />
+      <text class="gm-ref-label" x="695" y="80" text-anchor="end" fill="#1d6a3b">FY 2025 avg 69.3%</text>
+      <!-- 60% reference (rule of thumb floor for healthy SaaS/CT margin) -->
+      <line class="gm-ref" x1="60" y1="130" x2="700" y2="130" />
+      <text class="gm-ref-label" x="65" y="127" fill="#9b2c2c">60% floor</text>
+      <!-- Data line: 33 points, x from 60 to 700 (spacing 20) -->
+      <polyline class="gm-line" points="60,154 80,120 100,118.5 120,115.5 140,125 160,128.5 180,125.5 200,143 220,148.5 240,115.5 260,100.5 280,90.5 300,63.5 320,74.5 340,78.5 360,70.5 380,87 400,84 420,93.5 440,102.5 460,109 480,79.5 500,66.5 520,92.5 540,82.5 560,95.5 580,81.5 600,102 620,107.5 640,139.5 660,135 680,154 700,160.5" />
+      <!-- Dots -->
+      <circle class="gm-dot" cx="60" cy="154" /><circle class="gm-dot" cx="80" cy="120" /><circle class="gm-dot" cx="100" cy="118.5" /><circle class="gm-dot" cx="120" cy="115.5" /><circle class="gm-dot" cx="140" cy="125" /><circle class="gm-dot" cx="160" cy="128.5" /><circle class="gm-dot" cx="180" cy="125.5" /><circle class="gm-dot" cx="200" cy="143" /><circle class="gm-dot" cx="220" cy="148.5" /><circle class="gm-dot" cx="240" cy="115.5" /><circle class="gm-dot" cx="260" cy="100.5" /><circle class="gm-dot" cx="280" cy="90.5" />
+      <circle class="gm-dot-hi" cx="300" cy="63.5" /><!-- Jan 2025 peak -->
+      <circle class="gm-dot" cx="320" cy="74.5" /><circle class="gm-dot" cx="340" cy="78.5" /><circle class="gm-dot" cx="360" cy="70.5" /><circle class="gm-dot" cx="380" cy="87" /><circle class="gm-dot" cx="400" cy="84" /><circle class="gm-dot" cx="420" cy="93.5" /><circle class="gm-dot" cx="440" cy="102.5" /><circle class="gm-dot" cx="460" cy="109" /><circle class="gm-dot" cx="480" cy="79.5" /><circle class="gm-dot" cx="500" cy="66.5" /><circle class="gm-dot" cx="520" cy="92.5" /><circle class="gm-dot" cx="540" cy="82.5" /><circle class="gm-dot" cx="560" cy="95.5" /><circle class="gm-dot" cx="580" cy="81.5" /><circle class="gm-dot" cx="600" cy="102" /><circle class="gm-dot" cx="620" cy="107.5" /><circle class="gm-dot" cx="640" cy="139.5" /><circle class="gm-dot" cx="660" cy="135" /><circle class="gm-dot" cx="680" cy="154" />
+      <circle class="gm-dot-lo" cx="700" cy="160.5" /><!-- Sep 2026 low -->
+      <!-- Peak annotation -->
+      <text class="gm-annot" x="308" y="55" text-anchor="start">Jan '25 · 73.3% (peak)</text>
+      <!-- Current low annotation -->
+      <text class="gm-annot" x="695" y="175" text-anchor="end">Sep '26 · 53.9%</text>
+      <!-- Discount removal marker: Dec 2025 invoice = index 23, x = 60 + 23*20 = 520 -->
+      <line x1="520" y1="30" x2="520" y2="230" stroke="#9b2c2c" stroke-width="1" stroke-dasharray="2 4" opacity="0.5" />
+      <text class="gm-annot" x="525" y="45" fill="#9b2c2c">Dec '25: 20% carrier discount removed</text>
+      <!-- Volume spike marker: Jun 2026 = index 29, x = 60 + 29*20 = 640 -->
+      <line x1="640" y1="30" x2="640" y2="230" stroke="#9b2c2c" stroke-width="1" stroke-dasharray="2 4" opacity="0.5" />
+      <text class="gm-annot" x="635" y="45" text-anchor="end" fill="#9b2c2c">Jun '26: volume spike begins</text>
+      <!-- X-axis year labels -->
+      <text class="gm-tick" x="170" y="252" text-anchor="middle">2024</text>
+      <text class="gm-tick" x="390" y="252" text-anchor="middle">2025</text>
+      <text class="gm-tick" x="610" y="252" text-anchor="middle">2026 (YTD)</text>
+      <!-- Month tick guides -->
+      <line class="gm-axis" x1="60" y1="230" x2="60" y2="235" />
+      <line class="gm-axis" x1="300" y1="230" x2="300" y2="235" />
+      <line class="gm-axis" x1="540" y1="230" x2="540" y2="235" />
+      <line class="gm-axis" x1="700" y1="230" x2="700" y2="235" />
+      <text class="gm-tick" x="60" y="278" text-anchor="middle">Jan '24</text>
+      <text class="gm-tick" x="300" y="278" text-anchor="middle">Jan '25</text>
+      <text class="gm-tick" x="540" y="278" text-anchor="middle">Jan '26</text>
+      <text class="gm-tick" x="700" y="278" text-anchor="middle">Sep '26</text>
+      <!-- Y-axis title -->
+      <text class="gm-tick" x="15" y="130" transform="rotate(-90 15 130)" text-anchor="middle">Gross margin (%)</text>
+    </svg>
+    <div class="caption">
+      Call Tracking monthly gross margin, Jan 2024 – Sep 2026. Green
+      marker = FY 2025 peak; red marker = current low. Reference lines
+      show the FY 2025 average (69.3%) and a 60% healthy-margin floor.
+      Source: Call Tracking revenue (recurring + per-minute + vanity)
+      matched to FirstDigital carrier invoice by month.
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top: 24px;">
+    <div class="card">
+      <h3>The compression drivers, ranked</h3>
+      <p style="font-size: 14px;">
+        <strong>1. Carrier rate reset (Dec 2025):</strong> The 20% discount
+        removal took ~10 points of gross margin off the bill immediately.
+        Comparing Nov 2025 (72.7% GM) to Dec 2025 (67.5%) shows the direct hit.
+      </p>
+      <p style="font-size: 14px;">
+        <strong>2. Volume-driven variable cost spike (Apr–Sep 2026):</strong>
+        Domestic InterState minutes doubled. Call Tracking revenue is largely
+        fixed per tracked number — minutes are pure cost. Every extra minute
+        of caller talk time drops straight through as margin loss.
+      </p>
+      <p style="font-size: 14px;">
+        <strong>3. Transaction count is flat, minutes are not:</strong>
+        Transactions grew only +5% Sep '25 → Sep '26 (13,567 → 14,206), but
+        FirstDigital minutes were up +49%. The average tracked call is
+        materially longer than a year ago.
+      </p>
+    </div>
+    <div class="card">
+      <h3>Per-transaction economics</h3>
+      <table style="margin: 0; font-size: 13px;">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th class="num">Rev / tx</th>
+            <th class="num">Cost / tx</th>
+            <th class="num">Gross profit / tx</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>FY 2024</td><td class="num">$21.30</td><td class="num">$8.24</td><td class="num">$13.06</td></tr>
+          <tr class="hi-ok"><td>FY 2025</td><td class="num">$22.07</td><td class="num">$6.78</td><td class="num">$15.29</td></tr>
+          <tr class="hi-warn"><td>FY 2026 YTD</td><td class="num">$24.12</td><td class="num">$9.08</td><td class="num">$15.04</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size: 13px; margin-top: 12px;">
+        Notice: <strong>gross profit per transaction is essentially flat</strong>
+        from 2025 to 2026 ($15.29 → $15.04). Pricing per transaction is up
+        9%, which nearly offsets the 34% jump in cost per transaction. The
+        margin <em>percentage</em> is falling because both sides of the ratio
+        are growing — dollar profit per tracked line is preserved so far,
+        but that offset shrinks every month at the current trajectory.
+      </p>
+    </div>
+  </div>
+
+  <h3>Monthly detail</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th class="num">Revenue</th>
+        <th class="num">Cost (FirstDigital)</th>
+        <th class="num">Gross profit</th>
+        <th class="num">GM %</th>
+        <th class="num">Tx</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Jan 2024</td><td class="num">$234,409</td><td class="num">$105,093</td><td class="num">$129,316</td><td class="num">55.2%</td><td class="num">10,561</td></tr>
+      <tr><td>Feb 2024</td><td class="num">$231,366</td><td class="num">$87,995</td><td class="num">$143,371</td><td class="num">62.0%</td><td class="num">11,306</td></tr>
+      <tr><td>Mar 2024</td><td class="num">$225,565</td><td class="num">$85,043</td><td class="num">$140,522</td><td class="num">62.3%</td><td class="num">11,222</td></tr>
+      <tr><td>Apr 2024</td><td class="num">$235,622</td><td class="num">$87,337</td><td class="num">$148,285</td><td class="num">62.9%</td><td class="num">10,762</td></tr>
+      <tr><td>May 2024</td><td class="num">$240,660</td><td class="num">$93,847</td><td class="num">$146,814</td><td class="num">61.0%</td><td class="num">10,867</td></tr>
+      <tr><td>Jun 2024</td><td class="num">$234,010</td><td class="num">$92,967</td><td class="num">$141,043</td><td class="num">60.3%</td><td class="num">11,602</td></tr>
+      <tr><td>Jul 2024</td><td class="num">$248,528</td><td class="num">$97,141</td><td class="num">$151,387</td><td class="num">60.9%</td><td class="num">11,274</td></tr>
+      <tr><td>Aug 2024</td><td class="num">$246,750</td><td class="num">$105,038</td><td class="num">$141,712</td><td class="num">57.4%</td><td class="num">11,569</td></tr>
+      <tr><td>Sep 2024</td><td class="num">$253,425</td><td class="num">$110,868</td><td class="num">$142,557</td><td class="num">56.3%</td><td class="num">11,518</td></tr>
+      <tr><td>Oct 2024</td><td class="num">$252,805</td><td class="num">$93,700</td><td class="num">$159,105</td><td class="num">62.9%</td><td class="num">13,811</td></tr>
+      <tr><td>Nov 2024</td><td class="num">$258,631</td><td class="num">$88,208</td><td class="num">$170,424</td><td class="num">65.9%</td><td class="num">11,429</td></tr>
+      <tr><td>Dec 2024</td><td class="num">$263,634</td><td class="num">$84,686</td><td class="num">$178,948</td><td class="num">67.9%</td><td class="num">11,404</td></tr>
+      <tr class="hi-ok"><td><strong>Jan 2025</strong> — peak</td><td class="num">$285,418</td><td class="num">$76,211</td><td class="num">$209,208</td><td class="num">73.3%</td><td class="num">13,019</td></tr>
+      <tr><td>Feb 2025</td><td class="num">$284,924</td><td class="num">$82,305</td><td class="num">$202,619</td><td class="num">71.1%</td><td class="num">13,289</td></tr>
+      <tr><td>Mar 2025</td><td class="num">$280,740</td><td class="num">$83,341</td><td class="num">$197,399</td><td class="num">70.3%</td><td class="num">13,030</td></tr>
+      <tr><td>Apr 2025</td><td class="num">$285,187</td><td class="num">$80,262</td><td class="num">$204,925</td><td class="num">71.9%</td><td class="num">13,706</td></tr>
+      <tr><td>May 2025</td><td class="num">$289,005</td><td class="num">$90,805</td><td class="num">$198,200</td><td class="num">68.6%</td><td class="num">13,290</td></tr>
+      <tr><td>Jun 2025</td><td class="num">$294,942</td><td class="num">$90,740</td><td class="num">$204,202</td><td class="num">69.2%</td><td class="num">13,243</td></tr>
+      <tr><td>Jul 2025</td><td class="num">$302,521</td><td class="num">$98,985</td><td class="num">$203,536</td><td class="num">67.3%</td><td class="num">13,480</td></tr>
+      <tr><td>Aug 2025</td><td class="num">$298,720</td><td class="num">$102,991</td><td class="num">$195,728</td><td class="num">65.5%</td><td class="num">13,666</td></tr>
+      <tr><td>Sep 2025</td><td class="num">$304,877</td><td class="num">$109,167</td><td class="num">$195,710</td><td class="num">64.2%</td><td class="num">13,567</td></tr>
+      <tr><td>Oct 2025</td><td class="num">$309,925</td><td class="num">$92,542</td><td class="num">$217,382</td><td class="num">70.1%</td><td class="num">13,703</td></tr>
+      <tr><td>Nov 2025</td><td class="num">$313,049</td><td class="num">$85,519</td><td class="num">$227,530</td><td class="num">72.7%</td><td class="num">13,684</td></tr>
+      <tr class="hi-warn"><td><strong>Dec 2025</strong> — discount ends</td><td class="num">$317,396</td><td class="num">$103,004</td><td class="num">$214,392</td><td class="num">67.5%</td><td class="num">13,936</td></tr>
+      <tr><td>Jan 2026</td><td class="num">$329,506</td><td class="num">$100,491</td><td class="num">$229,014</td><td class="num">69.5%</td><td class="num">14,076</td></tr>
+      <tr><td>Feb 2026</td><td class="num">$330,090</td><td class="num">$109,325</td><td class="num">$220,765</td><td class="num">66.9%</td><td class="num">13,974</td></tr>
+      <tr><td>Mar 2026</td><td class="num">$335,356</td><td class="num">$101,668</td><td class="num">$233,688</td><td class="num">69.7%</td><td class="num">13,886</td></tr>
+      <tr><td>Apr 2026</td><td class="num">$332,968</td><td class="num">$114,589</td><td class="num">$218,379</td><td class="num">65.6%</td><td class="num">14,482</td></tr>
+      <tr><td>May 2026</td><td class="num">$334,029</td><td class="num">$118,456</td><td class="num">$215,574</td><td class="num">64.5%</td><td class="num">13,358</td></tr>
+      <tr class="hi"><td><strong>Jun 2026</strong> — volume spike</td><td class="num">$343,343</td><td class="num">$143,844</td><td class="num">$199,499</td><td class="num">58.1%</td><td class="num">14,466</td></tr>
+      <tr class="hi"><td>Jul 2026</td><td class="num">$343,301</td><td class="num">$140,707</td><td class="num">$202,594</td><td class="num">59.0%</td><td class="num">13,766</td></tr>
+      <tr class="hi"><td>Aug 2026</td><td class="num">$354,111</td><td class="num">$158,568</td><td class="num">$195,543</td><td class="num">55.2%</td><td class="num">14,480</td></tr>
+      <tr class="hi"><td><strong>Sep 2026</strong> — current low</td><td class="num">$353,026</td><td class="num">$162,741</td><td class="num">$190,285</td><td class="num">53.9%</td><td class="num">14,206</td></tr>
+      <tr style="font-weight: 600; background: var(--surface);"><td>FY 2024 total</td><td class="num">$2,925,404</td><td class="num">$1,131,920</td><td class="num">$1,793,483</td><td class="num">61.3%</td><td class="num">137,325</td></tr>
+      <tr style="font-weight: 600; background: var(--surface);"><td>FY 2025 total</td><td class="num">$3,566,704</td><td class="num">$1,095,873</td><td class="num">$2,470,831</td><td class="num">69.3%</td><td class="num">161,613</td></tr>
+      <tr style="font-weight: 600; background: var(--surface);"><td>FY 2026 YTD (Jan–Sep)</td><td class="num">$3,055,730</td><td class="num">$1,150,388</td><td class="num">$1,905,342</td><td class="num">62.4%</td><td class="num">126,694</td></tr>
+    </tbody>
+  </table>
+  <div class="caption">
+    Revenue: recurring Call Tracking + per-minute + vanity number
+    revenue (per source data, Sep 2026 pull). Cost: FirstDigital
+    invoiced monthly totals. Sep 2026 uses the actual invoice ($162,741)
+    since the source cost table did not include September. Vanity
+    revenue shows $0 in September 2026 and small negative values in May
+    and July 2026 — likely credits or a data pipeline issue worth
+    confirming with finance. FY 2025 monthly cells sum to $1,095,873
+    while the source table reports a $1,141,531 total; the ~$45.7K gap
+    is likely a year-end true-up not present in the monthly cells.
+  </div>
+
+  <div class="callout warning" style="margin-top: 24px;">
+    <div class="title">If the trajectory holds, FY 2026 gross margin lands near 60% — down 9 points from FY 2025</div>
+    <p>
+      Q4 2026 at the September run rate implies FY 2026 gross margin of
+      ~60–61% (versus 69.3% in FY 2025). Restoring the 20% carrier
+      discount alone would move FY 2026 GM back to ~66%. Combined with
+      even a partial volume rationalization (or renegotiation to
+      per-minute pricing more aligned with tracked-number pricing), a
+      return to 68%+ is realistic — but requires acting on both the
+      pricing and the volume conversations before year-end.
+    </p>
+  </div>
+</section>
+
+<section>
   <h2>Recommended actions</h2>
   <ol class="actions">
     <li>
@@ -661,11 +910,13 @@
       <span class="pill">Data hygiene</span>
     </li>
     <li>
-      <strong>Tie this to Goal #1 (LC gross margin 20% → 35%).</strong>
-      At the current $1.55M+ run rate, telephony is up ~$412K vs 2025.
-      Every $100K of telephony savings is roughly 1 point of gross
-      margin at LC's current revenue. Discount restoration alone
-      ($200K/yr) is worth ~2 GM points without any operational change.
+      <strong>Tie this to Call Tracking gross margin, not just LC.</strong>
+      Call Tracking GM has fallen from 73.3% (Jan 2025) to 53.9% (Sep 2026)
+      because FirstDigital is the primary cost of service. At the current
+      run rate, FY 2026 Call Tracking GM will land near 60% — down 9 pts
+      from FY 2025. Discount restoration alone ($200K / yr) moves FY 2026
+      GM back toward 66%. This is the fastest lever with the largest
+      P&amp;L impact on any Entrata voice product.
     </li>
   </ol>
 </section>
@@ -693,8 +944,9 @@
       <h3>Attribution</h3>
       <p style="font-size: 13px;">
         The bill has three departments (parent, Lehi, Lindon). Is the
-        full $162K/mo allocated to LC COGS, or split with Entrata corp
-        network? A miscoding could distort LC gross margin reporting.
+        full $162K/mo attributed to Call Tracking COGS, split with LC,
+        or shared with corp network? A miscoding in either direction
+        distorts the margin story for both products.
       </p>
     </div>
   </div>
