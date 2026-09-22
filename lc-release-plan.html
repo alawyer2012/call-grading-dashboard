@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Leasing Center Release Plan — R4 2026 &amp; R1 2027</title>
+  <!--
+    HOW TO USE THIS FILE
+    ────────────────────
+    Structure mirrors Jeanine's UER ops-review doc so the design carries over.
+
+    Each release section (<section class="release">) has:
+      • release-header  → title + GA date + epic count
+      • .headline       → one-sentence story of the release
+      • .bullets        → 4–6 bullets summarizing the release themes
+      • .theme-table    → theme mix (rename/renumber as you move epics)
+      • .theme-group    → one per theme, contains <details class="epic"> cards
+
+    To move an epic between R4 and R1: cut the <details class="epic"> block
+    from one theme group and paste it into the other. Update the stat cards
+    and theme table counts at the top.
+
+    Empty Why/After/Who? Just delete that .field block — the card still renders cleanly.
+
+    To share: push this file to a repo and enable GitHub Pages, or send the file directly.
+  -->
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5c5c5c;
+      --border: #e2e2de;
+      --accent: #0b57d0;
+      --accent-soft: #e8f0fe;
+      --pill-bg: #f0f0ec;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 15px;
+    }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 32px 20px 64px; }
+    header.page { margin-bottom: 28px; }
+    h1 { font-size: 1.75rem; font-weight: 650; margin: 0 0 8px; letter-spacing: -0.02em; }
+    .subtitle { color: var(--muted); margin: 0 0 12px; max-width: 62ch; }
+    .meta { font-size: 0.85rem; color: var(--muted); }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0 28px;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .stat .value { font-size: 1.6rem; font-weight: 650; letter-spacing: -0.02em; }
+    .stat .label { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    .nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .nav a {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .nav a:hover { border-color: var(--accent); color: var(--accent); }
+    .callout {
+      background: var(--accent-soft);
+      border: 1px solid #c5d7f7;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 28px;
+      color: #0b3d91;
+    }
+    .callout strong { display: block; margin-bottom: 4px; }
+    .release {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 22px 28px;
+      margin-bottom: 28px;
+    }
+    details.release:not([open]) { padding: 20px 22px; }
+    details.release > summary.release-header {
+      list-style: none; cursor: pointer;
+      display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    }
+    details.release > summary.release-header::-webkit-details-marker { display: none; }
+    details.release > summary.release-header::before {
+      content: '▸'; color: var(--muted); font-size: 0.9rem;
+      transition: transform 0.15s ease;
+    }
+    details.release[open] > summary.release-header::before { content: '▾'; }
+    details.release > summary.release-header .ga { margin: 0; }
+    details.release[open] > summary.release-header { margin-bottom: 8px; }
+    .release-header h2 { margin: 0; font-size: 1.35rem; letter-spacing: -0.02em; }
+    .ga { color: var(--muted); margin: 4px 0 12px; font-size: 0.9rem; }
+    .headline { font-weight: 600; margin: 0 0 12px; }
+    .bullets { margin: 0 0 20px; padding-left: 1.2em; color: var(--muted); }
+    .bullets li { margin-bottom: 8px; }
+    .summary-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0 0 24px;
+    }
+    @media (max-width: 640px) {
+      .summary-cards { grid-template-columns: 1fr; }
+    }
+    .summary-card {
+      background: #fbfbf9;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .summary-card h4 {
+      margin: 0 0 6px;
+      font-size: 0.95rem;
+      font-weight: 650;
+      color: var(--fg);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .summary-card h4 .count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 22px; height: 22px; padding: 0 6px;
+      font-size: 0.75rem; font-weight: 600;
+      background: #90959c; color: white;
+      border-radius: 999px;
+    }
+    .summary-card p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
+    h3 { font-size: 1rem; margin: 20px 0 10px; letter-spacing: -0.01em; }
+    .theme-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-bottom: 8px; }
+    .theme-table th, .theme-table td {
+      text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border);
+    }
+    .theme-table th {
+      color: var(--muted); font-weight: 550; font-size: 0.8rem;
+      text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    .theme-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .theme-table tbody tr:nth-child(even) { background: #fafaf8; }
+    .hint { color: var(--muted); font-size: 0.85rem; margin: 0 0 12px; }
+    .theme-group { margin-top: 18px; }
+    .theme-heading {
+      font-size: 0.95rem; margin: 0 0 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .theme-heading .count {
+      font-size: 0.75rem; font-weight: 600; background: var(--pill-bg);
+      border-radius: 999px; padding: 2px 8px; color: var(--muted);
+    }
+    details.epic {
+      border: 1px solid var(--border); border-radius: 8px;
+      margin-bottom: 8px; background: #fafaf8;
+    }
+    details.epic[open] { background: var(--surface); }
+    details.epic summary {
+      cursor: pointer; padding: 12px 14px; list-style: none;
+      display: grid; grid-template-columns: 14px 1fr auto;
+      gap: 10px; align-items: center;
+    }
+    details.epic summary::-webkit-details-marker { display: none; }
+    details.epic summary::before {
+      content: '▸'; color: var(--muted); font-size: 0.85rem; line-height: 1;
+      transition: transform 0.15s ease;
+    }
+    details.epic[open] > summary::before { content: '▾'; }
+    details.epic summary:hover::before { color: var(--accent); }
+    .epic-key { font-weight: 650; color: var(--accent); font-size: 0.9rem; }
+    .epic-title { font-weight: 500; }
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+    .pill {
+      font-size: 0.72rem; background: var(--pill-bg); border-radius: 999px;
+      padding: 3px 8px; color: var(--muted); white-space: nowrap;
+    }
+    .pill.product-lc { background: #e8f5e9; color: #1b5e20; }
+    .pill.product-ca { background: #ede7f6; color: #4527a0; }
+    .pill.product-eli { background: #ede7f6; color: #4527a0; }
+    .pill.product-ctp { background: #fff3e0; color: #e65100; }
+    .pill.product-uer { background: #e1f5fe; color: #01579b; }
+    .pill.lc-qa { background: #eceff1; color: #37474f; }
+    .pill.confirmed-r4 { background: #dcedc8; color: #33691e; font-weight: 600; }
+    .pill.maybe-r1 { background: #fff9c4; color: #827717; font-weight: 600; }
+    .epic-body { padding: 0 14px 14px; border-top: 1px solid var(--border); }
+    .blurb { margin: 12px 0; }
+    .field { margin: 12px 0; }
+    .field h4 {
+      margin: 0 0 4px; font-size: 0.8rem; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--muted); font-weight: 600;
+    }
+    .field p { margin: 0; color: var(--muted); }
+    .jira { margin: 14px 0 4px; }
+    .jira + .jira { margin-top: 4px; }
+    .jira a { color: var(--accent); font-weight: 550; text-decoration: none; }
+    .jira a:hover { text-decoration: underline; }
+    .sub-epics { margin: 14px 0 4px; padding: 10px 12px; background: #f0f0ec; border-left: 3px solid var(--accent); border-radius: 4px; }
+    .sub-epics h4 {
+      margin: 0 0 6px; font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--muted); font-weight: 600;
+    }
+    .sub-epic-item { display: flex; gap: 8px; align-items: baseline; font-size: 0.85rem; margin-top: 4px; }
+    .sub-epic-item a { color: var(--accent); text-decoration: none; font-weight: 550; }
+    .sub-epic-item a:hover { text-decoration: underline; }
+    .sub-epic-item .sub-desc { color: var(--muted); }
+    .placeholder { color: #b58900; font-style: italic; }
+    footer { margin-top: 8px; font-size: 0.8rem; color: var(--muted); }
+    @media (max-width: 700px) {
+      .stats { grid-template-columns: 1fr; }
+      details.epic summary { grid-template-columns: 14px 1fr; gap: 6px; }
+      .pills { justify-content: flex-start; }
+    }
+    @media print {
+      body { background: white; }
+      .release, details.epic { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page">
+      <h1>Leasing Center Release Plan — R4 2026 &amp; R1 2027</h1>
+    </header>
+
+    <div class="callout">
+      R4 2026 is split into <em>Voice Agents</em> (AI IVR, LC Other, RU) and <em>Other Items</em>
+      (Call Tracking, QA, Settings &amp; Automation work).
+      R1 2027 is a single flat list of epics.
+    </div>
+
+    <nav class="nav">
+      <a href="#R4-2026">R4 2026</a>
+      <a href="#R1-2027">R1 2027</a>
+    </nav>
+
+    <!-- ═══════════════════════════════ R4 2026 ═══════════════════════════════ -->
+    <details class="release" id="R4-2026">
+      <summary class="release-header">
+        <h2>R4 2026</h2>
+        <p class="ga">Standard GA Date: Dec 15, 2026 · 9 epics (draft)</p>
+      </summary>
+      <p class="headline">Ship the voice-agent trio — AI IVR, LC Other, and RU — so AI answers the calls today's humans are just message-taking, and land the supporting Call Tracking, QA, and settings work that makes those agents pay off.</p>
+      <div class="summary-cards">
+        <div class="summary-card">
+          <h4>Voice Agents <span class="count">3</span></h4>
+          <p>AI IVR Agent (conversational intent classification on inbound routing), LC Other Agent (message-take for Resident + Other calls), RU Agent (live answer on the 877 invoice line). All reuse Super Agent; English only.</p>
+        </div>
+        <div class="summary-card">
+          <h4>Call Tracking <span class="count">1</span></h4>
+          <p>CT Orchestrator Support — Orchestrator (Super Agent) as a native CT routing destination; anchor story is voicemail-fallback to Orchestrator instead of dead-end voicemail.</p>
+        </div>
+        <div class="summary-card">
+          <h4>QA <span class="count">3</span></h4>
+          <p>QA Dashboard 3.0 (widget drill-throughs, chart cleanup, complaint / dispute markers), QA Insights Dashboard (replaces spreadsheet reporting for QA leads + specialists), 2027 QA Changes (placeholder — needs a PRD before it can be scoped).</p>
+        </div>
+        <div class="summary-card">
+          <h4>Settings &amp; Automation <span class="count">2</span></h4>
+          <p>LC Settings Setup Agent, Lead Automation Agent (Phase 2 — real-time toast + verification for auto-created guest cards).</p>
+        </div>
+      </div>
+
+      <h3>Epics</h3>
+
+      <!-- ─── Theme group: Our Agents ─── -->
+      <div class="theme-group">
+        <h3 class="theme-heading">Voice Agents <span class="count">3</span></h3>
+
+        <details class="epic" id="DEV-312262">
+          <summary>
+            <span class="epic-title">AI IVR Agent</span>
+            <span class="pills">
+              <span class="pill product-ctp">CT</span>
+              <span class="pill product-eli">ELI+</span>
+              <span class="pill">Voice Agents</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">Phase 2 of AI IVR: replaces the menu with a conversational AI that greets "How can I help you?", classifies caller intent from natural language, and routes to Leasing / Resident / Maintenance / Other. The AI classifies and routes only — it does not answer questions.</p>
+            <div class="field">
+              <h4>Why this matters</h4>
+              <p>Menu-based IVR (Phase 1) still lets solicitors and non-leads game the system by picking "Leasing" when their intent is something else. Conversational classification is more accurate, deflects non-leads before they reach LC agents, and directly moves the LC gross margin needle (Goal #1: 20% → 35%).</p>
+            </div>
+            <div class="field">
+              <h4>After (intended outcome)</h4>
+              <p>AI picks up: "Thank you for calling [Property]. How can I help you?" — no menu options read. Caller states intent in natural language; AI classifies as Leasing / Resident / Maintenance / Other and routes via existing FreeSWITCH rules. Max 2 conversational turns before routing. Silent callers → voicemail (never an agent). Agent-demand → transfer on second demand, flagged for reporting. Multi-intent priority: Maintenance &gt; Resident &gt; Lead &gt; Other.</p>
+            </div>
+            <div class="field">
+              <h4>Who</h4>
+              <p>Property managers (higher routing accuracy). Prospects, residents, and maintenance callers (no menu to navigate). LC agents (fewer misrouted non-leads in queue). Config: <em>Setup → Property → Communication → Call Handling → IVR Configuration</em>.</p>
+            </div>
+            <div class="sub-epics">
+              <h4>Enabling sub-epics</h4>
+              <div class="sub-epic-item">
+                <a href="https://entrata.atlassian.net/browse/DEV-321622" target="_blank" rel="noopener">DEV-321622 — CT MCP</a>
+                <span class="sub-desc">Read-only MCP exposing Call Tracking data (call distribution, call logs) to the agent runtime.</span>
+              </div>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-312262" target="_blank" rel="noopener">Open in Jira →</a></p>
+            <p class="jira"><a href="https://www.figma.com/board/9X7ARxPwvziV6YQfS52lDf/Eli---Workflows?node-id=0-1&amp;p=f&amp;t=rFoMMcEuRDqjeUS0-0" target="_blank" rel="noopener">Open workflow in Figma →</a></p>
+          </div>
+        </details>
+
+        <details class="epic" id="DEV-328868">
+          <summary>
+            <span class="epic-title">LC Other Agent</span>
+            <span class="pills">
+              <span class="pill product-lc">LC</span>
+              <span class="pill">Voice Agents</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">The agent takes the message. It does not resolve it — AI handles Resident (non-work-order) and Other calls the same way LC agents do today, then submits to the property.</p>
+            <div class="field">
+              <h4>Why this matters</h4>
+              <p>LC gross margin is 20% against a 35% 2026 target (Goal #1). Live agents burn queue time on message-taking work — Resident ~21%, Solicitor ~12%, Vendor ~3% of the LC IVR mix (Feb–Apr 2026). That's expensive human time for a job with no lookups, no decisions, and no charges to change.</p>
+            </div>
+            <div class="field">
+              <h4>After (intended outcome)</h4>
+              <p>Voice agent greets with property name, classifies, takes a message. Resident → Resident Call Result (Request Call Back when asked). Solicitor/vendor → Other Call Result + Send Message. Junk (abandoned, spam, wrong number, survey, test) → disposition only. Leads and work orders hand off to their existing flows. 911 follows property protocol. Property staff see the same Dashboard → Leasing Center notes they read today — bit-identical payload.</p>
+            </div>
+            <div class="field">
+              <h4>Who</h4>
+              <p>Residents (still get "we'll have the property call you back," now from AI). Property managers (unchanged read path). LC agents (fewer message-take calls in queue). LC ops (same dispositions, AI does the work). Reuses Super Agent; company flag for rollback.</p>
+            </div>
+            <div class="sub-epics">
+              <h4>Enabling sub-epics</h4>
+              <div class="sub-epic-item">
+                <a href="https://entrata.atlassian.net/browse/DEV-321620" target="_blank" rel="noopener">DEV-321620 — LC MCP</a>
+                <span class="sub-desc">Read-only MCP exposing LC data (call distribution, call caps, conversion, pathway) to the agent runtime.</span>
+              </div>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-328868" target="_blank" rel="noopener">Open in Jira →</a></p>
+            <p class="jira"><a href="https://www.figma.com/board/v9Yagk1N4qfNS6MFX4hKR9/Leasing-Center-AI-Agents?node-id=0-1&amp;p=f&amp;t=XPuOJHerJFgzhUW6-0" target="_blank" rel="noopener">Open workflow in Figma →</a></p>
+          </div>
+        </details>
+
+        <details class="epic" id="DEV-239267">
+          <summary>
+            <span class="epic-title">RU Agent</span>
+            <span class="pills">
+              <span class="pill product-uer">UER</span>
+              <span class="pill">Voice Agents</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">The agent explains this invoice. It does not fix it — live AI on 877-825-3995 (the number printed on the back of the ResidentUtility invoice) instead of 100% voicemail.</p>
+            <div class="field">
+              <h4>Why this matters</h4>
+              <p>Every call to 877-825-3995 hits voicemail today. UBS specialists listen and call back — 2 human touches per contact, 0% live answer. FAQ-class questions (what is VCR? how do I pay?) consume the same listen-and-callback labor as true disputes. Alyssa Barlow (UBS) confirmed VCR is the #1 inbound, and canned templates already exist. Tied to Goal #4 (AI utilization on TES labor), not LC margin.</p>
+            </div>
+            <div class="field">
+              <h4>After (intended outcome)</h4>
+              <p>Utilities Super Agent answers 877 live with disclosure, binds by name or invoice number (no ANI), and explains the latest invoice from canned copy + live fields: VCR, invoice line readback (lease charges called out as lease), billing method one-liner, how to pay (portal only — never takes a card). Anything else — refunds, "why did my bill go up," disputes, off-list — routes to today's UBS voicemail bucket. Company flag can rollback to voicemail-first without reprinting invoices.</p>
+            </div>
+            <div class="field">
+              <h4>Who</h4>
+              <p>Residents (primary — live answer instead of voicemail). Utility Billing Specialists (voicemail bucket becomes real work, not "what is RUBS"). TES ops (flag rollback owner; residual path unchanged). No property staff use — 877 is resident-only. No Entrata UI to build.</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-239267" target="_blank" rel="noopener">Open in Jira →</a></p>
+            <p class="jira"><a href="https://www.figma.com/board/NTkelACpOhtZt438JmEwRc/RU-Voice-Agent?node-id=1-83&amp;t=Qvhicy36IGgmxKF3-0" target="_blank" rel="noopener">Open workflow in Figma →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <!-- ─── Theme group: Other Items ─── -->
+      <div class="theme-group">
+        <h3 class="theme-heading">Other Items <span class="count">6</span></h3>
+
+        <details class="epic" id="DEV-292126">
+          <summary>
+            <span class="epic-title">QA Insights Dashboard</span>
+            <span class="pills">
+              <span class="pill product-lc">LC</span>
+              <span class="pill lc-qa">LC QA</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">Reporting dashboard for the LC QA team surfacing performance data, dispute trends, and client-complaint patterns — replacing spreadsheet workflows with real-time visibility. Two permission-based views: Admin (managers / supervisors) and QA Specialist (individual, self-service).</p>
+            <div class="field">
+              <h4>Why this matters</h4>
+              <p>QA leadership runs on manual work today — pulling calls from Client Admin and grading them in Google Sheets to compute accuracy, calculating calls-per-hour from agent status logs, and stitching dispute / complaint trends by hand. Specialists have no self-service view of their own metrics.</p>
+            </div>
+            <div class="field">
+              <h4>After (intended outcome)</h4>
+              <p>Admin view = 4 tabs: <strong>Dashboard</strong> (Total Calls Graded, Avg Score, Fail Rate, Dispute Rate, trend charts, most-missed / disqualifier / disputed question cards), <strong>QA Specialists</strong> (per-specialist table: Calls Graded, Avg Score, Fail Rate, Disputes, Consistency, Calls/Hr), <strong>Disputes</strong> (top reasons + most-disputed questions with drill-down), <strong>Client Complaints</strong> (by category + flagged calls). Specialist view = personal KPIs + weekly volume + score distribution + own disputes. Filters on both: Specialist, Scorecard Type, Date Range, Client/Property.</p>
+            </div>
+            <div class="field">
+              <h4>Who</h4>
+              <p>QA Managers / Supervisors (full team visibility, replaces spreadsheets). QA Specialists (self-service on own performance). LC Ops (dispute + complaint triage). Internal LC tool — no customer surface.</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-292126" target="_blank" rel="noopener">Open in Jira →</a></p>
+          </div>
+        </details>
+
+        <details class="epic" id="DEV-336169">
+          <summary>
+            <span class="epic-title">CT Orchestrator Support</span>
+            <span class="pills">
+              <span class="pill product-ctp">CT</span>
+              <span class="pill product-eli">ELI+</span>
+              <span class="pill">Other Items</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">Umbrella epic making ELI Orchestrator (Super Agent) a first-class routing destination inside Call Tracking. Anchor story: Orchestrator as voicemail-fallback when the property doesn't answer.</p>
+            <div class="field">
+              <h4>Why this matters</h4>
+              <p>Call Tracking routes today to property, IVR menu, voicemail, or LC — Orchestrator isn't natively selectable. Customers who want AI in their call flow bolt it on outside CT, which blocks the obvious play "if the property doesn't pick up, don't send to voicemail — send to Orchestrator." Deflecting to AI before calls hit the LC queue supports Goal #1 (LC GM 20 → 35%); cleaner intent labels feed Call Analysis (Goal #2); differentiates Call Tracker+ (Goal #3).</p>
+            </div>
+            <div class="field">
+              <h4>After (intended outcome)</h4>
+              <p>Orchestrator appears as a selectable destination in Setup → Property → Communication → Call Handling and in the IVR builder — primary, IVR branch, vanity direct, and voicemail-fallback. Documented CT → Orchestrator handoff (caller ID, DNIS, vanity → property mapping, callback context). Orchestrator-handled calls flow into Call Tracking reporting with disposition and intent labels.</p>
+            </div>
+            <div class="field">
+              <h4>Who</h4>
+              <p>Property managers (new routing option in Call Handling). Callers (may reach AI instead of voicemail). LC agents (fewer property-overflow calls in queue). CSM / Implementation (new setup conversation — "AI backup instead of voicemail"). Sales (CT+ differentiator story, pending SKU-gating decision).</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-336169" target="_blank" rel="noopener">Open in Jira →</a></p>
+          </div>
+        </details>
+
+        <details class="epic" id="DEV-336883">
+          <summary>
+            <span class="epic-title">2027 QA Changes</span>
+            <span class="pills">
+              <span class="pill product-lc">LC</span>
+              <span class="pill lc-qa">LC QA</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">Batch of QA workflow / scorecard changes planned for 2027 — details captured in the linked spec doc.</p>
+            <div class="field">
+              <h4>Source of truth</h4>
+              <p>Spec: <a href="https://docs.google.com/document/d/1-TSItkNoqHSQKzSEIrtXAEOuq55jM4EZuCvF0uuhIRE/edit" target="_blank" rel="noopener">Google Doc</a> · Jira description is currently just this link. Content will move into Why / After / Who once the spec is broken down.</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-336883" target="_blank" rel="noopener">Open in Jira →</a></p>
+          </div>
+        </details>
+
+        <details class="epic" id="DEV-331246">
+          <summary>
+            <span class="epic-title">LC Settings Setup Agent</span>
+            <span class="pills">
+              <span class="pill product-lc">LC</span>
+              <span class="pill">Agent</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">AI agent that helps configure Leasing Center settings during setup — jira description is still empty, so this needs a PRD before we ship a summary here.</p>
+            <div class="field">
+              <h4>Status</h4>
+              <p>Jira ticket exists (status: In Refinement) but has no description yet. Related epic <a href="https://entrata.atlassian.net/browse/DEV-312240" target="_blank" rel="noopener">DEV-312240</a> is the Settings Agent for Qualifications &amp; Policies (auto-populates policy fields during LC onboarding by scanning property settings) — this epic likely extends that pattern to broader LC settings.</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-331246" target="_blank" rel="noopener">Open in Jira →</a></p>
+          </div>
+        </details>
+
+        <details class="epic" id="DEV-288161">
+          <summary>
+            <span class="epic-title">Lead Automation Agent</span>
+            <span class="pills">
+              <span class="pill product-ctp">CT</span>
+              <span class="pill">Agent</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">Phase 2 of Auto-Lead (Call Tracker+ add-on): closes the loop on Phase 1 (silent guest-card creation) by notifying the active agent in real time and giving them a path to review, correct, or enrich the auto-created lead inside Entrata.</p>
+            <div class="field">
+              <h4>Why this matters</h4>
+              <p>Phase 1 silently creates an Entrata Guest Card for every lead-classified call — but the handling agent has no way to see, verify, or fix what the AI extracted. Phase 2 puts the auto-created lead in front of the agent while the call is still fresh. Key constraint: requires the agent to be logged into the phone system; if they're not, Phase 1 still captures the lead silently — Phase 2 features simply don't appear.</p>
+            </div>
+            <div class="field">
+              <h4>After (intended outcome)</h4>
+              <p><strong>Toast notification</strong> within 5s: "Guest Card created for [Name / Unknown Lead] from [Phone]." Auto-dismisses at 10s. <strong>Post-call banner</strong> persists with "View Lead in Entrata" / "Edit Details." Edit opens a <strong>Split-View Verification Screen</strong> — AI-extracted fields (name, phone, email, move-in date, source) on the left, call transcript on the right. Saves write back to the guest card via the Phase 1 API. Analytics events on toast shown/dismissed, banner clicks, and verification saves (with fields_changed).</p>
+            </div>
+            <div class="field">
+              <h4>Who</h4>
+              <p>LC agents (real-time notification + one-click correction flow). Property managers (higher lead accuracy, fewer "Unknown Lead" cards sitting stale). Depends on phone-system login adoption to deliver notifications.</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-288161" target="_blank" rel="noopener">Open in Jira →</a></p>
+          </div>
+        </details>
+
+        <details class="epic" id="DEV-326292">
+          <summary>
+            <span class="epic-title">QA Dashboard 3.0 Enhancements</span>
+            <span class="pills">
+              <span class="pill product-lc">LC</span>
+              <span class="pill lc-qa">LC QA</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">Internal LC QA Dashboard enhancements: full ranking drill-throughs, complaint / valid-dispute markers, chart cleanup, rich-text scorecard notes, faster load, default filters that hide Outbound.</p>
+            <div class="field">
+              <h4>Why this matters</h4>
+              <p>The QA Dashboard is the operational instrument for Goal #2 (ELI Call Analysis consistency). QA leads still lose time every shift: exporting past the 25-row widget preview, reading gappy weekend charts, cleaning Outbound out of default filters, and digging into tickets to clarify complaint / dispute status. Follow-on to QA Dashboard 2.0 (DEV-288120) with the same outcome hypothesis — ~30% reduction in workaround steps on the screen ops already lives in.</p>
+            </div>
+            <div class="field">
+              <h4>After (intended outcome)</h4>
+              <p>Top Performers and Top Performing Calls widget titles open full ranking screens (not limited to top-25). Charts omit no-data days so working-day series render as continuous lines. Agent profile shows the assigned supervisor as read-only. QoI notes get a rich text editor (no more pasted HTML). Disputes keep the original call date (pending ops confirm). Default scorecard filters: Maintenance, Work Orders, Leads, Residents on — Outbound off. Client-complaint flag (red) and valid-dispute checkmark (green) on the Calls list.</p>
+            </div>
+            <div class="field">
+              <h4>Who</h4>
+              <p>QA Specialists (rich-text notes, cleaner indicators). QA Leads / Team Leads (full rankings for coaching the whole stack). LC Operations (faster load, original call dates on disputes, continuous charts). LC Supervisors (assigned-supervisor context on agent drill-in). Internal only — no customer release note, no new permissions, no Setup toggle.</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-326292" target="_blank" rel="noopener">Open in Jira →</a></p>
+          </div>
+        </details>
+
+      </div>
+
+    </details>
+
+    <!-- ═══════════════════════════════ R1 2027 ═══════════════════════════════ -->
+    <details class="release" id="R1-2027">
+      <summary class="release-header">
+        <h2>R1 2027</h2>
+        <p class="ga">Standard GA Date: Feb 23, 2027 · 3 epics (more moving from R4 as scope firms up)</p>
+      </summary>
+      <p class="headline">Tighten the LC agent workflow at student properties, kill config drift between LC and property settings, and refresh the VOIP UI.</p>
+      <div class="summary-cards">
+        <div class="summary-card">
+          <h4>Dashboards <span class="count">1</span></h4>
+          <p>Standard Student Dashboard — LC dashboard optimized for US floor-plan (not by-the-bed) student leasing; hides irrelevant columns/filters, adds inventory-status badges.</p>
+        </div>
+        <div class="summary-card">
+          <h4>Settings <span class="count">1</span></h4>
+          <p>LC Settings Sync — Phase 2 of the LC → property-settings integration; policy text becomes read-only in LC and edits redirect to the source (starts with Pet Policy).</p>
+        </div>
+        <div class="summary-card">
+          <h4>VOIP <span class="count">1</span></h4>
+          <p>VOIP UI Upgrades — telephony UI refresh; PRD pending.</p>
+        </div>
+      </div>
+
+      <h3>Epics</h3>
+
+      <div class="theme-group">
+        <details class="epic" id="DEV-301460">
+          <summary>
+            <span class="epic-title">Standard Student Dashboard</span>
+            <span class="pills">
+              <span class="pill product-lc">LC</span>
+              <span class="pill">Dashboards</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">When the LC dashboard detects <code>student_leasing_type = "standard"</code>, it renders a Standard Student view optimized for US floor-plan leasing (not by-the-bed).</p>
+            <div class="field">
+              <h4>Why this matters</h4>
+              <p>Standard student properties don't have bed-level assignment, gender preference, or vacancy — the default LC dashboard shows irrelevant columns, filters, and lead fields that clutter the agent workflow at those properties. Availability logic also needs to switch from unit-occupancy to unit-type run rates.</p>
+            </div>
+            <div class="field">
+              <h4>After (intended outcome)</h4>
+              <p>Hides Gender / Vacancy / Unit # columns and filters when leasing type is Standard. New <strong>Inventory Status</strong> column shows Accepting (green) / Sold Out (red) / Waitlist (yellow) badges. Availability uses unit-type run rates (Intrada-active OR web-visible) instead of unit occupancy. Sold Out rows visible but dimmed — no CTA. Waitlist Guest Card routes prospects to a Student Waitlist. Conditional emails and stored lead preferences omit Gender/Vacancy fields.</p>
+            </div>
+            <div class="field">
+              <h4>Who</h4>
+              <p>LC agents at Standard student properties (cleaner workflow, correct availability logic). Prospects at those properties (Waitlist option when Sold Out).</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-301460" target="_blank" rel="noopener">Open in Jira →</a></p>
+          </div>
+        </details>
+
+        <details class="epic" id="DEV-237605">
+          <summary>
+            <span class="epic-title">LC Settings Sync</span>
+            <span class="pills">
+              <span class="pill product-lc">LC</span>
+              <span class="pill">Settings</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">Phase 2 of the LC → property settings integration. After Phase 1 (<a href="https://entrata.atlassian.net/browse/DEV-312240" target="_blank" rel="noopener">DEV-312240</a> Settings Agent for Qualifications &amp; Policies) ships, this epic goes policy by policy — pulling backend property settings into the LC dashboard as read-only, with a direct link to edit the source.</p>
+            <div class="field">
+              <h4>Why this matters</h4>
+              <p>LC maintains its own copy of policy / qualification descriptions (pet policy, income, occupancy, fees, credit, criminal, smoking, etc.) separate from core Entrata property settings. Two sources of truth → configuration drift. When a customer updates pet policy in property settings, the LC knowledge base doesn't reflect it. Supports Goal #1 (LC gross margin 20 → 35%) by eliminating both the setup-time re-entry and the ongoing drift.</p>
+            </div>
+            <div class="field">
+              <h4>After (intended outcome)</h4>
+              <p>Policy text fields become <strong>read-only</strong> in the LC dashboard, populated from core property settings. The "Required to review / Not required to review" toggle stays editable per policy. A header link directs users to the specific backend settings page for edits. Rolls out one policy at a time — <strong>Pet Policy first</strong>, then Income Requirements, Occupancy Limits, Fees, Credit History, Criminal History, Smoking Policy. Empty backend field → LC shows an empty state prompting the user to populate it in property settings.</p>
+            </div>
+            <div class="field">
+              <h4>Who</h4>
+              <p>Property managers (single source of truth — edit in property settings, LC reflects immediately). LC agents (always see current policy info on dashboard). Implementation team (fewer setup-time policy questions; centralization workflow simpler). Support (~80% fewer stale-policy tickets, per success metric).</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-237605" target="_blank" rel="noopener">Open in Jira →</a></p>
+          </div>
+        </details>
+
+        <details class="epic" id="DEV-339820">
+          <summary>
+            <span class="epic-title">VOIP UI Upgrades</span>
+            <span class="pills">
+              <span class="pill product-ctp">CT</span>
+              <span class="pill">VOIP</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">Telephony / VOIP UI refresh — jira description is empty (ticket created 2026-09-22), so this needs a PRD before we ship a summary here.</p>
+            <div class="field">
+              <h4>Status</h4>
+              <p>Jira ticket newly created (status: New). No description or scope defined yet. Placeholder card until a PRD lands.</p>
+            </div>
+            <p class="jira"><a href="https://entrata.atlassian.net/browse/DEV-339820" target="_blank" rel="noopener">Open in Jira →</a></p>
+          </div>
+        </details>
+      </div>
+
+    </details>
+
+  </div>
+  <script>
+    // Force ALL accordions closed on load — defeats bfcache-restored open state.
+    document.querySelectorAll('details').forEach(d => { d.open = false; });
+
+    // Open a collapsed release <details> only when its nav anchor is clicked.
+    function openRelease(id) {
+      const el = document.getElementById(id);
+      if (el && el.classList.contains('release')) el.open = true;
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', () => openRelease(a.getAttribute('href').slice(1)));
+    });
+
+    // Confetti effects when opening R4 or R1 (each gets a different animation).
+    (function () {
+      const COLORS_R4 = ['#2b6cb0','#38a169','#d69e2e','#805ad5','#e53e3e','#dd6b20','#319795','#e91e63'];
+      const COLORS_R1 = ['#ff6b6b','#feca57','#48dbfb','#1dd1a1','#5f27cd','#ff9ff3','#54a0ff','#00d2d3'];
+      let canvas, ctx;
+      const activeParticles = [];
+      let running = false;
+
+      function ensureCanvas() {
+        if (canvas) return;
+        canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;';
+        document.body.appendChild(canvas);
+        ctx = canvas.getContext('2d');
+        const resize = () => {
+          canvas.width = window.innerWidth * devicePixelRatio;
+          canvas.height = window.innerHeight * devicePixelRatio;
+          canvas.style.width = window.innerWidth + 'px';
+          canvas.style.height = window.innerHeight + 'px';
+          ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        };
+        resize();
+        window.addEventListener('resize', resize);
+      }
+
+      function drawParticle(p) {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, 1 - p.life / p.maxLife);
+        ctx.fillStyle = p.color;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        if (p.shape === 'rect') {
+          ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.6);
+        } else if (p.shape === 'streamer') {
+          ctx.fillRect(-p.size / 2, -p.size * 1.5, p.size * 0.35, p.size * 3);
+        } else if (p.shape === 'star') {
+          const spikes = 5, outer = p.size / 2, inner = outer / 2.4;
+          ctx.beginPath();
+          for (let i = 0; i < spikes * 2; i++) {
+            const r = i % 2 === 0 ? outer : inner;
+            const a = (Math.PI / spikes) * i - Math.PI / 2;
+            ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+          }
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      function tick() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = activeParticles.length - 1; i >= 0; i--) {
+          const p = activeParticles[i];
+          p.vy += p.gravity;
+          p.vx *= p.drag;
+          p.vy *= p.drag;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.life++;
+          if (p.life > p.maxLife) activeParticles.splice(i, 1);
+          else drawParticle(p);
+        }
+        if (activeParticles.length > 0) requestAnimationFrame(tick);
+        else { running = false; ctx.clearRect(0, 0, canvas.width, canvas.height); }
+      }
+      function start() { if (!running) { running = true; requestAnimationFrame(tick); } }
+
+      // R4: single upward cannon burst from the section header — classic confetti.
+      function burstR4(originEl) {
+        ensureCanvas();
+        const rect = originEl.getBoundingClientRect();
+        const originX = rect.left + rect.width / 2;
+        const originY = rect.top + 20;
+        for (let i = 0; i < 140; i++) {
+          const angle = (-Math.PI / 2) + (Math.random() - 0.5) * (Math.PI * 0.9);
+          const speed = 6 + Math.random() * 8;
+          activeParticles.push({
+            x: originX, y: originY,
+            vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+            size: 6 + Math.random() * 6,
+            rot: Math.random() * Math.PI * 2, vr: (Math.random() - 0.5) * 0.4,
+            color: COLORS_R4[(Math.random() * COLORS_R4.length) | 0],
+            life: 0, maxLife: 90 + Math.random() * 40,
+            gravity: 0.28, drag: 0.995,
+            shape: Math.random() < 0.5 ? 'rect' : 'circle',
+          });
+        }
+        start();
+      }
+
+      // R1: dual side cannons + delayed fireworks star-burst overhead.
+      function burstR1(originEl) {
+        ensureCanvas();
+        const rect = originEl.getBoundingClientRect();
+        const W = window.innerWidth, H = window.innerHeight;
+        // Left cannon (bottom-left → up-right)
+        for (let i = 0; i < 80; i++) {
+          const angle = -Math.PI / 4 + (Math.random() - 0.5) * (Math.PI * 0.35);
+          const speed = 10 + Math.random() * 10;
+          activeParticles.push({
+            x: 0, y: H,
+            vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+            size: 5 + Math.random() * 5,
+            rot: Math.random() * Math.PI * 2, vr: (Math.random() - 0.5) * 0.5,
+            color: COLORS_R1[(Math.random() * COLORS_R1.length) | 0],
+            life: 0, maxLife: 120 + Math.random() * 40,
+            gravity: 0.22, drag: 0.992,
+            shape: Math.random() < 0.6 ? 'streamer' : 'rect',
+          });
+        }
+        // Right cannon (bottom-right → up-left)
+        for (let i = 0; i < 80; i++) {
+          const angle = -Math.PI + Math.PI / 4 + (Math.random() - 0.5) * (Math.PI * 0.35);
+          const speed = 10 + Math.random() * 10;
+          activeParticles.push({
+            x: W, y: H,
+            vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+            size: 5 + Math.random() * 5,
+            rot: Math.random() * Math.PI * 2, vr: (Math.random() - 0.5) * 0.5,
+            color: COLORS_R1[(Math.random() * COLORS_R1.length) | 0],
+            life: 0, maxLife: 120 + Math.random() * 40,
+            gravity: 0.22, drag: 0.992,
+            shape: Math.random() < 0.6 ? 'streamer' : 'rect',
+          });
+        }
+        start();
+        // Delayed radial firework near the header for extra sparkle
+        setTimeout(() => {
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + 40;
+          for (let i = 0; i < 60; i++) {
+            const angle = (i / 60) * Math.PI * 2 + Math.random() * 0.15;
+            const speed = 5 + Math.random() * 5;
+            activeParticles.push({
+              x: cx, y: cy,
+              vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+              size: 8 + Math.random() * 6,
+              rot: Math.random() * Math.PI * 2, vr: (Math.random() - 0.5) * 0.3,
+              color: COLORS_R1[(Math.random() * COLORS_R1.length) | 0],
+              life: 0, maxLife: 70 + Math.random() * 30,
+              gravity: 0.12, drag: 0.985,
+              shape: 'star',
+            });
+          }
+          start();
+        }, 250);
+      }
+
+      const bursts = { 'R4-2026': burstR4, 'R1-2027': burstR1 };
+      document.querySelectorAll('details.release').forEach(d => {
+        let wasOpen = d.open;
+        d.addEventListener('toggle', () => {
+          if (d.open && !wasOpen) {
+            const fn = bursts[d.id];
+            if (fn) fn(d.querySelector('summary') || d);
+          }
+          wasOpen = d.open;
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
