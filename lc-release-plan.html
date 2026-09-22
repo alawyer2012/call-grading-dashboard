@@ -526,10 +526,14 @@
     <details class="release" id="R1-2027">
       <summary class="release-header">
         <h2>R1 2027</h2>
-        <p class="ga">Standard GA Date: Feb 23, 2027 · 3 epics (more moving from R4 as scope firms up)</p>
+        <p class="ga">Standard GA Date: Feb 23, 2027 · 4 epics (more moving from R4 as scope firms up)</p>
       </summary>
       <p class="headline">Tighten the LC agent workflow at student properties, kill config drift between LC and property settings, and refresh the VOIP UI.</p>
       <div class="summary-cards">
+        <div class="summary-card">
+          <h4>Voice Agents <span class="count">1</span></h4>
+          <p>LC Resident Agent — placeholder for the resident-facing voice agent that extends R4's LC Other Agent work into a full resident experience. Scope TBD; needs a PRD.</p>
+        </div>
         <div class="summary-card">
           <h4>Dashboards <span class="count">1</span></h4>
           <p>Standard Student Dashboard — LC dashboard optimized for US floor-plan (not by-the-bed) student leasing; hides irrelevant columns/filters, adds inventory-status badges.</p>
@@ -547,6 +551,24 @@
       <h3>Epics</h3>
 
       <div class="theme-group">
+        <details class="epic" id="LC-RESIDENT-AGENT">
+          <summary>
+            <span class="epic-title">LC Resident Agent</span>
+            <span class="pills">
+              <span class="pill product-lc">LC</span>
+              <span class="pill product-eli">ELI+</span>
+              <span class="pill">Voice Agents</span>
+            </span>
+          </summary>
+          <div class="epic-body">
+            <p class="blurb">Placeholder — the resident-facing voice agent. Builds on R4's LC Other Agent (message-take for Resident + Other calls) to move toward a full resident experience. Scope, workflows, and success metrics to be defined in a PRD.</p>
+            <div class="field">
+              <h4>Status</h4>
+              <p>No Jira ticket yet · No PRD yet · Slotted into R1 2027 as a follow-on to the R4 LC Other Agent. Next step: draft the PRD (problem statement, target call types, hand-off rules, success metrics) so we can create the epic and size the work.</p>
+            </div>
+          </div>
+        </details>
+
         <details class="epic" id="DEV-301460">
           <summary>
             <span class="epic-title">Standard Student Dashboard</span>
