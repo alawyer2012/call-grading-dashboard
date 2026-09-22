@@ -164,6 +164,12 @@
   tr.hi td { background: var(--danger-soft); }
   tr.hi-warn td { background: var(--warning-soft); }
   tr.hi-ok td { background: var(--success-soft); }
+  tr.total-row td { background: var(--surface); border-top: 2px solid var(--border-strong); font-weight: 600; }
+  td.num.pos { color: var(--success); }
+  td.num.neg { color: var(--danger); }
+  table.mini { font-size: 13px; margin: 8px 0; }
+  table.mini th, table.mini td { padding: 6px 10px; }
+  table.mini th { font-size: 11px; }
 
   .caption {
     font-size: 12px;
@@ -240,7 +246,9 @@
       removal of a long-standing 20% discount, and a large spike in call
       minutes starting April 2026 — and they've compressed Call Tracking
       gross margin from a 73.3% peak in January 2025 to 53.9% in
-      September 2026.
+      September 2026. Notably, number-count inventory has been
+      <strong>flat since Jan 2025</strong> — the cost spike is 100% from
+      more minutes on the same base of lines, not from adding numbers.
     </p>
   </div>
   <div class="meta">
@@ -615,6 +623,281 @@
     Estimates assume no additional pricing change from FirstDigital, no
     contract renegotiation, and no material client churn or onboarding
     between now and December.
+  </p>
+</section>
+
+<section>
+  <h2>Number-count trend — is inventory growth driving the cost?</h2>
+  <p>
+    A natural hypothesis: costs are up because we have more phone numbers
+    on the platform (especially vanity numbers). The bills answer that
+    question directly. Every FirstDigital invoice bills five separate
+    number-inventory line items, all at $0.16 per number per month. Below
+    is the count of each, month by month, across all 33 bills.
+  </p>
+
+  <div class="callout success">
+    <strong>Verdict: number growth is NOT the cost driver in 2025–2026.</strong>
+    Total inventory grew <strong>+11.8%</strong> from Jan 2024 to Sep 2026,
+    but essentially all of that growth happened <em>during 2024</em>. Since
+    Jan 2025, total number count has been <strong>flat to slightly declining
+    (−0.3%)</strong>. Vanity/premium pools are actually <strong>smaller
+    today than they were 2 years ago</strong>. The number-count fixed cost
+    is ~$22,394/mo today vs. ~$22,471/mo in Jan 2025 — a <strong>$77/month
+    difference</strong>. The cost spike is entirely from usage intensity on
+    a stable base of lines.
+  </div>
+
+  <!-- Stacked area chart: telephony line count by category -->
+  <svg viewBox="0 0 720 320" role="img" aria-label="Monthly telephony line count by category, Jan 2024 to Sep 2026">
+    <style>
+      .grid { stroke: #e4e4e0; stroke-width: 1; }
+      .axis { stroke: #57575a; stroke-width: 1; }
+      .tick { font: 500 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #57575a; }
+      .layer-natl { fill: #b8cee0; opacity: 0.95; }
+      .layer-tfsvc { fill: #8fb4d1; opacity: 0.95; }
+      .layer-did-charge { fill: #c76b3f; opacity: 0.95; }
+      .layer-did-number { fill: #2f5e8f; opacity: 0.95; }
+      .layer-tf-number { fill: #1a3c5c; opacity: 0.95; }
+      .total-line { fill: none; stroke: #1a1a1a; stroke-width: 1.5; }
+      .anno { font: 600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a; }
+      .anno-sub { font: 500 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #57575a; }
+      .anno-line { stroke: #1a1a1a; stroke-width: 1; stroke-dasharray: 3 3; }
+      .anno-dot { fill: #1a1a1a; }
+      .legend-label { font: 500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a; }
+    </style>
+
+    <!-- Y-axis gridlines and ticks -->
+    <line class="grid" x1="60" y1="30" x2="705" y2="30" />
+    <line class="grid" x1="60" y1="69.2" x2="705" y2="69.2" />
+    <line class="grid" x1="60" y1="108.3" x2="705" y2="108.3" />
+    <line class="grid" x1="60" y1="147.5" x2="705" y2="147.5" />
+    <line class="grid" x1="60" y1="186.7" x2="705" y2="186.7" />
+    <line class="grid" x1="60" y1="225.8" x2="705" y2="225.8" />
+    <line class="axis" x1="60" y1="265" x2="705" y2="265" />
+
+    <text class="tick" x="55" y="34" text-anchor="end">150K</text>
+    <text class="tick" x="55" y="73.2" text-anchor="end">125K</text>
+    <text class="tick" x="55" y="112.3" text-anchor="end">100K</text>
+    <text class="tick" x="55" y="151.5" text-anchor="end">75K</text>
+    <text class="tick" x="55" y="190.7" text-anchor="end">50K</text>
+    <text class="tick" x="55" y="229.8" text-anchor="end">25K</text>
+    <text class="tick" x="55" y="269" text-anchor="end">0</text>
+
+    <!-- Stacked areas: bottom to top -->
+    <path class="layer-natl" d="M 60.0,151.3 L 80.2,151.3 L 100.3,151.3 L 120.5,151.3 L 140.6,151.3 L 160.8,151.3 L 180.9,151.3 L 201.1,151.3 L 221.2,151.4 L 241.4,151.4 L 261.6,151.4 L 281.7,151.4 L 301.9,151.4 L 322.0,151.5 L 342.2,151.8 L 362.3,152.6 L 382.5,153.1 L 402.7,150.9 L 422.8,150.9 L 443.0,155.2 L 463.1,152.1 L 483.3,152.2 L 503.4,151.7 L 523.6,151.7 L 543.8,151.7 L 563.9,151.7 L 584.1,151.7 L 604.2,151.7 L 624.4,151.7 L 644.5,151.7 L 664.7,151.7 L 684.8,151.7 L 705.0,151.7 L 705.0,265.0 L 60.0,265.0 Z" />
+
+    <path class="layer-tfsvc" d="M 60.0,92.3 L 80.2,91.6 L 100.3,90.9 L 120.5,90.1 L 140.6,89.8 L 160.8,89.8 L 180.9,88.8 L 201.1,87.8 L 221.2,87.1 L 241.4,86.9 L 261.6,86.3 L 281.7,86.2 L 301.9,86.1 L 322.0,86.1 L 342.2,85.2 L 362.3,86.0 L 382.5,86.5 L 402.7,84.1 L 422.8,84.1 L 443.0,88.4 L 463.1,85.6 L 483.3,85.6 L 503.4,85.1 L 523.6,85.1 L 543.8,85.1 L 563.9,85.1 L 584.1,85.1 L 604.2,85.1 L 624.4,85.1 L 644.5,85.1 L 664.7,85.1 L 684.8,85.1 L 705.0,85.1 L 705.0,151.7 L 684.8,151.7 L 664.7,151.7 L 644.5,151.7 L 624.4,151.7 L 604.2,151.7 L 584.1,151.7 L 563.9,151.7 L 543.8,151.7 L 523.6,151.7 L 503.4,151.7 L 483.3,152.2 L 463.1,152.1 L 443.0,155.2 L 422.8,150.9 L 402.7,150.9 L 382.5,153.1 L 362.3,152.6 L 342.2,151.8 L 322.0,151.5 L 301.9,151.4 L 281.7,151.4 L 261.6,151.4 L 241.4,151.4 L 221.2,151.4 L 201.1,151.3 L 180.9,151.3 L 160.8,151.3 L 140.6,151.3 L 120.5,151.3 L 100.3,151.3 L 80.2,151.3 L 60.0,151.3 Z" />
+
+    <path class="layer-did-charge" d="M 60.0,74.1 L 80.2,70.3 L 100.3,67.9 L 120.5,65.2 L 140.6,63.4 L 160.8,63.3 L 180.9,59.7 L 201.1,56.8 L 221.2,54.1 L 241.4,54.3 L 261.6,51.6 L 281.7,51.2 L 301.9,50.2 L 322.0,50.3 L 342.2,46.0 L 362.3,47.0 L 382.5,49.4 L 402.7,49.3 L 422.8,50.5 L 443.0,53.9 L 463.1,51.1 L 483.3,51.7 L 503.4,50.5 L 523.6,50.5 L 543.8,50.5 L 563.9,50.6 L 584.1,50.6 L 604.2,50.6 L 624.4,50.6 L 644.5,50.6 L 664.7,50.8 L 684.8,50.6 L 705.0,50.5 L 705.0,85.1 L 684.8,85.1 L 664.7,85.1 L 644.5,85.1 L 624.4,85.1 L 604.2,85.1 L 584.1,85.1 L 563.9,85.1 L 543.8,85.1 L 523.6,85.1 L 503.4,85.1 L 483.3,85.6 L 463.1,85.6 L 443.0,88.4 L 422.8,84.1 L 402.7,84.1 L 382.5,86.5 L 362.3,86.0 L 342.2,85.2 L 322.0,86.1 L 301.9,86.1 L 281.7,86.2 L 261.6,86.3 L 241.4,86.9 L 221.2,87.1 L 201.1,87.8 L 180.9,88.8 L 160.8,89.8 L 140.6,89.8 L 120.5,90.1 L 100.3,90.9 L 80.2,91.6 L 60.0,92.3 Z" />
+
+    <path class="layer-did-number" d="M 60.0,70.4 L 80.2,66.5 L 100.3,64.2 L 120.5,61.4 L 140.6,59.7 L 160.8,59.5 L 180.9,56.0 L 201.1,53.0 L 221.2,50.4 L 241.4,50.6 L 261.6,47.9 L 281.7,47.5 L 301.9,46.5 L 322.0,46.5 L 342.2,42.7 L 362.3,43.7 L 382.5,46.1 L 402.7,46.0 L 422.8,47.2 L 443.0,50.6 L 463.1,47.8 L 483.3,48.5 L 503.4,47.3 L 523.6,47.3 L 543.8,47.3 L 563.9,47.3 L 584.1,47.3 L 604.2,47.3 L 624.4,47.3 L 644.5,47.3 L 664.7,47.5 L 684.8,47.3 L 705.0,47.3 L 705.0,50.5 L 684.8,50.6 L 664.7,50.8 L 644.5,50.6 L 624.4,50.6 L 604.2,50.6 L 584.1,50.6 L 563.9,50.6 L 543.8,50.5 L 523.6,50.5 L 503.4,50.5 L 483.3,51.7 L 463.1,51.1 L 443.0,53.9 L 422.8,50.5 L 402.7,49.3 L 382.5,49.4 L 362.3,47.0 L 342.2,46.0 L 322.0,50.3 L 301.9,50.2 L 281.7,51.2 L 261.6,51.6 L 241.4,54.3 L 221.2,54.1 L 201.1,56.8 L 180.9,59.7 L 160.8,63.3 L 140.6,63.4 L 120.5,65.2 L 100.3,67.9 L 80.2,70.3 L 60.0,74.1 Z" />
+
+    <path class="layer-tf-number" d="M 60.0,68.8 L 80.2,65.0 L 100.3,62.7 L 120.5,59.9 L 140.6,58.1 L 160.8,58.0 L 180.9,54.4 L 201.1,51.5 L 221.2,48.9 L 241.4,49.1 L 261.6,46.3 L 281.7,46.0 L 301.9,45.0 L 322.0,45.0 L 342.2,41.2 L 362.3,42.1 L 382.5,44.6 L 402.7,44.5 L 422.8,45.7 L 443.0,49.1 L 463.1,46.3 L 483.3,46.9 L 503.4,45.7 L 523.6,45.7 L 543.8,45.7 L 563.9,45.7 L 584.1,45.7 L 604.2,45.7 L 624.4,45.7 L 644.5,45.7 L 664.7,46.0 L 684.8,45.7 L 705.0,45.7 L 705.0,47.3 L 684.8,47.3 L 664.7,47.5 L 644.5,47.3 L 624.4,47.3 L 604.2,47.3 L 584.1,47.3 L 563.9,47.3 L 543.8,47.3 L 523.6,47.3 L 503.4,47.3 L 483.3,48.5 L 463.1,47.8 L 443.0,50.6 L 422.8,47.2 L 402.7,46.0 L 382.5,46.1 L 362.3,43.7 L 342.2,42.7 L 322.0,46.5 L 301.9,46.5 L 281.7,47.5 L 261.6,47.9 L 241.4,50.6 L 221.2,50.4 L 201.1,53.0 L 180.9,56.0 L 160.8,59.5 L 140.6,59.7 L 120.5,61.4 L 100.3,64.2 L 80.2,66.5 L 60.0,70.4 Z" />
+
+    <!-- Total line on top -->
+    <path class="total-line" d="M 60.0,68.8 L 80.2,65.0 L 100.3,62.7 L 120.5,59.9 L 140.6,58.1 L 160.8,58.0 L 180.9,54.4 L 201.1,51.5 L 221.2,48.9 L 241.4,49.1 L 261.6,46.3 L 281.7,46.0 L 301.9,45.0 L 322.0,45.0 L 342.2,41.2 L 362.3,42.1 L 382.5,44.6 L 402.7,44.5 L 422.8,45.7 L 443.0,49.1 L 463.1,46.3 L 483.3,46.9 L 503.4,45.7 L 523.6,45.7 L 543.8,45.7 L 563.9,45.7 L 584.1,45.7 L 604.2,45.7 L 624.4,45.7 L 644.5,45.7 L 664.7,46.0 L 684.8,45.7 L 705.0,45.7" />
+
+    <!-- Annotations -->
+    <line class="anno-line" x1="342.2" y1="41.2" x2="342.2" y2="20" />
+    <circle class="anno-dot" cx="342.2" cy="41.2" r="3" />
+    <text class="anno" x="342.2" y="16" text-anchor="middle">Peak: 142,863 (Mar 2025)</text>
+
+    <line class="anno-line" x1="60" y1="68.8" x2="60" y2="20" />
+    <circle class="anno-dot" cx="60" cy="68.8" r="3" />
+    <text class="anno-sub" x="65" y="16" text-anchor="start">125,219 (Jan 2024)</text>
+
+    <line class="anno-line" x1="705" y1="45.7" x2="705" y2="20" />
+    <circle class="anno-dot" cx="705" cy="45.7" r="3" />
+    <text class="anno-sub" x="700" y="16" text-anchor="end">139,962 (Sep 2026)</text>
+
+    <!-- X-axis labels -->
+    <text class="tick" x="60" y="280" text-anchor="middle">Jan '24</text>
+    <text class="tick" x="120.5" y="280" text-anchor="middle">Apr '24</text>
+    <text class="tick" x="180.9" y="280" text-anchor="middle">Jul '24</text>
+    <text class="tick" x="241.4" y="280" text-anchor="middle">Oct '24</text>
+    <text class="tick" x="301.9" y="280" text-anchor="middle">Jan '25</text>
+    <text class="tick" x="362.3" y="280" text-anchor="middle">Apr '25</text>
+    <text class="tick" x="422.8" y="280" text-anchor="middle">Jul '25</text>
+    <text class="tick" x="483.3" y="280" text-anchor="middle">Oct '25</text>
+    <text class="tick" x="543.8" y="280" text-anchor="middle">Jan '26</text>
+    <text class="tick" x="604.2" y="280" text-anchor="middle">Apr '26</text>
+    <text class="tick" x="664.7" y="280" text-anchor="middle">Jul '26</text>
+    <text class="tick" x="705" y="280" text-anchor="middle">Sep '26</text>
+
+    <!-- Legend -->
+    <rect x="60" y="298" width="12" height="10" class="layer-natl" />
+    <text class="legend-label" x="76" y="307">Natl Inbound DID (~72K, flat)</text>
+    <rect x="248" y="298" width="12" height="10" class="layer-tfsvc" />
+    <text class="legend-label" x="264" y="307">Tollfree Service (~42K)</text>
+    <rect x="400" y="298" width="12" height="10" class="layer-did-charge" />
+    <text class="legend-label" x="416" y="307">DID Charge (the mover)</text>
+    <rect x="548" y="298" width="12" height="10" class="layer-did-number" />
+    <text class="legend-label" x="564" y="307">DID Number (~2K)</text>
+    <rect x="638" y="298" width="12" height="10" class="layer-tf-number" />
+    <text class="legend-label" x="654" y="307">Toll Free Number (977)</text>
+  </svg>
+  <p class="caption">
+    Every line billed at $0.16/number/month. Total inventory = sum of all
+    five layers. Black line traces the total. Source: 33 FirstDigital
+    invoices, Jan 2024 through Sep 2026.
+  </p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>What actually happened</h3>
+      <ol>
+        <li>
+          <strong>All of the number growth happened in 2024.</strong>
+          The "DID Charge" pool (the orange band) nearly doubled
+          from 11,632 in Jan 2024 to 22,855 in Jan 2025 — a <strong>+97%
+          year</strong>. This is when Call Tracking's bulk DID inventory
+          was scaling.
+        </li>
+        <li>
+          <strong>Growth stopped in Q1 2025.</strong> DID Charge peaked at
+          25,013 in Mar 2025, then <em>declined</em> back to ~22,000 by
+          mid-year and has held there ever since. Net movement Jan 2025
+          to Sep 2026: <strong>−3.6%</strong>.
+        </li>
+        <li>
+          <strong>All other pools are flat.</strong> Natl Inbound DID
+          (~72K) hasn't moved. Tollfree Service (~42.5K) has been flat
+          since Mar 2025. Toll Free Number (977) has been <em>exactly the
+          same value</em> for all 33 months.
+        </li>
+        <li>
+          <strong>Vanity/premium counts are DOWN, not up.</strong> The
+          two smaller pools most likely to represent vanity/premium lines
+          (DID Number + Toll Free Number) went from 3,366 lines in Jan
+          2024 to <strong>3,079 today — a loss of 287 lines
+          (−8.5%)</strong>.
+        </li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Cost implication</h3>
+      <p>
+        At $0.16 per number per month, the entire number-count inventory
+        drives a <em>fixed</em> monthly cost that has been essentially
+        flat since Jan 2025:
+      </p>
+      <table class="mini">
+        <thead>
+          <tr><th>Snapshot</th><th class="num">Total lines</th><th class="num">Fixed $/mo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Jan 2024</td><td class="num">125,219</td><td class="num">$20,035</td></tr>
+          <tr><td>Jan 2025</td><td class="num">140,442</td><td class="num">$22,471</td></tr>
+          <tr><td>Peak (Mar 2025)</td><td class="num">142,863</td><td class="num">$22,858</td></tr>
+          <tr><td>Sep 2026</td><td class="num">139,962</td><td class="num">$22,394</td></tr>
+        </tbody>
+      </table>
+      <p>
+        <strong>Δ Jan 2025 → Sep 2026: −$77/month</strong>. Meanwhile the
+        <em>total</em> monthly bill went from ~$67K to ~$142K in that same
+        window. The extra <strong>~$75K/month of cost is 100% from
+        per-minute usage on the same base of lines</strong>, not from
+        adding numbers.
+      </p>
+    </div>
+  </div>
+
+  <h3>Category-by-category inventory, snapshot view</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Line-item category</th>
+        <th class="num">Jan 2024</th>
+        <th class="num">Jan 2025</th>
+        <th class="num">Sep 2026</th>
+        <th class="num">Δ '24→'26</th>
+        <th class="num">Δ '25→'26</th>
+        <th>Interpretation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Natl Inbound DID</strong></td>
+        <td class="num">72,591</td>
+        <td class="num">72,482</td>
+        <td class="num">72,313</td>
+        <td class="num neg">−0.4%</td>
+        <td class="num neg">−0.2%</td>
+        <td>Largest pool. Almost certainly Entrata's national tracked-number inventory. Flat for 3 years.</td>
+      </tr>
+      <tr>
+        <td><strong>Tollfree Service</strong></td>
+        <td class="num">37,630</td>
+        <td class="num">41,739</td>
+        <td class="num">42,532</td>
+        <td class="num pos">+13.0%</td>
+        <td class="num pos">+1.9%</td>
+        <td>Second-largest pool. Grew steadily 2024, flat since Feb 2026 (42,532 exactly).</td>
+      </tr>
+      <tr class="hi-warn">
+        <td><strong>DID Charge</strong></td>
+        <td class="num">11,632</td>
+        <td class="num">22,855</td>
+        <td class="num">22,038</td>
+        <td class="num pos">+89.5%</td>
+        <td class="num neg">−3.6%</td>
+        <td><strong>The only category with meaningful movement.</strong> Nearly doubled in 2024. Peaked Mar 2025 at 25,013. Since then: down and flat.</td>
+      </tr>
+      <tr>
+        <td><strong>DID Number</strong></td>
+        <td class="num">2,389</td>
+        <td class="num">2,389</td>
+        <td class="num">2,102</td>
+        <td class="num neg">−12.0%</td>
+        <td class="num neg">−12.0%</td>
+        <td>Small premium DID pool. Held at 2,389 through Feb 2025, then dropped ~300 in Mar 2025 and stayed there. Likely vanity/premium DIDs.</td>
+      </tr>
+      <tr>
+        <td><strong>Toll Free Number</strong></td>
+        <td class="num">977</td>
+        <td class="num">977</td>
+        <td class="num">977</td>
+        <td class="num">0.0%</td>
+        <td class="num">0.0%</td>
+        <td>Exactly 977 for all 33 months. This is the most likely vanity toll-free pool. <em>Zero net movement in 3 years.</em></td>
+      </tr>
+      <tr class="total-row">
+        <td><strong>Total lines</strong></td>
+        <td class="num"><strong>125,219</strong></td>
+        <td class="num"><strong>140,442</strong></td>
+        <td class="num"><strong>139,962</strong></td>
+        <td class="num pos"><strong>+11.8%</strong></td>
+        <td class="num neg"><strong>−0.3%</strong></td>
+        <td>All net growth was in 2024. Since Jan 2025: flat.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warning">
+    <strong>Cross-referencing revenue tells a worse story for margin.</strong>
+    On the revenue side, Additional Vanity Number Revenue peaked at
+    <strong>$15,600 in Jan 2025</strong> and has declined every quarter
+    since — to about <strong>$7,000/month in mid-2026</strong>. If vanity
+    line count is <em>stable</em> at ~3,079 but vanity <em>revenue</em>
+    has been cut roughly in half, that means we're generating <strong>less
+    revenue per vanity number over time</strong>, on top of paying more
+    per minute for the traffic on those same lines. Two forces compressing
+    Call Tracking margin from opposite directions. Worth a separate
+    revenue conversation with the CT team.
+  </div>
+
+  <p class="caption">
+    Note on labels: FirstDigital's five inventory line items are billed
+    generically as DID/Tollfree pools; the bills do not explicitly label
+    which pool contains "vanity" numbers. The interpretation above assigns
+    the two smallest, separately-billed pools (DID Number 2,102 and Toll
+    Free Number 977) as the most likely vanity/premium candidates because
+    they are broken out from the bulk DID Charge and Tollfree Service
+    pools and have moved independently. If Entrata's number-ordering
+    process labels a specific FirstDigital line differently, the
+    conclusion doesn't change: none of the five pools shows net growth
+    since Jan 2025.
   </p>
 </section>
 
