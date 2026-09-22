@@ -701,173 +701,55 @@
 </section>
 
 <section>
-  <h2>Auxiliary telephony infrastructure — the fully-loaded stack</h2>
-  <p>
-    The FirstDigital invoice is the carrier layer. Behind it, LC runs its
-    own voice infrastructure — SIP proxy, media server, presence/chat,
-    call center orchestration, and the databases those services depend
-    on. These costs are steady month over month (compute + storage +
-    licensing) and total <strong>$28,500&nbsp;/&nbsp;month</strong>, or
-    <strong>$342,000&nbsp;/&nbsp;year</strong>.
-  </p>
-
-  <div class="stats" style="grid-template-columns: repeat(3, 1fr); margin: 20px 0 24px;">
-    <div class="stat">
-      <div class="value">$162,741</div>
-      <div class="label">FirstDigital carrier (Sep 2026 invoice)</div>
-    </div>
-    <div class="stat warning">
-      <div class="value">$28,500</div>
-      <div class="label">Auxiliary infrastructure (monthly)</div>
-    </div>
-    <div class="stat accent">
-      <div class="value">$191,241</div>
-      <div class="label">Fully-loaded monthly telephony cost</div>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div>
-      <table style="margin-top: 0;">
-        <thead>
-          <tr>
-            <th>Component</th>
-            <th>Role</th>
-            <th class="num">Monthly cost</th>
-            <th class="num">Annualized</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>ejabberd</td><td>XMPP / presence &amp; chat</td><td class="num">$11,000</td><td class="num">$132,000</td></tr>
-          <tr><td>FreeSWITCH</td><td>Media server / softswitch</td><td class="num">$9,000</td><td class="num">$108,000</td></tr>
-          <tr><td>Kamailio</td><td>SIP routing / proxy</td><td class="num">$3,000</td><td class="num">$36,000</td></tr>
-          <tr><td>Call center app</td><td>Agent desktop / routing logic</td><td class="num">$2,500</td><td class="num">$30,000</td></tr>
-          <tr><td>VOIP systems</td><td>Supporting VOIP infrastructure</td><td class="num">$2,000</td><td class="num">$24,000</td></tr>
-          <tr><td>Databases</td><td>Persistence for all of the above</td><td class="num">$1,000</td><td class="num">$12,000</td></tr>
-          <tr style="font-weight: 600; background: var(--surface);"><td>Auxiliary total</td><td>Infrastructure only, ex-carrier</td><td class="num">$28,500</td><td class="num">$342,000</td></tr>
-        </tbody>
-      </table>
-      <div class="caption">
-        Steady-state operating cost of the internal voice stack, provided
-        by LC engineering. Excludes personnel, one-time capital, and
-        Entrata shared services (identity, monitoring, backup).
-      </div>
-    </div>
-
-    <div>
-      <h3 style="margin-top: 0;">Fully-loaded monthly cost mix</h3>
-      <svg viewBox="0 0 400 240" role="img" aria-label="Monthly telephony cost composition, carrier vs auxiliary">
-        <style>
-          .seg-carrier { fill: #1e4d7b; }
-          .seg-ejabberd { fill: #57575a; }
-          .seg-freeswitch { fill: #7a7a7d; }
-          .seg-kamailio { fill: #8f8f92; }
-          .seg-app { fill: #a5a5a7; }
-          .seg-voip { fill: #babac0; }
-          .seg-db { fill: #cfcfd3; }
-          .seg-label { font: 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a; }
-          .seg-caption { font: 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #57575a; }
-          .seg-val { font: 600 12px ui-monospace, Menlo, monospace; fill: #ffffff; }
-        </style>
-        <!-- Total width = 400px. Represents $191,241/mo.
-             $/px = 191241/400 = 478.10
-             Segments (widths):
-              Carrier   $162,741 → 340.4px
-              ejabberd  $11,000  →  23.0px
-              FreeSWITCH $9,000  →  18.8px
-              Kamailio  $3,000   →   6.3px
-              App       $2,500   →   5.2px
-              VOIP      $2,000   →   4.2px
-              DB        $1,000   →   2.1px  (rounds down; visually merged into VOIP band)
-        -->
-        <g transform="translate(0, 30)">
-          <rect class="seg-carrier"   x="0"     y="0" width="340.4" height="50" />
-          <rect class="seg-ejabberd"  x="340.4" y="0" width="23.0"  height="50" />
-          <rect class="seg-freeswitch" x="363.4" y="0" width="18.8" height="50" />
-          <rect class="seg-kamailio"  x="382.2" y="0" width="6.3"   height="50" />
-          <rect class="seg-app"       x="388.5" y="0" width="5.2"   height="50" />
-          <rect class="seg-voip"      x="393.7" y="0" width="4.2"   height="50" />
-          <rect class="seg-db"        x="397.9" y="0" width="2.1"   height="50" />
-          <text class="seg-val" x="170" y="30" text-anchor="middle">FirstDigital · 85.1%</text>
-        </g>
-        <!-- Legend rows -->
-        <g transform="translate(0, 105)">
-          <rect class="seg-carrier"   x="0"  y="0" width="12" height="12" />
-          <text class="seg-label"     x="20" y="10">FirstDigital carrier</text>
-          <text class="seg-caption"   x="240" y="10" text-anchor="end">$162,741</text>
-          <text class="seg-caption"   x="395" y="10" text-anchor="end">85.1%</text>
-        </g>
-        <g transform="translate(0, 125)">
-          <rect class="seg-ejabberd"  x="0"  y="0" width="12" height="12" />
-          <text class="seg-label"     x="20" y="10">ejabberd</text>
-          <text class="seg-caption"   x="240" y="10" text-anchor="end">$11,000</text>
-          <text class="seg-caption"   x="395" y="10" text-anchor="end">5.8%</text>
-        </g>
-        <g transform="translate(0, 145)">
-          <rect class="seg-freeswitch" x="0" y="0" width="12" height="12" />
-          <text class="seg-label"     x="20" y="10">FreeSWITCH</text>
-          <text class="seg-caption"   x="240" y="10" text-anchor="end">$9,000</text>
-          <text class="seg-caption"   x="395" y="10" text-anchor="end">4.7%</text>
-        </g>
-        <g transform="translate(0, 165)">
-          <rect class="seg-kamailio"  x="0"  y="0" width="12" height="12" />
-          <text class="seg-label"     x="20" y="10">Kamailio</text>
-          <text class="seg-caption"   x="240" y="10" text-anchor="end">$3,000</text>
-          <text class="seg-caption"   x="395" y="10" text-anchor="end">1.6%</text>
-        </g>
-        <g transform="translate(0, 185)">
-          <rect class="seg-app"       x="0"  y="0" width="12" height="12" />
-          <text class="seg-label"     x="20" y="10">Call center app</text>
-          <text class="seg-caption"   x="240" y="10" text-anchor="end">$2,500</text>
-          <text class="seg-caption"   x="395" y="10" text-anchor="end">1.3%</text>
-        </g>
-        <g transform="translate(0, 205)">
-          <rect class="seg-voip"      x="0"  y="0" width="12" height="12" />
-          <text class="seg-label"     x="20" y="10">VOIP systems</text>
-          <text class="seg-caption"   x="240" y="10" text-anchor="end">$2,000</text>
-          <text class="seg-caption"   x="395" y="10" text-anchor="end">1.0%</text>
-        </g>
-        <g transform="translate(0, 225)">
-          <rect class="seg-db"        x="0"  y="0" width="12" height="12" />
-          <text class="seg-label"     x="20" y="10">Databases</text>
-          <text class="seg-caption"   x="240" y="10" text-anchor="end">$1,000</text>
-          <text class="seg-caption"   x="395" y="10" text-anchor="end">0.5%</text>
-        </g>
-      </svg>
-      <div class="caption" style="margin-top: 12px;">
-        Cost composition, current-month basis (Sep 2026 FirstDigital
-        invoice + steady-state infra). Carrier dominates at 85%; the
-        remaining 15% is stable infrastructure that scales with
-        engineering choices, not call volume.
-      </div>
-    </div>
-  </div>
-
-  <div class="callout warning" style="margin-top: 24px;">
-    <div class="title">What this changes about the picture above</div>
+  <h2>Adjacent infrastructure costs — needs a home in the cost model</h2>
+  <div class="callout warning">
+    <div class="title">Flag for finance and cost-accounting alignment</div>
     <p>
-      The projections earlier in this report cover only the FirstDigital
-      carrier bill. If auxiliary infrastructure holds at $28.5K / month
-      for the remainder of 2026, add roughly <strong>$342K</strong> on
-      top of any full-year telephony estimate: base scenario becomes
-      <strong>~$1.89M</strong>, volume-hold <strong>~$1.94M</strong>,
-      continued-growth <strong>~$2.04M</strong>. Fully-loaded telephony
-      is on track to clear <strong>$2M</strong> in 2026 for the first
-      time.
+      LC also runs internal infrastructure that supports voice traffic
+      but is <strong>not part of the FirstDigital carrier bill</strong>
+      and should not be rolled into "telephony" without a formal decision
+      about categorization. These are steady operating costs regardless
+      of call volume, and today they aren't tracked in a single
+      cost-of-service view.
     </p>
   </div>
 
-  <h3>Implications for margin work</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Role</th>
+        <th class="num">Monthly</th>
+        <th class="num">Annualized</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>ejabberd</td><td>XMPP / presence &amp; chat</td><td class="num">$11,000</td><td class="num">$132,000</td></tr>
+      <tr><td>FreeSWITCH</td><td>Media server / softswitch</td><td class="num">$9,000</td><td class="num">$108,000</td></tr>
+      <tr><td>Kamailio</td><td>SIP routing / proxy</td><td class="num">$3,000</td><td class="num">$36,000</td></tr>
+      <tr><td>Call center app</td><td>Agent desktop / routing logic</td><td class="num">$2,500</td><td class="num">$30,000</td></tr>
+      <tr><td>VOIP systems</td><td>Supporting VOIP infrastructure</td><td class="num">$2,000</td><td class="num">$24,000</td></tr>
+      <tr><td>Databases</td><td>Persistence for all of the above</td><td class="num">$1,000</td><td class="num">$12,000</td></tr>
+      <tr style="font-weight: 600; background: var(--surface);"><td colspan="2">Adjacent infra total (not in telephony above)</td><td class="num">$28,500</td><td class="num">$342,000</td></tr>
+    </tbody>
+  </table>
+  <div class="caption">
+    Steady-state operating cost of the internal voice stack, provided by
+    LC engineering. Listed here for visibility only — not rolled into the
+    telephony carrier analysis above.
+  </div>
+
+  <h3>Why this matters as an accounting problem</h3>
   <p>
-    The auxiliary stack is largely fixed cost — most of these components
-    (ejabberd, FreeSWITCH, Kamailio) are open source, so the dollars are
-    hosting, capacity, and DevOps time, not licensing. They do not scale
-    linearly with call volume the way FirstDigital minutes do. That means:
+    Right now these costs likely land in an infrastructure or R&amp;D
+    line item rather than an LC cost-of-service line, which means LC
+    gross margin reporting excludes them entirely. Before the FY 2026
+    close and the FY 2027 budgeting cycle, decide:
   </p>
   <ul style="margin: 8px 0 8px 20px; padding: 0;">
-    <li style="margin-bottom: 6px;"><strong>Per-call infra cost is falling</strong> as volume rises — the $28.5K stays flat while minutes are up 78%. Amortized per minute, aux infra is now &lt;$0.003 / min.</li>
-    <li style="margin-bottom: 6px;"><strong>Consolidation opportunities are real but modest.</strong> Combined ejabberd + FreeSWITCH + Kamailio = $23K / mo. A managed CPaaS migration could displace some of this, but a like-for-like managed voice stack often runs 2-3x this cost at LC's scale. Not the first lever to pull.</li>
-    <li style="margin-bottom: 6px;"><strong>The carrier fight is still the bigger fight.</strong> Restoring the FirstDigital 20% discount alone (~$200K / yr) is worth 60% of the entire aux infra spend.</li>
+    <li style="margin-bottom: 6px;"><strong>Which of these belong in LC COGS?</strong> A media server dedicated to LC voice is COGS. A shared database that also serves other Entrata systems is not (or only partially).</li>
+    <li style="margin-bottom: 6px;"><strong>Who owns each line?</strong> "LC engineering," "shared infra," or "Entrata platform." Ownership determines which team has the mandate to optimize each.</li>
+    <li style="margin-bottom: 6px;"><strong>Where does this live going forward?</strong> One shared internal dashboard covering carrier + infra + shared services would let anyone answer "what does one call cost us end-to-end?" — a question this analysis can't answer today.</li>
   </ul>
 </section>
 
@@ -877,11 +759,11 @@
     January 2024 through September 2026, all on account 48752. All carrier
     figures read directly from the "Summary of Current Charges" panel and
     "Charge Detail" tables on each invoice. Effective per-minute rate =
-    billed usage total ÷ minutes. Auxiliary infrastructure costs provided
-    by LC engineering as steady-state monthly operating figures.
+    billed usage total ÷ minutes. Adjacent infrastructure figures provided
+    by LC engineering as steady-state monthly operating costs.
   </p>
   <p>
-    <strong>Still not included:</strong> Zendesk telephony fees, secondary
+    <strong>Not included:</strong> Zendesk telephony fees, secondary
     carrier costs (Twilio programmable voice, LiveVox, etc.), non-recurring
     installation fees, personnel and DevOps labor, and Entrata shared
     services (identity, monitoring, backup). FirstDigital is the primary
