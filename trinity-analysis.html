@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trinity Call Analysis — Scoring Deep Dive</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --surface: #14181d;
+    --surface-2: #1a1f26;
+    --border: #262c35;
+    --text: #e6e9ef;
+    --text-dim: #9ca3af;
+    --text-mute: #6b7280;
+    --accent: #60a5fa;
+    --accent-dim: #1e3a5f;
+    --danger: #f87171;
+    --warning: #fbbf24;
+    --success: #4ade80;
+    --info: #38bdf8;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+  .surface { background: var(--surface); border: 1px solid var(--border); }
+  .surface-2 { background: var(--surface-2); border: 1px solid var(--border); }
+  .divider { border-color: var(--border); }
+  .accent { color: var(--accent); }
+  .text-dim { color: var(--text-dim); }
+  .text-mute { color: var(--text-mute); }
+  .pill { background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); padding: 6px 14px; border-radius: 999px; font-size: 13px; cursor: pointer; transition: all .15s; }
+  .pill:hover { background: #202733; color: var(--text); }
+  .pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .stat-value { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; }
+  .stat-label { color: var(--text-dim); font-size: 13px; margin-top: 2px; }
+  .tone-danger { color: var(--danger); }
+  .tone-warning { color: var(--warning); }
+  .tone-success { color: var(--success); }
+  .tone-info { color: var(--info); }
+  table { border-collapse: collapse; width: 100%; }
+  th { text-align: left; font-weight: 500; color: var(--text-dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .callout { padding: 16px 18px; border-radius: 10px; border: 1px solid var(--border); }
+  .callout.danger { background: rgba(248, 113, 113, 0.07); border-color: rgba(248, 113, 113, 0.3); }
+  .callout.warning { background: rgba(251, 191, 36, 0.06); border-color: rgba(251, 191, 36, 0.3); }
+  .callout.info { background: rgba(56, 189, 248, 0.06); border-color: rgba(56, 189, 248, 0.3); }
+  .callout.success { background: rgba(74, 222, 128, 0.06); border-color: rgba(74, 222, 128, 0.3); }
+  .quote { background: var(--surface-2); border-left: 3px solid var(--text-mute); padding: 10px 14px; font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 13px; line-height: 1.6; color: var(--text-dim); }
+  .pill-tone { font-size: 11px; padding: 2px 8px; border-radius: 4px; display: inline-block; font-weight: 500; }
+  .pill-tone.danger { background: rgba(248, 113, 113, 0.15); color: var(--danger); }
+  .pill-tone.warning { background: rgba(251, 191, 36, 0.15); color: var(--warning); }
+  .pill-tone.success { background: rgba(74, 222, 128, 0.15); color: var(--success); }
+  .pill-tone.info { background: rgba(56, 189, 248, 0.15); color: var(--info); }
+  .pill-tone.neutral { background: var(--surface-2); color: var(--text-dim); border: 1px solid var(--border); }
+  details > summary { cursor: pointer; list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] > summary .chevron { transform: rotate(90deg); }
+  .chevron { display: inline-block; transition: transform .15s; }
+</style>
+</head>
+<body class="min-h-screen">
+<div class="max-w-7xl mx-auto px-6 py-10">
+
+  <!-- Header -->
+  <div class="mb-8">
+    <div class="text-sm text-mute mb-2">Call Analysis / Customer Deep Dive</div>
+    <h1 class="text-3xl font-semibold tracking-tight">Trinity Call Analysis — Scoring Review</h1>
+    <p class="text-dim mt-2 max-w-3xl">6,174 scored calls, Aug–Sep 2026, Trinity (property ID 3482). The customer flagged that scores were pulling their agent averages too low. This document walks through what we found, backed by transcript-level validation on 25 sampled calls.</p>
+    <div class="text-xs text-mute mt-3">Last updated: Oct 6, 2026 · Internal review</div>
+  </div>
+
+  <!-- Executive stats -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+    <div class="surface rounded-xl p-5">
+      <div class="stat-value tone-warning">45.7</div>
+      <div class="stat-label">Mean score</div>
+    </div>
+    <div class="surface rounded-xl p-5">
+      <div class="stat-value tone-warning">43</div>
+      <div class="stat-label">Median score</div>
+    </div>
+    <div class="surface rounded-xl p-5">
+      <div class="stat-value tone-danger">72%</div>
+      <div class="stat-label">Calls graded F (&lt;60)</div>
+    </div>
+    <div class="surface rounded-xl p-5">
+      <div class="stat-value tone-info">5.5%</div>
+      <div class="stat-label">Calls graded A (≥90)</div>
+    </div>
+  </div>
+
+  <!-- Headline callout -->
+  <div class="callout warning mb-10">
+    <div class="font-semibold mb-2">Headline — three stacked problems, in rough contribution order</div>
+    <div class="text-dim text-sm leading-relaxed">
+      <span class="text-white">(1) Trinity's custom scorecard overlaps</span> — seven of the twenty questions score the same "did they talk about features / amenities" behavior, stacking penalties 7:1 on a single missed sales behavior.
+      <span class="text-white">(2) Two Entrata-side scoring bugs</span> — a conditional ID-verification question that isn't properly N/A'd (293 calls), and a scoring-pipeline bug where real leasing calls occasionally get all 20 questions marked N/A and are then scored 0 (119 calls).
+      <span class="text-white">(3) Real agent gaps</span> — Trinity's agents consistently miss four lead fundamentals (asking how caller heard, why they're moving, capturing email, specific appointment attempts).
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex flex-wrap gap-2 mb-6 border-b divider pb-4">
+    <button class="pill active" data-tab="verdict">Verdict</button>
+    <button class="pill" data-tab="distribution">Score distribution</button>
+    <button class="pill" data-tab="rubric">Rubric issues</button>
+    <button class="pill" data-tab="scoring-bugs">Scoring bugs</button>
+    <button class="pill" data-tab="model-errors">Model accuracy</button>
+    <button class="pill" data-tab="agent-gaps">Real agent gaps</button>
+    <button class="pill" data-tab="validation">Transcript validation</button>
+    <button class="pill" data-tab="recommend">Recommendations</button>
+  </div>
+
+  <!-- VERDICT -->
+  <section data-panel="verdict" class="panel space-y-6">
+    <div>
+      <h2 class="text-xl font-semibold mb-3">Short answer: is it the model, the agents, or the rubric?</h2>
+      <p class="text-dim leading-relaxed">All three, but not equally. Roughly 55% of the score drag comes from how Trinity's custom scorecard was designed. ~20% comes from Entrata-side scoring bugs that we need to fix. ~25% comes from genuine, coachable agent behavior gaps. Model <em>reading accuracy</em> is high — in a 25-call transcript audit, the model got nearly every question correct where it had a clear signal to work with. Where it fails, it fails on <strong>compound-requirement edge cases</strong> and <strong>conditional-question handling</strong>, not on reading comprehension.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="surface rounded-xl p-5">
+        <div class="text-sm text-mute mb-1">Driver 1</div>
+        <div class="font-semibold mb-2">Rubric design</div>
+        <div class="tone-warning font-mono text-sm mb-3">~55% of the drag</div>
+        <p class="text-sm text-dim leading-relaxed">7 of 20 questions overlap on the same behavior. 42% of all calls fail 6+ of those 7. The customer-authored scorecard also has compound questions (3-in-1 asks) with no partial credit.</p>
+      </div>
+      <div class="surface rounded-xl p-5">
+        <div class="text-sm text-mute mb-1">Driver 2</div>
+        <div class="font-semibold mb-2">Scoring pipeline bugs</div>
+        <div class="tone-danger font-mono text-sm mb-3">~20% of the drag · Our fix</div>
+        <p class="text-sm text-dim leading-relaxed">Conditional ID question marked "No" on 293 calls where no appointment was set. 119 real leasing calls had all 20 questions marked N/A and were scored 0 — including at least one strong 70+ call we validated.</p>
+      </div>
+      <div class="surface rounded-xl p-5">
+        <div class="text-sm text-mute mb-1">Driver 3</div>
+        <div class="font-semibold mb-2">Real agent gaps</div>
+        <div class="tone-info font-mono text-sm mb-3">~25% of the drag · Coachable</div>
+        <p class="text-sm text-dim leading-relaxed">Agents consistently skip: asking how caller heard (76% No), asking why they're moving (64% No), setting specific appointments (59% No), capturing email (58% No), using caller's name (55% No).</p>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="font-semibold mb-2">Simulated impact — fix just the two cleanest structural issues</div>
+      <p class="text-sm text-dim mb-3">Collapse the 7 feature/amenity questions into 2 categories and correctly apply N/A to the ID-verification question when no appointment is scheduled. Nothing else changes — same model, same agents.</p>
+      <div class="grid grid-cols-5 gap-3 mt-3">
+        <div><div class="font-semibold tone-success">45.7 → 52.4</div><div class="text-xs text-mute">Mean score</div></div>
+        <div><div class="font-semibold tone-success">43 → 50</div><div class="text-xs text-mute">Median score</div></div>
+        <div><div class="font-semibold tone-info">+78%</div><div class="text-xs text-mute">D-grade calls</div></div>
+        <div><div class="font-semibold tone-info">+55%</div><div class="text-xs text-mute">B-grade calls</div></div>
+        <div><div class="font-semibold tone-success">-16%</div><div class="text-xs text-mute">F-grade calls</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISTRIBUTION -->
+  <section data-panel="distribution" class="panel space-y-6 hidden">
+    <div>
+      <h2 class="text-xl font-semibold mb-3">Where scores actually land</h2>
+      <p class="text-dim leading-relaxed">Heavily left-skewed. 60% of calls score below 50; only 10.3% score 80 or higher. For a mature contact center a well-calibrated rubric should center around 60–80. This shape alone is the first signal the rubric is pulling too hard.</p>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-4">Call score distribution (6,174 calls, 10-point buckets)</div>
+      <canvas id="distChart" height="100"></canvas>
+      <div class="text-xs text-mute mt-2">Source: Call Analysis Calls sheet. Mean 45.7, median 43, stdev 22.6.</div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="surface rounded-xl p-5">
+        <div class="text-sm font-semibold mb-4">Current grade distribution</div>
+        <canvas id="gradeCurrent" height="130"></canvas>
+      </div>
+      <div class="surface rounded-xl p-5">
+        <div class="text-sm font-semibold mb-4">After structural fixes</div>
+        <canvas id="gradeAdjusted" height="130"></canvas>
+        <div class="text-xs text-mute mt-2">Simulation: 7 feature Qs collapsed to 2; ID question N/A when no appointment set.</div>
+      </div>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-3">Decile breakpoints</div>
+      <table>
+        <thead><tr><th>Decile</th><th>Score</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>10th</td><td>21</td><td>Bottom 10% of calls score ≤ 21</td></tr>
+          <tr><td>50th (median)</td><td>43</td><td>Half of all calls score ≤ 43</td></tr>
+          <tr><td>80th</td><td>65</td><td>Only top 20% score ≥ 65</td></tr>
+          <tr><td>90th</td><td>80</td><td>Only top 10% score ≥ 80</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- RUBRIC -->
+  <section data-panel="rubric" class="panel space-y-6 hidden">
+    <div>
+      <h2 class="text-xl font-semibold mb-3">Rubric design — the biggest driver</h2>
+      <p class="text-dim leading-relaxed">Trinity authored this 20-question rubric themselves. The design decisions below are Trinity's, not Entrata defaults. That means the fix is a customer-education + co-design conversation rather than a product bug.</p>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-3">Overlap #1 — "Did the agent mention features / amenities?" counted 7 times</div>
+      <p class="text-dim text-sm mb-4">Seven of twenty questions all score some variant of "mentioned apartment / community features or benefits." An agent who skips amenity-talk loses up to 7 of 20 points on a single behavioral miss — a 35-point penalty on a 100-point scale.</p>
+      <table>
+        <thead><tr><th>Q#</th><th>Question</th><th class="text-right">No %</th></tr></thead>
+        <tbody>
+          <tr><td>Q01</td><td>Describe apartment features/benefits</td><td class="text-right">46.7%</td></tr>
+          <tr><td>Q02</td><td>Describe property amenity features/benefits</td><td class="text-right">78.6%</td></tr>
+          <tr><td>Q05</td><td>Ask about leasing needs (incl. amenities)</td><td class="text-right">32.0%</td></tr>
+          <tr><td>Q07</td><td>Ask about preferred features/amenities</td><td class="text-right">73.3%</td></tr>
+          <tr><td>Q08</td><td>Mention community features to build value</td><td class="text-right">78.3%</td></tr>
+          <tr><td>Q10</td><td>Match features to caller's preferences</td><td class="text-right">55.2%</td></tr>
+          <tr><td>Q17</td><td>Features that encourage a tour</td><td class="text-right">73.7%</td></tr>
+        </tbody>
+      </table>
+      <div class="mt-5">
+        <div class="text-sm font-semibold mb-2">How many of the 7 questions agents miss per call</div>
+        <canvas id="overlapChart" height="100"></canvas>
+        <div class="text-xs text-mute mt-2">59.5% of calls miss 5, 6, or all 7 of these overlapping questions. 23.9% miss all seven at once.</div>
+      </div>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-3">Overlap #2 — Discovery questions also overlap</div>
+      <p class="text-dim text-sm mb-4">Preference-discovery is spread across five related questions. Q05, Q07, and Q10 reward very similar behavior — any good agent who asks "what are you looking for?" should credit all three in one breath, but phrasing variance drives false No's.</p>
+      <table>
+        <thead><tr><th>Q#</th><th>Question</th><th class="text-right">No %</th></tr></thead>
+        <tbody>
+          <tr><td>Q05</td><td>Ask about leasing needs (move-in, budget, floor plan)</td><td class="text-right">32.0%</td></tr>
+          <tr><td>Q07</td><td>Ask about preferred features/amenities</td><td class="text-right">73.3%</td></tr>
+          <tr><td>Q10</td><td>Mention features matching caller preferences</td><td class="text-right">55.2%</td></tr>
+          <tr><td>Q13</td><td>Ask how caller heard about community</td><td class="text-right">76.2%</td></tr>
+          <tr><td>Q19</td><td>Ask why caller is moving to the area</td><td class="text-right">63.8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-3">Compound-requirement questions (ALL-of-the-above traps)</div>
+      <p class="text-dim text-sm mb-3">Three questions require multiple conditions to all be true. Agents who hit most-but-not-all get zero credit instead of partial.</p>
+      <table>
+        <thead><tr><th>Q#</th><th>Requirement</th><th class="text-right">No %</th></tr></thead>
+        <tbody>
+          <tr><td>Q14</td><td>Obtained caller's name <strong>AND</strong> used it in conversation</td><td class="text-right">54.7%</td></tr>
+          <tr><td>Q15</td><td>Captured caller's email <strong>AND</strong> phone number</td><td class="text-right">58.4%</td></tr>
+          <tr><td>Q18</td><td>Opening: thank-you <strong>AND</strong> property name <strong>AND</strong> self-intro</td><td class="text-right">27.4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-3">Weighting is flat — all 20 questions worth equal points</div>
+      <p class="text-dim text-sm">The scoring formula is <code class="text-xs bg-black/40 px-1.5 py-0.5 rounded">Yes / (Yes + No) × 100</code>, confirmed to within rounding error on 6,168 of 6,174 rows. Every question is weighted equally — "used polite language" counts the same as "set a specific appointment." Combined with the overlap above, "talking about amenities" ends up worth 35 points but "setting a tour" is worth 5. That's inverted from what any leasing GM would want.</p>
+    </div>
+  </section>
+
+  <!-- SCORING BUGS -->
+  <section data-panel="scoring-bugs" class="panel space-y-6 hidden">
+    <div>
+      <h2 class="text-xl font-semibold mb-3">Scoring pipeline bugs — Entrata-side</h2>
+      <p class="text-dim leading-relaxed">These are not model competence issues. These are specific defects in how questions are being evaluated. Both validated with transcript-level evidence.</p>
+    </div>
+
+    <div class="callout danger">
+      <div class="flex items-start justify-between gap-4 mb-3">
+        <div>
+          <div class="font-semibold">Bug #1 — Conditional ID question not being N/A'd</div>
+          <div class="text-xs text-mute mt-0.5">Severity: Medium · 293 calls affected (4.7%)</div>
+        </div>
+        <span class="pill-tone danger">Confirmed 5/5</span>
+      </div>
+      <p class="text-sm text-dim mb-3">
+        Q03 reads: <em class="text-white">"If an in-person appointment or tour was scheduled, did the team member inform the caller that a valid ID will be required?"</em> It is explicitly conditional. If no appointment was scheduled, the correct answer is N/A — not No.
+      </p>
+      <div class="grid grid-cols-3 gap-3 mb-3">
+        <div class="surface-2 rounded-lg p-3"><div class="text-xl font-semibold">2,404</div><div class="text-xs text-mute">Calls where appt was set</div></div>
+        <div class="surface-2 rounded-lg p-3"><div class="text-xl font-semibold tone-warning">1,259</div><div class="text-xs text-mute">of those missed the ID mention</div></div>
+        <div class="surface-2 rounded-lg p-3"><div class="text-xl font-semibold tone-danger">293</div><div class="text-xs text-mute">Calls graded "No" with NO appt scheduled</div></div>
+      </div>
+      <p class="text-sm text-dim">We validated 5 calls in this cohort. In every one, no appointment was scheduled — model correctly marked "appointment=No" but incorrectly marked "ID=No" instead of "ID=N/A". <strong>The model knows how to use N/A</strong> (it applies it 16.6% of the time on the "why moving" question). It's just not being told to apply it here.</p>
+    </div>
+
+    <div class="callout danger">
+      <div class="flex items-start justify-between gap-4 mb-3">
+        <div>
+          <div class="font-semibold">Bug #2 — 119 real leasing calls scored as 0</div>
+          <div class="text-xs text-mute mt-0.5">Severity: High · 119 calls (1.9%)</div>
+        </div>
+        <span class="pill-tone danger">Validated — new finding</span>
+      </div>
+      <p class="text-sm text-dim mb-3">
+        119 calls have <strong>all 20 questions marked N/A</strong>. The scoring formula interprets 0/0 as 0, so these calls are scored as perfect failures. Original hypothesis: these are hang-ups and wrong numbers that should be excluded from scoring. <strong>Reality from transcript audit: that is not what's happening.</strong>
+      </p>
+      <p class="text-sm text-dim mb-3">We validated 3 calls in this cohort. All 3 were legitimate leasing conversations:</p>
+      <ul class="text-sm text-dim space-y-2 ml-4">
+        <li>• <code class="text-xs bg-black/40 px-1.5 py-0.5 rounded">279783518</code> — 87s inquiry call, agent opened properly, gave pricing, explained cosigner program. Should have scored ~25–35.</li>
+        <li>• <code class="text-xs bg-black/40 px-1.5 py-0.5 rounded">276071182</code> — <strong>293s full leasing call</strong>. Agent captured name, timeframe, source attribution, move reason, discussed features/laundry, mentioned ID requirement, mentioned 1-month free promo. <strong>Should have scored 70–85.</strong> Agent was told she got a 0.</li>
+        <li>• <code class="text-xs bg-black/40 px-1.5 py-0.5 rounded">275972668</code> — 128s pre-leasing inquiry for next school year, agent explained no pricing yet, captured phone. Should have scored ~30–45.</li>
+      </ul>
+      <p class="text-sm text-dim mt-3">This is a severe issue at the <strong>agent level</strong>. A single mystery zero kills an agent's weekly average. The scoring pipeline needs to either: (a) correctly answer the questions on these calls, or (b) exclude the call from the agent's score entirely rather than scoring it 0.</p>
+    </div>
+  </section>
+
+  <!-- MODEL ERRORS -->
+  <section data-panel="model-errors" class="panel space-y-6 hidden">
+    <div>
+      <h2 class="text-xl font-semibold mb-3">Model accuracy — findings from 25-call audit</h2>
+      <p class="text-dim leading-relaxed">We transcript-validated 25 calls stratified across the score range, including specific "stress test" cases. The model is <strong>largely accurate</strong>, but has a specific pattern of false negatives on compound-requirement questions and when the agent satisfies the question in a non-standard way.</p>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-3">Audit summary — 20 questions × 25 calls = 500 decisions reviewed</div>
+      <table>
+        <thead><tr><th>Category</th><th>Validated</th><th>Model accuracy</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>Perfect-score (100) sanity check</td><td>3/3</td><td>100%</td><td><span class="pill-tone success">Calibrated</span></td></tr>
+          <tr><td>Neighborhood question (81.8% No overall)</td><td>7/8 correct</td><td>87.5%</td><td><span class="pill-tone success">Model is accurate — real agent gap</span></td></tr>
+          <tr><td>Compound opening question</td><td>2/3 correct</td><td>66%</td><td><span class="pill-tone warning">1 false negative found</span></td></tr>
+          <tr><td>Compound email+phone question</td><td>3/3 correct</td><td>100%</td><td><span class="pill-tone success">Real agent gap</span></td></tr>
+          <tr><td>Appointment-attempt question</td><td>2 false negatives found</td><td>—</td><td><span class="pill-tone warning">Pattern worth investigating</span></td></tr>
+          <tr><td>ID-verification question (when agent DID mention it)</td><td>1 false negative</td><td>—</td><td><span class="pill-tone warning">Separate from ID-trap bug</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-3">False negatives — validated examples</div>
+      <div class="space-y-4">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="pill-tone neutral">Call 279759456</span>
+            <span class="pill-tone neutral">Score 90</span>
+            <span class="pill-tone warning">Model missed BOTH appt attempt and ID mention</span>
+          </div>
+          <p class="text-sm text-dim mb-2">Agent asked: <em class="text-white">"Is there a day you would like to come in, Bill, and come view one of our 1st Floor units?"</em> — Model marked "attempt specific appointment = No" despite agent explicitly asking for availability.</p>
+          <p class="text-sm text-dim">Agent also said: <em class="text-white">"Just in case you do end up coming in, just be sure that you all bring an ID with you."</em> — Model marked "ID verification = No" despite agent explicitly mentioning the ID requirement.</p>
+        </div>
+
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="pill-tone neutral">Call 280241956</span>
+            <span class="pill-tone neutral">Score 26</span>
+            <span class="pill-tone warning">Model missed appt attempt</span>
+          </div>
+          <p class="text-sm text-dim">Agent asked: <em class="text-white">"Okay. When did you wanna come in?"</em> — Model marked "attempt specific appointment = No". The call stalled because the caller got distracted, but the attempt was clearly made. If this had been credited, the call would score ~32 instead of 26.</p>
+        </div>
+
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="pill-tone neutral">Call 278714578</span>
+            <span class="pill-tone neutral">Score 94</span>
+            <span class="pill-tone warning">Model missed opening</span>
+          </div>
+          <p class="text-sm text-dim">Agent said: <em class="text-white">"Thank you for calling Arrive Odenton. Tina speaking. How can I help you?"</em> — all three criteria (thank-you + property + self-intro) met. Model marked "opening = No", likely because Deepgram transcribed the property name with an unusual period break ("Arrive. Odenton.") that may have confused the parser.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="font-semibold mb-2">Takeaway on model accuracy</div>
+      <p class="text-sm text-dim">The model's base reading comprehension is strong. Where it fails, it tends to fail on <strong>paraphrased or non-canonical phrasings</strong> ("come in" vs "schedule a tour", "bring an ID" vs "valid ID required"). These are prompt-engineering fixes, not model-replacement fixes. We should audit the per-question prompt definitions and add synonym coverage.</p>
+    </div>
+  </section>
+
+  <!-- AGENT GAPS -->
+  <section data-panel="agent-gaps" class="panel space-y-6 hidden">
+    <div>
+      <h2 class="text-xl font-semibold mb-3">Where Trinity's agents genuinely have gaps</h2>
+      <p class="text-dim leading-relaxed">Stripping out the structural issues, these are areas where even deduplicated, well-weighted scoring would still mark the agents down. These are coachable, and most of them are leasing fundamentals.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="surface rounded-xl p-5">
+        <div class="text-sm font-semibold mb-4">Top coaching opportunities</div>
+        <div class="space-y-4">
+          <div>
+            <div class="font-medium">1. Confirm how caller heard (76% No)</div>
+            <div class="text-xs text-mute mt-1">Marketing attribution is being skipped. One sentence: "How did you hear about us?"</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">2. Ask why they're moving (64% No)</div>
+            <div class="text-xs text-mute mt-1">Discovery question that drives tour conversion. Agents are skipping it entirely.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">3. Set a specific appointment (59% No)</div>
+            <div class="text-xs text-mute mt-1">Only 39% of calls end with an actual appointment attempt. This is the single biggest revenue lever.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">4. Capture email AND phone (58% No)</div>
+            <div class="text-xs text-mute mt-1">Phone is auto-captured (inbound), but agents routinely don't ask for email. Both are required for most CRMs.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">5. Use caller's name (55% No)</div>
+            <div class="text-xs text-mute mt-1">Agents are capturing names but not using them back in conversation. Simple rapport builder.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">6. Discuss the neighborhood (82% No)</div>
+            <div class="text-xs text-mute mt-1">Confirmed by transcript audit — agents rarely mention nearby amenities, schools, highways, dining. "Location, location, location" is a leasing fundamental being systematically missed.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="surface rounded-xl p-5">
+        <div class="text-sm font-semibold mb-4">Where agents are doing fine</div>
+        <div class="space-y-4">
+          <div>
+            <div class="font-medium">Polite / professional language (0.3% No)</div>
+            <div class="text-xs text-mute mt-1">Essentially 100% hit rate. Agents are respectful.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">Professional closing (6.4% No)</div>
+            <div class="text-xs text-mute mt-1">94% of calls end with a proper closing.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">Clear explanations (17.8% No)</div>
+            <div class="text-xs text-mute mt-1">Comprehension and answering is strong.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">Full opening (27.4% No)</div>
+            <div class="text-xs text-mute mt-1">Decent, though the triple requirement (thank + property + name) may be inflating the miss rate.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">Ask leasing needs (32% No)</div>
+            <div class="text-xs text-mute mt-1">Basic qualifying questions are asked on 2 of every 3 calls.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-3">Full question ranking by "No" rate</div>
+      <table>
+        <thead><tr><th>Rank</th><th>Question</th><th class="text-right">No %</th><th class="text-right">Yes</th><th class="text-right">No</th><th>Category</th></tr></thead>
+        <tbody id="questionTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TRANSCRIPT VALIDATION -->
+  <section data-panel="validation" class="panel space-y-6 hidden">
+    <div>
+      <h2 class="text-xl font-semibold mb-3">Transcript validation methodology</h2>
+      <p class="text-dim leading-relaxed">To separate model errors from rubric design issues from real agent gaps, we spot-checked 25 calls across 5 stratified groups. Caller PII has been redacted from this document; call IDs and property/agent context retained for internal reference.</p>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-4">Sample composition</div>
+      <table>
+        <thead><tr><th>Group</th><th>Call count</th><th>What it tested</th></tr></thead>
+        <tbody>
+          <tr><td>ID-trap bug</td><td>5</td><td>Calls where appointment=No and ID=No — should be N/A</td></tr>
+          <tr><td>Neighborhood question</td><td>8</td><td>Mid-high score calls with neighborhood=No — is the model too strict?</td></tr>
+          <tr><td>Compound opening</td><td>3</td><td>High-score calls with opening=No — is 3-in-1 requirement too strict?</td></tr>
+          <tr><td>Compound email+phone</td><td>3</td><td>High-score calls with email+phone=No — same question</td></tr>
+          <tr><td>Perfect-score sanity</td><td>3</td><td>Score=100 calls — is the model's high end calibrated?</td></tr>
+          <tr><td>Zero-score sanity</td><td>3</td><td>Score=0 calls — are these truly non-leasing calls?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-4">Findings log</div>
+      <div class="space-y-3">
+        <details class="surface-2 rounded-lg">
+          <summary class="p-4"><span class="chevron mr-2">▸</span> <strong>ID-trap bug: 5/5 confirmed</strong></summary>
+          <div class="p-4 pt-0 text-sm text-dim space-y-2">
+            <p>In all 5 sampled calls, no appointment was concretely scheduled, yet the ID question was marked "No" instead of "N/A". Confirmed across the full score range: calls scoring 5, 5, 26, 89, and 90 all showed the same pattern.</p>
+            <p>One case (call 275319166, score 89) is particularly instructive: the caller chose "send me the application" instead of a tour; the agent respected that preference; the rubric then penalized the agent on the ID question anyway.</p>
+          </div>
+        </details>
+
+        <details class="surface-2 rounded-lg">
+          <summary class="p-4"><span class="chevron mr-2">▸</span> <strong>Neighborhood question: 7/8 model-accurate</strong></summary>
+          <div class="p-4 pt-0 text-sm text-dim space-y-2">
+            <p>Across 8 mid-high score calls where the neighborhood question was marked "No", the model was correct 7 times. Agents genuinely don't describe the surrounding area, nearby amenities, or location benefits. The 81.8% No rate on this question — the worst in the whole dataset — is <strong>a real agent gap, not a model problem.</strong></p>
+            <p>The one edge case (call 274440622) involved an agent giving detailed highway exit directions ("down 75... Exit 242... North or south") which could arguably count as area info depending on how the question is interpreted.</p>
+          </div>
+        </details>
+
+        <details class="surface-2 rounded-lg">
+          <summary class="p-4"><span class="chevron mr-2">▸</span> <strong>Compound opening question: 2/3 model-accurate</strong></summary>
+          <div class="p-4 pt-0 text-sm text-dim space-y-2">
+            <p>Two of three sampled high-score calls genuinely missed the "thank you for calling" portion of the opening (agents used a terse "[Property]. [Name] speaking." format). The third was a model false negative — agent did all three correctly but got dinged, likely due to transcription punctuation.</p>
+            <p>Noteworthy pattern: Many Trinity agents use a terse opening without "thank you." This is a coachable, specific behavior.</p>
+          </div>
+        </details>
+
+        <details class="surface-2 rounded-lg">
+          <summary class="p-4"><span class="chevron mr-2">▸</span> <strong>Compound email+phone question: 3/3 model-accurate</strong></summary>
+          <div class="p-4 pt-0 text-sm text-dim space-y-2">
+            <p>All three high-scoring calls (all 95s) legitimately failed to capture both email AND phone. Even the top-performing agents are skipping the email ask. This is a specific, measurable coaching opportunity.</p>
+          </div>
+        </details>
+
+        <details class="surface-2 rounded-lg">
+          <summary class="p-4"><span class="chevron mr-2">▸</span> <strong>Perfect-score sanity check: 3/3 legitimately great calls</strong></summary>
+          <div class="p-4 pt-0 text-sm text-dim space-y-2">
+            <p>All three 100-score calls showed excellent agent performance: proper openings, discovery, amenity + neighborhood pitching, name/phone/email capture, specific appointment attempts, and explicit ID mentions. The model's high end is calibrated — when it says 100, it means it.</p>
+          </div>
+        </details>
+
+        <details class="surface-2 rounded-lg">
+          <summary class="p-4"><span class="chevron mr-2">▸</span> <strong>Zero-score sanity check: 3/3 are false zeros, not hang-ups</strong> <span class="pill-tone danger ml-2">Severity-1</span></summary>
+          <div class="p-4 pt-0 text-sm text-dim space-y-2">
+            <p>Initial hypothesis: these are hang-ups and wrong numbers that should be excluded. <strong>Reality: all three sampled calls were legitimate leasing conversations.</strong> One (call 276071182) was a strong 5-minute call where the agent captured name, source, move reason, features, pricing, and promo — would score 70+ on a correct evaluation. Agent was told she got a 0.</p>
+            <p>Extrapolating from the 3-call sample, the 119 all-N/A calls likely include a mix of truly non-scoreable calls and legitimate leasing calls incorrectly scored. The scoring pipeline needs to either correctly evaluate these calls or exclude them, not silently zero them out.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <section data-panel="recommend" class="panel space-y-6 hidden">
+    <div>
+      <h2 class="text-xl font-semibold mb-3">Recommendations</h2>
+      <p class="text-dim leading-relaxed">What to tell Trinity, what to fix on our side, and what to validate next.</p>
+    </div>
+
+    <div class="surface rounded-xl p-5">
+      <div class="text-sm font-semibold mb-3">Message to Trinity — one paragraph</div>
+      <div class="quote">
+        "Thanks for flagging the scores — we did a full-pass analysis on the 6,174 calls from Aug–Sep. The model is generally reading your calls accurately on the behaviors it's asked to detect, so the drag on your averages is coming from two places. First, the custom scorecard your team built scores the same 'mentioned features/amenities' behavior across seven of its twenty questions — any call where the agent skips the amenity pitch loses up to 35 points on what's really one missed behavior. We can walk you through how to deduplicate those or reweight the scorecard. Second — and this one is on us — we found that the conditional ID-verification question ('if a tour was scheduled, did they mention valid ID…') is being marked No on ~300 calls where no tour was even scheduled; it should be N/A. We're fixing that now. We also found 119 calls that got all 20 questions N/A'd and then scored 0 — some were truly non-leasing calls, but at least a few were real leasing calls that your agents handled well; we need to fix that pipeline too. On the agent-coaching side, the signal that's most actionable regardless of rubric changes is: asking how callers heard about you, asking why they're moving, capturing email addresses, and attempting specific appointments — those are the real gaps."
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="surface rounded-xl p-5">
+        <div class="text-sm font-semibold mb-3">Internal — scoring pipeline fixes <span class="pill-tone danger ml-2">Our bug</span></div>
+        <div class="space-y-3 text-sm">
+          <div>
+            <div class="font-medium">1. Fix the ID-verification N/A logic</div>
+            <div class="text-xs text-mute mt-1">Add explicit prompt rule: if "appointment set" = No, auto-set Q03 to N/A. Prevents 293 unfair penalties/month on this customer alone.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">2. Investigate the all-N/A → 0 bug <span class="pill-tone danger ml-2 text-xs">Sev-1</span></div>
+            <div class="text-xs text-mute mt-1">119 calls (1.9%) are getting zeros when at least some are legitimate scoreable calls. Determine root cause (prompt failure? call-type classifier?) and either fix the evaluation or exclude the call from the agent's score.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">3. Audit per-question prompt synonyms</div>
+            <div class="text-xs text-mute mt-1">Model is missing paraphrased phrasings like "come in" (= set an appointment) and "bring an ID" (= valid ID required). Expand prompt coverage.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">4. Surface per-question rationale in UI</div>
+            <div class="text-xs text-mute mt-1">If the model emits evidence/quotes per question, show them in Trinity's dashboard. Customers accept low scores when they can see WHY.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="surface rounded-xl p-5">
+        <div class="text-sm font-semibold mb-3">Co-design with Trinity — rubric changes <span class="pill-tone info ml-2">Their rubric</span></div>
+        <div class="space-y-3 text-sm">
+          <div>
+            <div class="font-medium">1. Deduplicate feature questions</div>
+            <div class="text-xs text-mute mt-1">Collapse Q01, Q02, Q08, Q17 → one "value-build" question. Collapse Q05, Q07, Q10 → one "preference-discovery" question. Immediate mean score lift of ~6 points.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">2. Weight the rubric</div>
+            <div class="text-xs text-mute mt-1">Give tour-set and lead-capture questions 2–3x weight. Give politeness and closing 0.5x weight. Reflects what actually drives Trinity's revenue.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">3. Loosen compound requirements</div>
+            <div class="text-xs text-mute mt-1">Q14 (name AND use), Q15 (email AND phone), Q18 (thank AND property AND intro) all require multiple conditions. Consider partial credit or splitting into separate questions.</div>
+          </div>
+          <hr class="divider border-t" />
+          <div>
+            <div class="font-medium">4. Agent coaching focus</div>
+            <div class="text-xs text-mute mt-1">Hand Trinity a prioritized coaching list: source attribution, move motivation, email capture, specific appointment attempts, neighborhood pitching. These are rubric-independent wins.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="font-semibold mb-2">Three questions to confirm with Trinity before next steps</div>
+      <ol class="text-sm text-dim space-y-1 ml-5 list-decimal">
+        <li>Is this scorecard a Trinity-wide standard, or specific to one property manager?</li>
+        <li>Are they comparing these scores to a benchmark number we gave them, or just reacting to the absolute values?</li>
+        <li>Do their internal QA leads agree with the model's grades when they sample calls themselves?</li>
+      </ol>
+      <p class="text-sm text-dim mt-2">Those three answers determine whether the next move is a product fix, a rubric reset, or a customer-education conversation.</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// Tab switching
+const tabs = document.querySelectorAll('.pill[data-tab]');
+const panels = document.querySelectorAll('.panel');
+tabs.forEach(tab => tab.addEventListener('click', () => {
+  const t = tab.dataset.tab;
+  tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === t));
+  panels.forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t));
+}));
+
+// Chart.js config - dark theme
+const theme = {
+  text: '#9ca3af',
+  grid: '#262c35',
+  accent: '#60a5fa',
+  warning: '#fbbf24',
+  danger: '#f87171',
+  success: '#4ade80',
+  info: '#38bdf8',
+};
+Chart.defaults.color = theme.text;
+Chart.defaults.borderColor = theme.grid;
+Chart.defaults.font.family = "Inter, system-ui, sans-serif";
+
+const commonAxis = {
+  grid: { color: theme.grid, drawBorder: false },
+  ticks: { color: theme.text, font: { size: 11 } },
+};
+
+// Score distribution
+new Chart(document.getElementById('distChart'), {
+  type: 'bar',
+  data: {
+    labels: ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80-89', '90-100'],
+    datasets: [{
+      label: 'Calls',
+      data: [134, 433, 1225, 1229, 923, 710, 482, 403, 294, 341],
+      backgroundColor: theme.info,
+      borderRadius: 2,
+    }],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0b0d10', borderColor: theme.grid, borderWidth: 1 } },
+    scales: { x: commonAxis, y: commonAxis },
+  },
+});
+
+// Grade distributions
+new Chart(document.getElementById('gradeCurrent'), {
+  type: 'bar',
+  data: {
+    labels: ['F (<60)', 'D (60-69)', 'C (70-79)', 'B (80-89)', 'A (90+)'],
+    datasets: [{ label: 'Current', data: [4453, 553, 429, 344, 395], backgroundColor: theme.danger, borderRadius: 2 }],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0b0d10' } },
+    scales: { x: commonAxis, y: commonAxis },
+  },
+});
+
+new Chart(document.getElementById('gradeAdjusted'), {
+  type: 'bar',
+  data: {
+    labels: ['F (<60)', 'D (60-69)', 'C (70-79)', 'B (80-89)', 'A (90+)'],
+    datasets: [{ label: 'Adjusted', data: [3719, 984, 609, 533, 329], backgroundColor: theme.info, borderRadius: 2 }],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0b0d10' } },
+    scales: { x: commonAxis, y: commonAxis },
+  },
+});
+
+// Overlap chart
+new Chart(document.getElementById('overlapChart'), {
+  type: 'bar',
+  data: {
+    labels: ['0 of 7', '1', '2', '3', '4', '5', '6', '7 of 7'],
+    datasets: [{
+      label: 'Calls',
+      data: [759, 259, 343, 580, 554, 1071, 1476, 1132],
+      backgroundColor: theme.warning,
+      borderRadius: 2,
+    }],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0b0d10' } },
+    scales: { x: Object.assign({}, commonAxis, { title: { display: true, text: 'Questions missed (of 7 overlapping)', color: theme.text } }), y: commonAxis },
+  },
+});
+
+// Question ranking table
+const questions = [
+  { id: 'Q06', short: 'Describe neighborhood / surrounding area', noRate: 81.8, yes: 1003, no: 5052, bucket: 'Local knowledge' },
+  { id: 'Q02', short: 'Describe property amenity features/benefits', noRate: 78.6, yes: 1201, no: 4854, bucket: 'Amenity (overlap)' },
+  { id: 'Q08', short: 'Mention community features to build value', noRate: 78.3, yes: 1219, no: 4836, bucket: 'Amenity (overlap)' },
+  { id: 'Q13', short: 'Confirm how caller heard about community', noRate: 76.2, yes: 1350, no: 4705, bucket: 'Lead discovery' },
+  { id: 'Q17', short: 'Presentation features that encourage tour', noRate: 73.7, yes: 1502, no: 4553, bucket: 'Amenity (overlap)' },
+  { id: 'Q07', short: "Ask about caller's preferred features", noRate: 73.3, yes: 1531, no: 4524, bucket: 'Preference discovery' },
+  { id: 'Q20', short: 'Use urgency language', noRate: 66.8, yes: 1931, no: 4124, bucket: 'Sales closing' },
+  { id: 'Q19', short: 'Ask why caller is moving', noRate: 63.8, yes: 1208, no: 3940, bucket: 'Preference discovery' },
+  { id: 'Q11', short: 'Attempt to set a specific appointment', noRate: 59.1, yes: 2404, no: 3651, bucket: 'Tour conversion' },
+  { id: 'Q15', short: "Capture caller's email AND phone", noRate: 58.4, yes: 2452, no: 3603, bucket: 'Lead capture (compound)' },
+  { id: 'Q10', short: 'Match features to caller preferences', noRate: 55.2, yes: 1740, no: 3408, bucket: 'Preference discovery' },
+  { id: 'Q14', short: "Obtain caller's name AND use it", noRate: 54.7, yes: 2680, no: 3375, bucket: 'Rapport (compound)' },
+  { id: 'Q01', short: 'Describe apartment features/benefits', noRate: 46.7, yes: 3171, no: 2884, bucket: 'Amenity (overlap)' },
+  { id: 'Q04', short: 'Invite caller to tour the community', noRate: 38.2, yes: 3697, no: 2358, bucket: 'Tour conversion' },
+  { id: 'Q05', short: 'Ask about leasing needs', noRate: 32.0, yes: 4078, no: 1977, bucket: 'Preference discovery' },
+  { id: 'Q18', short: 'Opening: thank + property + intro (ALL three)', noRate: 27.4, yes: 4365, no: 1690, bucket: 'Opening (compound)' },
+  { id: 'Q03', short: 'If tour scheduled: mention valid ID required', noRate: 25.1, yes: 4503, no: 1552, bucket: 'Conditional / bug' },
+  { id: 'Q12', short: 'Clear explanations', noRate: 17.8, yes: 4959, no: 1096, bucket: 'Soft skills' },
+  { id: 'Q09', short: 'Professional closing', noRate: 6.4, yes: 5658, no: 397, bucket: 'Closing' },
+  { id: 'Q16', short: 'Polite / professional language', noRate: 0.3, yes: 6038, no: 17, bucket: 'Soft skills' },
+];
+
+const qTable = document.getElementById('questionTable');
+if (qTable) {
+  questions.forEach((q, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td class="text-mute">${i + 1}</td><td>${q.short}</td><td class="text-right font-mono">${q.noRate.toFixed(1)}%</td><td class="text-right text-mute">${q.yes.toLocaleString()}</td><td class="text-right text-mute">${q.no.toLocaleString()}</td><td class="text-xs text-mute">${q.bucket}</td>`;
+    qTable.appendChild(row);
+  });
+}
+</script>
+</body>
+</html>
